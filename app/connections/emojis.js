@@ -2,6 +2,7 @@
 var Twit           = require('twit'),
     config         = require('config'),
     emoji          = require('emoji'),
+    EmojiTweet     = require('app/lib/emoji_tweet/tweet'),
     EmojiData      = require('app/lib/emoji_data/emoji_data'),
     twitter_stream;
 
@@ -15,16 +16,22 @@ twitter_stream = new Twit({
 
 // Controllers ==================================================================
 function emojiStream(io) {
-  var emoji_data = new EmojiData(),
-      emoji = emoji_data.emoji_chars();
-
-      console.log(emoji);
+  var emojiData = new EmojiData(),
+      emoji = emojiData.emojiChars();
 
   var stream = twitter_stream.stream('statuses/filter', { track: emoji });
 
   stream.on('tweet', function (tweet) {
-    if (tweet.coordinates) {
-      console.log(tweet.coordinates.coordinates);
+    var emojiTweet = new EmojiTweet(tweet);
+
+    if (emojiTweet.isRetweet()) {
+      return;
+    }
+
+    if (emojiTweet.coordinates && emojiTweet.emojis().length > 0 ) {
+      _.each(emojiTweet.emojis(), function(emoji) {
+        console.log([emoji, emojiTweet.coordinates]);
+      });
     }
   });
 }
