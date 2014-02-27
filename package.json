@@ -1,0 +1,23 @@
+{
+	"name": "EmojiEarth",
+	"description": "",
+	"version": "0.0.1",
+	"author": "Bradley",
+	"private": true,
+	"dependencies": {
+		"config": "*",
+		"emoji": "*",
+		"express": "3.3.5",
+		"mongodb": "1.x",
+		"mongoose": "3.x",
+		"mongoose-unique-validator": "*",
+		"node.extend": "*",
+		"punycode": "*",
+		"socket.io": "*",
+		"twit": "*",
+		"underscore": "*"
+	},
+	"devDependencies": {
+		"mocha": "~1.13.0"
+	}
+}
