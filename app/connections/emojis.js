@@ -1,17 +1,20 @@
 // Setup ========================================================================
-var emoji       = require('emoji'),
-    EmojiStream = require('app/lib/emoji_stream/emoji_stream'),
-    emojiStream = new EmojiStream(),
+var EmojiStream = require('app/lib/emoji_stream/stream'),
     io = null;
 
 // Controllers ==================================================================
-function foundTweet(emoji_tweet) {
-  console.log(emoji_tweet);
+function foundTweet(tweet) {
+  //console.log(tweet);
+  io.sockets.emit('new_tweet', {
+    emoji: tweet.emoji,
+    coordinates: tweet.coordinates
+  });
 }
 
 // Exports ======================================================================
-function setup(io) {
-  io = io;
+function setup(io_connection) {
+  var emojiStream = new EmojiStream();
+  io = io_connection;
   emojiStream.streamTweets(foundTweet)
 }
 module.exports = setup;

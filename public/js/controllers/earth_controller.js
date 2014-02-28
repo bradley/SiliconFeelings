@@ -1,6 +1,6 @@
-define([], function() {
-	return ['$scope', '$rootScope', '$http', '$location', 'socket', function($scope, $rootScope, $http, $location, socket) {
-	  $scope.message = "Foo Bar";
+define(['emoji'], function(emoji) {
+	return ['$scope', '$sce', '$rootScope', '$http', '$location', 'socket', function($scope, $sce, $rootScope, $http, $location, socket) {
+	  $scope.emoji_data;
 
 	  /* Socket Listeners */
 
@@ -8,6 +8,14 @@ define([], function() {
 	    console.log(data.message);
 	  });
 
+	  socket.on('new_tweet', function (tweet) {
+	    $scope.emoji_data = emoji.unifiedToHTML(tweet.emoji);
+	  });
+
+	  // http://docs.angularjs.org/api/ngSanitize/service/$sanitize
+	  $scope.deliberatelyTrustDangerousSnippet = function() {
+      return $sce.trustAsHtml($scope.emoji_data);
+    };
 
 	  // because this has happened asynchroneusly we've missed
 		// Angular's initial call to $apply after the controller has been loaded

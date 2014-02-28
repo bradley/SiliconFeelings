@@ -6,7 +6,6 @@
 	"private": true,
 	"dependencies": {
 		"config": "*",
-		"emoji": "*",
 		"express": "3.3.5",
 		"mongodb": "1.x",
 		"mongoose": "3.x",

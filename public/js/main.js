@@ -4,6 +4,7 @@ requirejs.config({
 		angularRoute: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-route.min',
 		angularResource: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-resource.min',
 		angularAnimate: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-animate.min',
+		emoji: '//cdn.staticfile.org/emoji/0.2.2/emoji',
 		io: '/socket.io/socket.io.js',
 		jQuery: '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min'
 	},
