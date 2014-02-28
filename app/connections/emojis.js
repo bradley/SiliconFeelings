@@ -16,10 +16,21 @@ twitter_stream = new Twit({
 
 // Controllers ==================================================================
 function emojiStream(io) {
-  var emojiData = new EmojiData(),
-      emoji = emojiData.emojiChars();
+  var emojiData,
+      emojis;
 
-  var stream = twitter_stream.stream('statuses/filter', { track: emoji });
+  // Only use the 'top' 200 emoji (determined Feb 26, 2014 using http://www.emojitracker.com/)
+  // if we still only have basic stream access... i.e.; if Twitter never got back to us. 😔
+  if (config.twitter.max_terms) {
+    emojiData = new EmojiData({top_emojis: true});
+  }
+  else {
+    emojiData = new EmojiData();
+  }
+  emojis = emojiData.emojis;
+
+  // Start streaming.
+  var stream = twitter_stream.stream('statuses/filter', { track: emojis });
 
   stream.on('tweet', function (tweet) {
     var emojiTweet = new EmojiTweet(tweet);
@@ -28,8 +39,9 @@ function emojiStream(io) {
       return;
     }
 
-    if (emojiTweet.coordinates && emojiTweet.emojis().length > 0 ) {
-      _.each(emojiTweet.emojis(), function(emoji) {
+    if (emojiTweet.coordinates && emojiTweet.emojis.length > 0 ) {
+      _.each(emojiTweet.emojis, function(emoji) {
+        // NOTE: The coordinates appear to be reversed from what google uses.
         console.log([emoji, emojiTweet.coordinates]);
       });
     }

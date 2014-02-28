@@ -4,22 +4,16 @@ var punycode = require('punycode'),
 var EmojiChar = function (emoji_hash) {
 	this.config = {};
   this.config.unified = emoji_hash.unified;
-  this.config.emoji_char = null;
+  this.emoji = this.emoji || (function(outerscope){ return outerscope.getChar(); })(this);
 }
 
 EmojiChar.prototype = {
-  emoji_char: function () {
+  getChar: function () {
+  	var split = this.config.unified.split('-'),
+        hex_emoji = _.map(split, function(i) { return parseInt(i, 16) }),
+				utf8_emoji = punycode.ucs2.encode(hex_emoji);
 
-  	var self = this,
-  			split = this.config.unified.split('-');
-    this.config.emoji_char = this.config.emoji_char || (function(outerscope) {
-			var hex_emoji = _.map(split, function(i) { return parseInt(i, 16) }),
-					utf8_emoji = punycode.ucs2.encode(hex_emoji);
-
-    	return utf8_emoji;
-    }(self));
-
-    return this.config.emoji_char;
+    return utf8_emoji;
   }
 }
 
