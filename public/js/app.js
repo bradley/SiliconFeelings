@@ -1,15 +1,17 @@
 define([
   'angular',
+  'services',
   'controllers',
   'angularRoute',
   'angularResource'
   ],
-  function (angular, controllers) {
+  function (angular, services, controllers) {
     'use strict';
 
     var myApp = angular.module('myApp', [
       'ngRoute',
       'ngResource',
+      'myApp.services',
       'myApp.controllers'
     ]);
 

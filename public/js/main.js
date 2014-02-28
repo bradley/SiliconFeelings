@@ -4,6 +4,7 @@ requirejs.config({
 		angularRoute: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-route.min',
 		angularResource: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-resource.min',
 		angularAnimate: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-animate.min',
+		io: '/socket.io/socket.io.js',
 		jQuery: '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min'
 	},
 	shim: {
@@ -16,7 +17,7 @@ requirejs.config({
 	]
 });
 
-//http://code.angularjs.org/1.2.1/docs/guide/bootstrap#overview_deferred-bootstrap
+// http://code.angularjs.org/1.2.1/docs/guide/bootstrap#overview_deferred-bootstrap
 window.name = 'NG_DEFER_BOOTSTRAP!';
 
 define([
