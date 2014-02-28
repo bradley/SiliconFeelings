@@ -7,7 +7,7 @@ var EmojiData = function (config) {
   this.config = config || {};
   this.config.emoji_map = this.config.top_emojis ? TOP_EMOJI_MAP : ALL_EMOJI_MAP;
   this.config.emoji_chars = _.map(this.config.emoji_map, function(emoji) { return new EmojiChar(emoji) });
-  this.emojis = this.emojis || (function(outerscope){ return outerscope.getEmojiChars(); })(this);
+  this.emojis = this.emojis || this.getEmojiChars();
 }
 
 EmojiData.prototype = {

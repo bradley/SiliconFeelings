@@ -4,7 +4,7 @@ var punycode = require('punycode'),
 var EmojiChar = function (emoji_hash) {
 	this.config = {};
   this.config.unified = emoji_hash.unified;
-  this.emoji = this.emoji || (function(outerscope){ return outerscope.getChar(); })(this);
+  this.emoji = this.emoji || this.getChar();
 }
 
 EmojiChar.prototype = {

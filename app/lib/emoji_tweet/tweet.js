@@ -4,7 +4,7 @@ var EmojiData = require('app/lib/emoji_data/emoji_data'),
 var EmojiTweet = function (raw_tweet) {
   this.tweet = raw_tweet;
   this.coordinates = this.tweet.coordinates ? this.tweet.coordinates.coordinates : null;
-  this.emojis = this.emojis || (function(outerscope){ return outerscope.findEmojis(); })(this);
+  this.emojis = this.emojis || this.findEmojis();
 }
 
 EmojiTweet.prototype = {
