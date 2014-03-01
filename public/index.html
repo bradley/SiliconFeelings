@@ -3,15 +3,36 @@
 <head>
   <meta charset="utf-8">
   <title>EmojiEarth</title>
+  <meta name="description" content="">
+	<meta name="author" content="Bradley Griffith">
+
   <link href="http://cdn.staticfile.org/emoji/0.2.2/emoji.css" rel="stylesheet" type="text/css" />
   <link href="css/application.css" rel="stylesheet" type="text/css">
 
 </head>
 <body ng-cloak>
+
+	<!--[if lt IE 7]>
+    <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+  <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.min.js"></script>
+  <![endif]-->
+
+
+
+  <!-- Primary Page Layout
+	================================================== -->
+
+	<header>
+		<h1>EmojiEarth</h1>
+	</header>
 	{{message}}
   <div class="view-container">
     <div ng-view class="view-frame"></div>
   </div>
   <script data-main="js/main" src="/bower_components/requirejs/require.js"></script>
+
 </body>
 </html>

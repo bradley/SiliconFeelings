@@ -6,7 +6,8 @@ requirejs.config({
 		angularAnimate: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-animate.min',
 		emoji: '//cdn.staticfile.org/emoji/0.2.2/emoji',
 		io: '/socket.io/socket.io.js',
-		jQuery: '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min'
+		jQuery: '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min',
+		three: '/vendor/js/three'
 	},
 	shim: {
 		'angular' : {'exports' : 'angular'},

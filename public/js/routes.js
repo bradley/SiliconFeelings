@@ -5,7 +5,7 @@ define(['angular', 'app'], function(angular, app) {
 
 	return app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/', {
-      templateUrl: 'partials/earth.html',
+      templateUrl: '/partials/home/index.html',
       controller: 'earthController'
     });
     $routeProvider.otherwise({
