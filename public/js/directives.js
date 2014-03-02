@@ -55,19 +55,26 @@ define(['angular', 'three'], function(angular) {
 
 
 	        function addLights() {
+	        	scene.add(new THREE.AmbientLight(0x333333));
+
 	          light = new THREE.DirectionalLight(0xffffff);
 	          light.position.set(POS_X,POS_Y, POS_Z);
 	          scene.add(light);
 	        }
 
 	        function addEarth() {
-	        	var sphere = new THREE.SphereGeometry(600, 50, 50),
-	        			material = new THREE.MeshLambertMaterial({
-			            color: 0xffffff,
-			            shading: THREE.FlatShading,
-			            vertexColors: THREE.VertexColors
-			          }),
-			       		earth = new THREE.Mesh(sphere, material);
+						var sphere = new THREE.SphereGeometry(600, 50, 50),
+							//planetTexture = THREE.ImageUtils.loadTexture("images/earth_4k.jpg"),
+								planetTexture = THREE.ImageUtils.loadTexture("images/earth_4k.jpg",{}, function() {
+									// Call render once image has loaded.
+									scope.render();
+								}),
+								material = new THREE.MeshPhongMaterial( {
+									map: planetTexture,
+									shininess: 0.2
+            		}),
+								earth = new THREE.Mesh(sphere, material);
+
 			      scene.add(earth);
 	        }
 
@@ -77,12 +84,13 @@ define(['angular', 'three'], function(angular) {
 	          //camera.position.y += ( - mouseY - camera.position.y ) * 0.05;
 	          camera.lookAt(scene.position);
 
-	          renderer.render( scene, camera );
+	          renderer.render(scene, camera);
+ 						requestAnimationFrame(scope.render);
 	        };
 
 	        // Begin
 	        scope.init();
-	        scope.render();
+	        //scope.render();
 
 	      }
 	    }
