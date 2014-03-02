@@ -37,7 +37,7 @@ require('../config/connections')(io);
 
 
 // Connect to Database ==========================================================
-mongoose.connect(config.database.uri, function (err, res) {
+mongoose.connect(config.database.uri, function(err, res) {
 	if (err) {
 		console.log ('ERROR connecting to: ' + config.database.uri + '. ' + err);
 	} else {

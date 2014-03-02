@@ -3,7 +3,7 @@ var ALL_EMOJI_MAP = require('./vendor/emoji.json'),
     EmojiChar     = require('./emoji_data/emoji_char')
     _             = require('underscore');
 
-var EmojiData = function (config) {
+var EmojiData = function(config) {
   this.config = config || {};
   this.config.emoji_map = this.config.top_emojis == true ? TOP_EMOJI_MAP : ALL_EMOJI_MAP;
   this.config.emoji_chars = _.map(this.config.emoji_map, function(emoji) { return new EmojiChar(emoji) });

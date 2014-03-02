@@ -1,4 +1,4 @@
-define(['angular', 'services'], function (angular) {
+define(['angular', 'services'], function(angular) {
 	'use strict';
 
 	/* Controllers */

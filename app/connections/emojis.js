@@ -2,6 +2,7 @@
 var EmojiStream = require('app/lib/emoji_stream/stream'),
     io = null;
 
+
 // Controllers ==================================================================
 function foundTweet(tweet) {
   io.sockets.emit('new_tweet', {
@@ -9,6 +10,7 @@ function foundTweet(tweet) {
     coordinates: tweet.coordinates
   });
 }
+
 
 // Exports ======================================================================
 function setup(io_connection) {

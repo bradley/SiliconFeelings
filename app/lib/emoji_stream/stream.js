@@ -11,7 +11,7 @@ twitter_stream = new Twit({
   access_token_secret: config.twitter.access_token_secret
 });
 
-var EmojiStream = function () {
+var EmojiStream = function() {
   this.twitter = twitter_stream;
   this.stream = null;
 }
@@ -30,7 +30,7 @@ EmojiStream.prototype = {
     // Start streaming.
     this.stream = stream = twitter_stream.stream('statuses/filter', { track: emojis });
 
-    stream.on('tweet', function (tweet) {
+    stream.on('tweet', function(tweet) {
       var emojiTweet = new EmojiTweet(tweet);
 
       if (emojiTweet.isRetweet()) {
