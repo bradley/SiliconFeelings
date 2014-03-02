@@ -6,7 +6,7 @@ define(['emoji'], function(emoji) {
 	  $scope.emoji_data;
 	  $scope.canvasWidth = 400;
     $scope.canvasHeight = 400;
-    $scope.dofillcontainer = true;
+    $scope.fillcontainer = true;
     $scope.scale = 1;
     $scope.materialType = 'lambert';
 
