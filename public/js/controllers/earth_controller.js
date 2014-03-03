@@ -3,9 +3,10 @@ define(['emoji'], function(emoji) {
 
 	  /* Setup */
 
+	  $scope.tweet_data;
 	  $scope.emoji_data;
-	  $scope.canvasWidth = 1000;
-    $scope.canvasHeight = 600;
+	  $scope.canvas_width = 1000;
+    $scope.canvas_height = 600;
 
 	  /* Socket Listeners */
 
@@ -14,6 +15,7 @@ define(['emoji'], function(emoji) {
 	  });
 
 	  socket.on('new_tweet', function(tweet) {
+	  	$scope.tweet_data = tweet;
 	    $scope.emoji_data = emoji.unifiedToHTML(tweet.emoji);
 	  });
 

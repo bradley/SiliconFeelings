@@ -6,10 +6,11 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 	angular.module('myApp.directives', [])
 		.directive('emojiPlanet', ['$rootScope', function($rootScope) {
     	return {
-	      restrict: 'A',
+	      restrict: 'E',
 	      scope: {
 	        'width': '=',
-	        'height': '='
+	        'height': '=',
+	        'tweetData': '='
 	      },
 	      link: function postLink(scope, element, attrs) {
 
@@ -51,7 +52,6 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 	          // Controls
 	          controls = new THREE.TrackballControls(camera);
-	          controls.noZoom = true;
 
 	          // Build Scene Components
 	          addLights();
@@ -125,11 +125,19 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 			    }
 
 
+			    /* Watches */
+
+			    scope.$watch('tweetData', function(new_va, old) {
+			    	console.log('DO SOMETHING');
+				  }, true);
+
+
+
+
 	        /* Lifecycle */
 
 	        scope.render = function() {
 	          controls.update();
-
 
 	          renderer.render(scene, camera);
  						requestAnimationFrame(scope.render);

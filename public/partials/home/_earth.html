@@ -6,4 +6,5 @@
 <!-- NOTE: The ng-if is important here. Because we load our controller
 		 asynchronously, scope variables are not set when the emojiPlanet
 		 directive attempts to use them. Im open to a better fix for this. -->
-<div id="emoji-planet-container" ng-if="canvasWidth" emoji-planet width="canvasWidth" height="canvasHeight"></div>
+<emoji-planet id="emoji-planet-container" width="canvas_width" height="canvas_height" tweet-data="tweet_data"></emoji-planet>
+{{tweet_data}}
