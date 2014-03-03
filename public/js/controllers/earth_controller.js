@@ -5,7 +5,6 @@ define(['emoji'], function(emoji) {
 	  /* Setup */
 
 	  $scope.tweet_data;
-	  $scope.emoji_data;
 	  $scope.canvas_width = 1000;
     $scope.canvas_height = 600;
 
@@ -16,18 +15,13 @@ define(['emoji'], function(emoji) {
 	    console.log(data.message);
 	  });
 
-	  socket.on('new_tweet', function(tweet) {
-	  	$scope.tweet_data = [tweet];
-	    $scope.emoji_data = emoji.unifiedToHTML(tweet.emoji);
+	  socket.on('new_tweets', function(tweets) {
+	  	$scope.tweet_data = tweets;
+	  	_.each(tweets, function(tweet) {
+	  		// Could get an HTML version of our tweets with emoji.unifiedToHTML(tweet.emoji);
+	  		console.log(tweet.emoji);
+	  	});
 	  });
-
-
-	  /* Scope Helper Functions */
-
-	  // http://docs.angularjs.org/api/ngSanitize/service/$sanitize
-	  $scope.deliberatelyTrustDangerousSnippet = function() {
-      return $sce.trustAsHtml($scope.emoji_data);
-    };
 
 
 	  // Because this has happened asynchroneusly we've missed
