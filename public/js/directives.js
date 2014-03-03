@@ -74,8 +74,8 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 	        function addEarth() {
 						var sphere = new THREE.SphereGeometry(900, 50, 50),
-							//planetTexture = THREE.ImageUtils.loadTexture("images/earth_4k_color1.jpg"),
-								planetTexture = THREE.ImageUtils.loadTexture("images/earth_8k.jpg", {}, function() {
+							//planetTexture = THREE.ImageUtils.loadTexture("images/earth_8k.jpg"),
+								planetTexture = THREE.ImageUtils.loadTexture("images/earth_4k_color1.jpg", {}, function() {
 									// Call render once image has loaded.
 									scope.render();
 								}),
