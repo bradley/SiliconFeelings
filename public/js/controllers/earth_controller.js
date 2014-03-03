@@ -4,8 +4,8 @@ define(['emoji'], function(emoji) {
 	  /* Setup */
 
 	  $scope.emoji_data;
-	  $scope.canvasWidth = 400;
-    $scope.canvasHeight = 400;
+	  $scope.canvasWidth = 1000;
+    $scope.canvasHeight = 600;
 
 	  /* Socket Listeners */
 
