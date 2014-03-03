@@ -7,12 +7,15 @@ requirejs.config({
 		emoji: '//cdn.staticfile.org/emoji/0.2.2/emoji',
 		io: '/socket.io/socket.io.js',
 		jQuery: '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min',
-		three: '/vendor/js/three'
+		three: '/vendor/js/three',
+		trackballControls: '/vendor/js/TrackballControls'
 	},
 	shim: {
-		'angular' : {'exports' : 'angular'},
+		'angular' : {'exports': 'angular'},
 		'angularRoute': ['angular'],
-		'angularResource': ['angular']
+		'angularResource': ['angular'],
+		'three': {'exports': 'three'},
+		'trackballControls': ['three']
 	},
 	priority: [
 		'angular'
