@@ -8,10 +8,11 @@ requirejs.config({
 		io: '/socket.io/socket.io.js',
 		jQuery: '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min',
 		three: '/vendor/js/three',
-		trackballControls: '/vendor/js/TrackballControls'
+		trackballControls: '/vendor/js/TrackballControls',
+		_: '/vendor/js/underscore-min'
 	},
 	shim: {
-		'angular' : {'exports': 'angular'},
+		'angular': {'exports': 'angular'},
 		'angularRoute': ['angular'],
 		'angularResource': ['angular'],
 		'three': {'exports': 'three'},

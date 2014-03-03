@@ -27,10 +27,8 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 			    		FAR = 4000,
 			    		RADIUS = 900, // TODO: Make this dynamic with canvas size?
 							camera, scene, renderer, controls, light, earth,
-							data_points = [];
+							tweets = [];
 
-
-			    var test_data = [{"emoji":"😝","coordinates":[-75.30613222,39.95309161]}, {"emoji":"😏","coordinates":[-83.64896659,43.0459068]}, {"emoji":"👏","coordinates":[-89.66125108,35.26079232]}, {"emoji":"😭","coordinates":[-122.41046711,37.73588451]}];
 
 			    /* Initialize */
 
@@ -94,10 +92,10 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
             var material = new THREE.MeshNormalMaterial(),
             		cube = new THREE.CubeGeometry(25, 25, 25);
 
-	          for (var i = 0; i < test_data.length; i++) {
-	          	// Convert earth coordinate to point in 3d space relative to our earth sphere.
-	          	var lon = parseInt(test_data[i].coordinates[0]),
-	          			lat = parseInt(test_data[i].coordinates[1]),
+            _.each(tweets, function(tweet) {
+            	// Convert earth coordinate to point in 3d space relative to our earth sphere.
+	          	var lon = parseInt(tweet.coordinates[0]),
+	          			lat = parseInt(tweet.coordinates[1]),
 	          			position = latLonToVector3(lon, lat);
 
 	          	// Create new object at our position and tell it to 'look at' the center of our scene (center of earth).
@@ -108,9 +106,13 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
             	// Add to scene.
             	// TODO: Look into merging geometries for performance (but find an updated example):
             	//   http://learningthreejs.com/blog/2011/10/05/performance-merging-geometry/
-            	data_points.push(object);
             	scene.add(object);
-	          }
+            	setTimeout(function() {
+            		// TODO: Rather than N timouts, let's look into having a single interval that checks for old data points
+            		// and removes them.
+            		scene.remove(object);
+            	}, 2000);
+            });
 			    }
 
 			    function latLonToVector3(lon, lat) {
@@ -124,14 +126,24 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 		        return new THREE.Vector3(x, y, z);
 			    }
 
+			    /*
+			    function clearScene() {
+				    _.each(data_points, function( object ) {
+			          scene.remove(object);
+				    });
+				    data_points = [];
+					}
+					*/
+
 
 			    /* Watches */
 
-			    scope.$watch('tweetData', function(new_va, old) {
-			    	console.log('DO SOMETHING');
-				  }, true);
-
-
+			    scope.$watch('tweetData', function(new_data, old_data) {
+			    	if (new_data) {
+			    		tweets = new_data;
+			    		addPoints();
+			    	}
+				  });
 
 
 	        /* Lifecycle */
