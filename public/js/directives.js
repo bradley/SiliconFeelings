@@ -48,9 +48,6 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 	          renderer.setClearColor(0xffffff);
 	          renderer.setSize(WIDTH, HEIGHT);
 
-	          // Controls
-	          controls = new THREE.TrackballControls(camera);
-
 	          // Build Scene Components
 	          addLights();
 	          addEarth();
@@ -75,14 +72,13 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 	        function addEarth() {
 						var sphere = new THREE.SphereGeometry(RADIUS, 50, 50),
 							//planetTexture = THREE.ImageUtils.loadTexture("vendor/images/earth_8k.jpg"),
-								planetTexture = THREE.ImageUtils.loadTexture("vendor/images/earth_4k_color1.jpg", {}, function() {
-									// Call render once image has loaded.
-									scope.render();
-								}),
-								material = new THREE.MeshPhongMaterial( {
-									map: planetTexture,
-									shininess: 0.2
-            		});
+							// TODO/NEXT: When we get to loading the emoji sprite sheet it will probably make more sense to load all
+							//   of these sort of resources together (with UI updates) prior to calling init.
+							planetTexture = THREE.ImageUtils.loadTexture("vendor/images/earth_4k_color1.jpg", {}, firstRender),
+							material = new THREE.MeshPhongMaterial({
+								map: planetTexture,
+								shininess: 0.2
+          		});
 
 						earth = new THREE.Mesh(sphere, material);
 			      scene.add(earth);
@@ -148,6 +144,12 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 	        /* Lifecycle */
 
+	        function firstRender() {
+	        	// Set controls and call render once images have loaded.
+	        	controls = new THREE.TrackballControls(camera, renderer.domElement);
+	        	scope.render();
+	        }
+
 	        scope.render = function() {
 	          controls.update();
 
@@ -155,8 +157,8 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
  						requestAnimationFrame(scope.render);
 	        };
 
+
 	        scope.init();
-	        //scope.render();
 	      }
 	    }
     }]);
