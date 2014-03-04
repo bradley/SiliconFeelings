@@ -16,8 +16,8 @@ function foundTweet(tweet) {
 function emit() {
 	if (new_tweets.length) {
 	  io.sockets.emit('new_tweets', new_tweets);
+	  new_tweets = [];
 	}
-	new_tweets = [];
 	// Call self. This is effectively a loop.
 	setTimeout(emit, 100);
 }

@@ -19,7 +19,6 @@ define(['emoji'], function(emoji) {
 	  	$scope.tweet_data = tweets;
 	  	_.each(tweets, function(tweet) {
 	  		// Could get an HTML version of our tweets with emoji.unifiedToHTML(tweet.emoji);
-	  		console.log(tweet.emoji);
 	  	});
 	  });
 
