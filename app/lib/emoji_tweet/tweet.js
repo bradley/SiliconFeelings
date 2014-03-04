@@ -1,7 +1,9 @@
 var EmojiData = require('app/lib/emoji_data/emoji_data'),
     _         = require('underscore');
 
-var EmojiTweet = function(raw_tweet) {
+var EmojiTweet = function(raw_tweet, emojiData) {
+  this.config = {};
+  this.config.emojiData = emojiData;
   this.tweet = raw_tweet;
   this.coordinates = this.tweet.coordinates ? this.tweet.coordinates.coordinates : null;
   this.emojis = this.emojis || this.findEmojis();
@@ -12,7 +14,7 @@ EmojiTweet.prototype = {
     this.tweet.retweeted_status != 'undefined';
   },
   findEmojis: function() {
-    var emojiData = new EmojiData(),
+    var emojiData = this.config.emojiData || new EmojiData(),
         emojis = emojiData.findByString(this.tweet.text);
     return emojis;
   }

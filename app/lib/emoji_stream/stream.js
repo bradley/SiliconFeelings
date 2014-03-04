@@ -31,7 +31,7 @@ EmojiStream.prototype = {
     this.stream = stream = twitter_stream.stream('statuses/filter', { track: emojis });
 
     stream.on('tweet', function(tweet) {
-      var emojiTweet = new EmojiTweet(tweet);
+      var emojiTweet = new EmojiTweet(tweet, emojiData);
 
       if (emojiTweet.isRetweet()) {
         return;
@@ -42,6 +42,7 @@ EmojiStream.prototype = {
           if (typeof(callback) == typeof(Function)) {
             callback({
               "emoji": emoji,
+              "unified": emojiData.emoji_mappings[emoji],
               "coordinates": emojiTweet.coordinates
             });
           }

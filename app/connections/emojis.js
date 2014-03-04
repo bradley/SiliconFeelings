@@ -6,7 +6,7 @@ var EmojiStream = require('app/lib/emoji_stream/stream'),
 
 // Controllers ==================================================================
 function foundTweet(tweet) {
-  new_tweets.push({ emoji: tweet.emoji, coordinates: tweet.coordinates });
+  new_tweets.push({ emoji: tweet.emoji, unified: tweet.unified, coordinates: tweet.coordinates });
 }
 
 
