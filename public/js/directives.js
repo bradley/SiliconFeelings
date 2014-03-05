@@ -93,9 +93,8 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 			    function addPoints() {
             var material = new THREE.MeshNormalMaterial(),
-            		cube = new THREE.CubeGeometry(25, 25, 25);
-
-            var geo = new THREE.Geometry();
+            		plane = new THREE.PlaneGeometry(25, 25),
+            		geo = new THREE.Geometry();
 
             _.each(tweets, function(tweet) {
             	// Convert earth coordinate to point in 3d space relative to our earth sphere.
@@ -104,14 +103,16 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 	          			position = latLonToVector3(lon, lat);
 
 	          	// Create new object at our position and tell it to 'look at' the center of our scene (center of earth).
-	          	var object = new THREE.Mesh(cube, material);
+	          	var object = new THREE.Mesh(plane, material);
+	          	object.material.side = THREE.DoubleSide; // TODO: make sure this isnt a problem with emoji textures.
             	object.position = position;
-            	object.lookAt( new THREE.Vector3(0,0,0) );
+            	lookAwayFromCenter(object);
 
             	// NOTE: Combine geometries for less draw calls
           		//   http://learningthreejs.com/blog/2011/10/05/performance-merging-geometry/
             	THREE.GeometryUtils.merge(geo, object);
             });
+
           	var total = new THREE.Mesh(geo, material);
           	scene.add(total);
 
@@ -120,6 +121,12 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
           		// and removes them.
           		scene.remove(total);
           	}, 2000);
+			    }
+
+			    function lookAwayFromCenter(object) {
+			    	var v = new THREE.Vector3();
+					    v.subVectors(object.position, new THREE.Vector3(0,0,0)).add(object.position);
+					    object.lookAt(v);
 			    }
 
 			    function latLonToVector3(lon, lat) {
