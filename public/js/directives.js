@@ -95,6 +95,8 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
             var material = new THREE.MeshNormalMaterial(),
             		cube = new THREE.CubeGeometry(25, 25, 25);
 
+            var geo = new THREE.Geometry();
+
             _.each(tweets, function(tweet) {
             	// Convert earth coordinate to point in 3d space relative to our earth sphere.
 	          	var lon = parseInt(tweet.coordinates[0]),
@@ -106,16 +108,18 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
             	object.position = position;
             	object.lookAt( new THREE.Vector3(0,0,0) );
 
-            	// Add to scene.
-            	// TODO: Look into merging geometries for performance (but find an updated example):
-            	//   http://learningthreejs.com/blog/2011/10/05/performance-merging-geometry/
-            	scene.add(object);
-            	setTimeout(function() {
-            		// TODO: Rather than N timouts, let's look into having a single interval that checks for old data points
-            		// and removes them.
-            		scene.remove(object);
-            	}, 2000);
+            	// NOTE: Combine geometries for less draw calls
+          		//   http://learningthreejs.com/blog/2011/10/05/performance-merging-geometry/
+            	THREE.GeometryUtils.merge(geo, object);
             });
+          	var total = new THREE.Mesh(geo, material);
+          	scene.add(total);
+
+          	setTimeout(function() {
+          		// TODO: Rather than N timouts, let's look into having a single interval that checks for old data points
+          		// and removes them.
+          		scene.remove(total);
+          	}, 2000);
 			    }
 
 			    function latLonToVector3(lon, lat) {
