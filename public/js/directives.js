@@ -27,38 +27,49 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 			    		FAR = 4000,
 			    		RADIUS = 900, // TODO: Make this dynamic with canvas size?
 							camera, scene, renderer, controls, light, earth,
+							planetTexture, emojiSprites,
 							tweets = [];
 
 
 			    /* Initialize */
 
 	        scope.init = function() {
+	        	// Load Images Prior to Rendering the Scene
+	        	loadImages(function() {
+	        		// Camera
+		          camera = new THREE.PerspectiveCamera(FOV, (WIDTH / HEIGHT), NEAR, FAR);
+					    camera.position.set(POS_X,POS_Y, POS_Z);
+					    camera.lookAt(new THREE.Vector3(0,0,0));
 
-	          // Camera
-	          camera = new THREE.PerspectiveCamera(FOV, (WIDTH / HEIGHT), NEAR, FAR);
-				    camera.position.set(POS_X,POS_Y, POS_Z);
-				    camera.lookAt(new THREE.Vector3(0,0,0));
+		          // Scene
+		          scene = new THREE.Scene();
+		          scene.add(camera);
 
-	          // Scene
-	          scene = new THREE.Scene();
-	          scene.add(camera);
+		         	// Renderer
+		          renderer = new THREE.WebGLRenderer({ antialias: true });
+		          renderer.setClearColor(0xffffff);
+		          renderer.setSize(WIDTH, HEIGHT);
 
-	         	// Renderer
-	          renderer = new THREE.WebGLRenderer({ antialias: true });
-	          renderer.setClearColor(0xffffff);
-	          renderer.setSize(WIDTH, HEIGHT);
+		          // Build Scene Components
+		          addLights();
+		          addEarth();
+		          addPoints();
 
-	          // Build Scene Components
-	          addLights();
-	          addEarth();
-	          addPoints();
-
-	          // Element is provided by the angular directive
-	          element[0].appendChild(renderer.domElement);
+		          // NOTE: Element is provided by the angular directive
+		          element[0].appendChild(renderer.domElement);
+		          controls = new THREE.TrackballControls(camera, renderer.domElement);
+		        	scope.render();
+	        	});
 	        };
 
 
 	        /* Helpers */
+
+	        function loadImages(callback) {
+	        	planetTexture = THREE.ImageUtils.loadTexture("vendor/images/earth_4k_color1.jpg", {}, function() {
+	        		callback();
+	        	});
+	        }
 
 	        function addLights() {
 	        	// TODO: Play with the colors for these lights!
@@ -71,10 +82,6 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 	        function addEarth() {
 						var sphere = new THREE.SphereGeometry(RADIUS, 50, 50),
-							//planetTexture = THREE.ImageUtils.loadTexture("vendor/images/earth_8k.jpg"),
-							// TODO/NEXT: When we get to loading the emoji sprite sheet it will probably make more sense to load all
-							//   of these sort of resources together (with UI updates) prior to calling init.
-							planetTexture = THREE.ImageUtils.loadTexture("vendor/images/earth_4k_color1.jpg", {}, firstRender),
 							material = new THREE.MeshPhongMaterial({
 								map: planetTexture,
 								shininess: 0.2
@@ -144,19 +151,12 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 	        /* Lifecycle */
 
-	        function firstRender() {
-	        	// Set controls and call render once images have loaded.
-	        	controls = new THREE.TrackballControls(camera, renderer.domElement);
-	        	scope.render();
-	        }
-
 	        scope.render = function() {
 	          controls.update();
 
 	          renderer.render(scene, camera);
  						requestAnimationFrame(scope.render);
 	        };
-
 
 	        scope.init();
 	      }
