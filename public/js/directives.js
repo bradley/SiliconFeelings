@@ -4,7 +4,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
   /* Services */
 
 	angular.module('myApp.directives', [])
-		.directive('emojiPlanet', ['$rootScope', function($rootScope) {
+		.directive('emojiPlanet', ['$rootScope', '$http', function($rootScope, $http) {
     	return {
 	      restrict: 'E',
 	      scope: {
@@ -27,7 +27,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 			    		FAR = 4000,
 			    		RADIUS = 900, // TODO: Make this dynamic with canvas size?
 							camera, scene, renderer, controls, light, earth,
-							planetTexture, emojiSprites,
+							planet_texture, emoji_sprites, emoji_sprite_mappings,
 							tweets = [];
 
 
@@ -35,7 +35,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 	        scope.init = function() {
 	        	// Load Images Prior to Rendering the Scene
-	        	loadImages(function() {
+	        	loadResources(function() {
 	        		// Camera
 		          camera = new THREE.PerspectiveCamera(FOV, (WIDTH / HEIGHT), NEAR, FAR);
 					    camera.position.set(POS_X,POS_Y, POS_Z);
@@ -65,10 +65,16 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 	        /* Helpers */
 
-	        function loadImages(callback) {
-	        	planetTexture = THREE.ImageUtils.loadTexture("vendor/images/earth_4k_color1.jpg", {}, function() {
-	        		callback();
-	        	});
+	        function loadResources(callback) {
+	        	// TODO: _Really_ need to rethink this chaining. It works but could get unwieldy quickly.
+	        	$http.get('vendor/emoji_sprite_sheet_small.json').success(function(data) {
+				    	emoji_sprite_mappings = data.frames;
+				    	emoji_sprites = THREE.ImageUtils.loadTexture("vendor/images/emoji_sprite_sheet_small.png", {}, function() {
+		        		planet_texture = THREE.ImageUtils.loadTexture("vendor/images/earth_4k_color1.jpg", {}, function() {
+			        		callback();
+			        	});
+		        	});
+				  	});
 	        }
 
 	        function addLights() {
@@ -82,10 +88,10 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 	        function addEarth() {
 						var sphere = new THREE.SphereGeometry(RADIUS, 50, 50),
-							material = new THREE.MeshPhongMaterial({
-								map: planetTexture,
-								shininess: 0.2
-          		});
+								material = new THREE.MeshPhongMaterial({
+									map: planet_texture,
+									shininess: 0.2
+	          		});
 
 						earth = new THREE.Mesh(sphere, material);
 			      scene.add(earth);
@@ -93,13 +99,14 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 			    function addPoints() {
             var material = new THREE.MeshNormalMaterial(),
-            		plane = new THREE.PlaneGeometry(25, 25),
+            		plane = new THREE.PlaneGeometry(67, 67),
             		geo = new THREE.Geometry();
 
             _.each(tweets, function(tweet) {
             	// Convert earth coordinate to point in 3d space relative to our earth sphere.
 	          	var lon = parseInt(tweet.coordinates[0]),
 	          			lat = parseInt(tweet.coordinates[1]),
+	          			sprite_info = emoji_sprite_mappings[tweet.unified.toLowerCase()],
 	          			position = latLonToVector3(lon, lat);
 
 	          	// Create new object at our position and tell it to 'look at' the center of our scene (center of earth).
