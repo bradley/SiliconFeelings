@@ -70,11 +70,31 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 	        	$http.get('vendor/emoji_sprite_sheet_small.json').success(function(data) {
 				    	emoji_sprite_mappings = data.frames;
 				    	emoji_sprites = THREE.ImageUtils.loadTexture("vendor/images/emoji_sprite_sheet_small.png", {}, function() {
-		        		planet_texture = THREE.ImageUtils.loadTexture("vendor/images/earth_4k_color1.jpg", {}, function() {
-			        		callback();
-			        	});
+				    		mapEmojiTextures(function() {
+				    			planet_texture = THREE.ImageUtils.loadTexture("vendor/images/earth_4k_color1.jpg", {}, function() {
+				        		callback();
+				        	});
+				    		});
 		        	});
 				  	});
+	        }
+
+	        function mapEmojiTextures(callback) {
+						for(var key in emoji_sprite_mappings) {
+							var sprite_info = emoji_sprite_mappings[key],
+									sprite_frame = sprite_info['frame'],
+									sprite = emoji_sprites.clone();
+
+    					sprite.needsUpdate = true; // Important when cloning textures.
+
+          		sprite.repeat.x = sprite_frame.w / 2048;
+							sprite.repeat.y = sprite_frame.h / 2048;
+							sprite.offset.x = ( sprite_frame.x / sprite_frame.w ) * sprite.repeat.x;
+							sprite.offset.y = ( ( 2048 - sprite_frame.y - sprite_frame.h ) / sprite_frame.h) * sprite.repeat.y;
+
+							emoji_sprite_mappings[key].sprite = sprite;
+						}
+						callback();
 	        }
 
 	        function addLights() {
@@ -102,7 +122,6 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
             		geo = new THREE.Geometry();
 
             _.each(tweets, function(tweet) {
-            	console.log(tweet);
             	// Convert earth coordinate to point in 3d space relative to our earth sphere.
 	          	var lon = parseInt(tweet.coordinates[0]),
 	          			lat = parseInt(tweet.coordinates[1]),
@@ -111,14 +130,9 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 	          	// Ensure we found a sprite for the given emoji unified unicode.
 	          	if (sprite_info) {
-	          		var sprite_frame = sprite_info['frame'];
+	          		var sprite = sprite_info.sprite;
 
-	          		emoji_sprites.repeat.x = sprite_frame.w / 2048;
-								emoji_sprites.repeat.y = sprite_frame.h / 2048;
-								emoji_sprites.offset.x = ( sprite_frame.x / sprite_frame.w ) * emoji_sprites.repeat.x;
-								emoji_sprites.offset.y = ( ( 2048 - sprite_frame.y - sprite_frame.h ) / sprite_frame.h) * emoji_sprites.repeat.y;
-
-								var material = new THREE.MeshBasicMaterial({ map: emoji_sprites });
+								var material = new THREE.MeshBasicMaterial({ map: sprite });
 
 		          	// Create new object at our position and tell it to 'look at' the center of our scene (center of earth).
 		          	var object = new THREE.Mesh(plane, material);
