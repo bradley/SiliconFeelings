@@ -32,6 +32,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 							emoji_sprite_sheet_width, emoji_sprite_sheet_height,
 							tweets = [];
 
+					var scene_ready = false;
 
 			    /* Initialize */
 
@@ -60,6 +61,9 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 		          // NOTE: Element is provided by the angular directive
 		          element[0].appendChild(renderer.domElement);
 		          controls = new THREE.TrackballControls(camera, renderer.domElement);
+
+		          // TODO: Dont like this. The rationale is that our tweetData watcher might get called before the scene is ready. Think on it.
+		          scene_ready = true;
 		        	scope.render();
 	        	});
 	        };
@@ -240,7 +244,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 			    /* Watches */
 
 			    scope.$watch('tweetData', function(new_data, old_data) {
-			    	if (new_data) {
+			    	if (scene_ready && new_data) {
 			    		tweets = new_data;
 			    		addPoints();
 			    	}
