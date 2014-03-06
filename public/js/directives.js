@@ -28,6 +28,8 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 			    		RADIUS = 900, // TODO: Make this dynamic with canvas size?
 							camera, scene, renderer, controls, light, earth,
 							planet_texture, emoji_sprites, emoji_sprite_mappings,
+							emoji_sprites_new = new Image(),
+							emoji_sprite_sheet_width, emoji_sprite_sheet_height,
 							tweets = [];
 
 
@@ -69,13 +71,18 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 	        	// TODO: _Really_ need to rethink this chaining. It works but could get unwieldy quickly.
 	        	$http.get('vendor/emoji_sprite_sheet_small.json').success(function(data) {
 				    	emoji_sprite_mappings = data.frames;
-				    	emoji_sprites = THREE.ImageUtils.loadTexture("vendor/images/emoji_sprite_sheet_small.png", {}, function() {
-				    		mapEmojiTextures(function() {
+				    	emoji_sprite_sheet_width = data.meta.size.w;
+				    	emoji_sprite_sheet_height = data.meta.size.h;
+
+				    	emoji_sprites_new.onload = function() {
+				        mapEmojiTextures(function() {
 				    			planet_texture = THREE.ImageUtils.loadTexture("vendor/images/earth_4k_color1.jpg", {}, function() {
 				        		callback();
 				        	});
 				    		});
-		        	});
+				      };
+
+				    	emoji_sprites_new.src = 'vendor/images/emoji_sprite_sheet_small.png';
 				  	});
 	        }
 
@@ -83,16 +90,34 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 						for(var key in emoji_sprite_mappings) {
 							var sprite_info = emoji_sprite_mappings[key],
 									sprite_frame = sprite_info['frame'],
-									sprite = emoji_sprites.clone();
+									canvas = document.createElement('canvas'),
+									context = canvas.getContext('2d'),
+									texture,
+									material;
 
-    					sprite.needsUpdate = true; // Important when cloning textures.
+							canvas.width = sprite_frame.w;
+							canvas.height = sprite_frame.h;
 
-          		sprite.repeat.x = sprite_frame.w / 2048;
-							sprite.repeat.y = sprite_frame.h / 2048;
-							sprite.offset.x = ( sprite_frame.x / sprite_frame.w ) * sprite.repeat.x;
-							sprite.offset.y = ( ( 2048 - sprite_frame.y - sprite_frame.h ) / sprite_frame.h) * sprite.repeat.y;
+							texture = new THREE.Texture(canvas);
 
-							emoji_sprite_mappings[key].sprite = sprite;
+							context.drawImage(
+								emoji_sprites_new,   // Image
+								sprite_frame.x,      // The x coordinate where to start clipping.
+								sprite_frame.y,      // The y coordinate where to start clipping
+								sprite_frame.w,      // The width of the clipped image.
+								sprite_frame.h,      // The height of the clipped image.
+								0,                   // The x coordinate where to place the image on the canvas.
+								0,                   // The y coordinate where to place the image on the canvas.
+								sprite_frame.w,      // The width of the image to use (stretch or reduce the image).
+								sprite_frame.h       // The height of the image to use (stretch or reduce the image)
+							);
+
+							texture.needsUpdate = true; // Important!
+
+							material = new THREE.MeshBasicMaterial({ map: texture });
+
+							// Add new key/value to current emoji object in emoji_sprite_mappings for this texture.
+							sprite_info.sprite = material;
 						}
 						callback();
 	        }
@@ -118,8 +143,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 	        }
 
 	        function addPoints() {
-            var plane = new THREE.PlaneGeometry(67, 67),
-            		geo = new THREE.Geometry();
+            var plane = new THREE.PlaneGeometry(67, 67);
 
             _.each(tweets, function(tweet) {
             	// Convert earth coordinate to point in 3d space relative to our earth sphere.
@@ -130,14 +154,14 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 	          	// Ensure we found a sprite for the given emoji unified unicode.
 	          	if (sprite_info) {
-	          		var sprite = sprite_info.sprite;
+	          		var sprite = sprite_info.sprite,
+	          				object = new THREE.Mesh(plane, sprite);
 
-								var material = new THREE.MeshBasicMaterial({ map: sprite });
-
-		          	// Create new object at our position and tell it to 'look at' the center of our scene (center of earth).
-		          	var object = new THREE.Mesh(plane, material);
+		          	// Make plane visible on top and bottom.
 		          	object.material.side = THREE.DoubleSide; // TODO: make sure this isnt a problem with emoji textures.
+		          	// Position object on correct coordinate relative to the Earth in 3D space.
 	            	object.position = position;
+	            	// Tell object to look away from the center of the scene (the center of the Earth sphere).
 	            	lookAwayFromCenter(object);
 
 	            	scene.add(object);
@@ -148,6 +172,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 		          		scene.remove(object);
 		          	}, 2000);
 	          	}
+
             });
 			    }
 
