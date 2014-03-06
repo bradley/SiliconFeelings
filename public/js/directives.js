@@ -97,6 +97,47 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 			      scene.add(earth);
 	        }
 
+	        function addPoints() {
+            var plane = new THREE.PlaneGeometry(67, 67),
+            		geo = new THREE.Geometry();
+
+            _.each(tweets, function(tweet) {
+            	console.log(tweet);
+            	// Convert earth coordinate to point in 3d space relative to our earth sphere.
+	          	var lon = parseInt(tweet.coordinates[0]),
+	          			lat = parseInt(tweet.coordinates[1]),
+	          			sprite_info = emoji_sprite_mappings[tweet.unified.toLowerCase()],
+	          			position = latLonToVector3(lon, lat);
+
+	          	// Ensure we found a sprite for the given emoji unified unicode.
+	          	if (sprite_info) {
+	          		var sprite_frame = sprite_info['frame'];
+
+	          		emoji_sprites.repeat.x = sprite_frame.w / 2048;
+								emoji_sprites.repeat.y = sprite_frame.h / 2048;
+								emoji_sprites.offset.x = ( sprite_frame.x / sprite_frame.w ) * emoji_sprites.repeat.x;
+								emoji_sprites.offset.y = ( ( 2048 - sprite_frame.y - sprite_frame.h ) / sprite_frame.h) * emoji_sprites.repeat.y;
+
+								var material = new THREE.MeshBasicMaterial({ map: emoji_sprites });
+
+		          	// Create new object at our position and tell it to 'look at' the center of our scene (center of earth).
+		          	var object = new THREE.Mesh(plane, material);
+		          	object.material.side = THREE.DoubleSide; // TODO: make sure this isnt a problem with emoji textures.
+	            	object.position = position;
+	            	lookAwayFromCenter(object);
+
+	            	scene.add(object);
+
+		          	setTimeout(function() {
+		          		// TODO: Rather than N timouts, let's look into having a single interval that checks for old data points
+		          		// and removes them.
+		          		scene.remove(object);
+		          	}, 2000);
+	          	}
+            });
+			    }
+
+/*
 			    function addPoints() {
             var material = new THREE.MeshNormalMaterial(),
             		plane = new THREE.PlaneGeometry(67, 67),
@@ -129,7 +170,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
           		scene.remove(total);
           	}, 2000);
 			    }
-
+*/
 			    function lookAwayFromCenter(object) {
 			    	var v = new THREE.Vector3();
 					    v.subVectors(object.position, new THREE.Vector3(0,0,0)).add(object.position);
