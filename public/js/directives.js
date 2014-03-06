@@ -34,6 +34,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 					var scene_ready = false;
 
+
 			    /* Initialize */
 
 	        scope.init = function() {
@@ -118,7 +119,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 							texture.needsUpdate = true; // Important!
 
-							material = new THREE.MeshBasicMaterial({ map: texture });
+							material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
 
 							// Add new key/value to current emoji object in emoji_sprite_mappings for this texture.
 							sprite_info.sprite = material;
@@ -230,15 +231,6 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 		        return new THREE.Vector3(x, y, z);
 			    }
-
-			    /*
-			    function clearScene() {
-				    _.each(data_points, function( object ) {
-			          scene.remove(object);
-				    });
-				    data_points = [];
-					}
-					*/
 
 
 			    /* Watches */
