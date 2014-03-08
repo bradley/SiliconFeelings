@@ -81,7 +81,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 				    	emoji_sprites_new.onload = function() {
 				        mapEmojiTextures(function() {
-				    			planet_texture = THREE.ImageUtils.loadTexture("vendor/images/earth_4k_color1.jpg", {}, function() {
+				    			planet_texture = THREE.ImageUtils.loadTexture("vendor/images/earth_4k.jpg", {}, function() {
 				        		callback();
 				        	});
 				    		});
@@ -144,11 +144,14 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 	          		});
 
 						earth = new THREE.Mesh(sphere, material);
+
 			      scene.add(earth);
 	        }
 
+
 	        function addPoints() {
-            var plane = new THREE.PlaneGeometry(67, 67);
+            //var plane = new THREE.PlaneGeometry(67, 67);
+            var plane = new THREE.PlaneGeometry(100, 100);
 
             _.each(tweets, function(tweet) {
             	// Convert earth coordinate to point in 3d space relative to our earth sphere.
