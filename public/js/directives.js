@@ -119,7 +119,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 							texture.needsUpdate = true; // Important!
 
-							material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+							material = new THREE.MeshBasicMaterial({ map: texture, transparent: true, depthWrite: false });
 
 							// Add new key/value to current emoji object in emoji_sprite_mappings for this texture.
 							sprite_info.sprite = material;
@@ -150,8 +150,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 
 	        function addPoints() {
-            //var plane = new THREE.PlaneGeometry(67, 67);
-            var plane = new THREE.PlaneGeometry(100, 100);
+            var plane = new THREE.PlaneGeometry(67, 67);
 
             _.each(tweets, function(tweet) {
             	// Convert earth coordinate to point in 3d space relative to our earth sphere.
