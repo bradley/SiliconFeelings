@@ -57,6 +57,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 		          // Build Scene Components
 		          addLights();
 		          addEarth();
+		          addFog();
 		          addPoints();
 
 		          // NOTE: Element is provided by the angular directive
@@ -81,12 +82,13 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 				    	emoji_sprites_new.onload = function() {
 				        mapEmojiTextures(function() {
-				    			planet_texture = THREE.ImageUtils.loadTexture("vendor/images/earth_4k_color1.jpg", {}, function() {
+				    			planet_texture = THREE.ImageUtils.loadTexture("vendor/images/earth_4k.jpg", {}, function() {
 				        		callback();
 				        	});
 				    		});
 				      };
 
+				      // Set src for image so that the onload event is triggered.
 				    	emoji_sprites_new.src = 'vendor/images/emoji_sprite_sheet_small.png';
 				  	});
 	        }
@@ -119,7 +121,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 							texture.needsUpdate = true; // Important!
 
-							material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+							material = new THREE.MeshBasicMaterial({ map: texture, transparent: true, depthWrite: false });
 
 							// Add new key/value to current emoji object in emoji_sprite_mappings for this texture.
 							sprite_info.sprite = material;
@@ -144,13 +146,23 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 	          		});
 
 						earth = new THREE.Mesh(sphere, material);
+
 			      scene.add(earth);
 	        }
 
-	        function addPoints() {
-            var plane = new THREE.PlaneGeometry(67, 67);
+	        function addFog() {
+	        	var start = 1986,
+	        			end = 2300;
+	        	scene.fog = new THREE.Fog(0xffffff, start, end);
+	        }
 
-            _.each(tweets, function(tweet) {
+	        function addPoints() {
+            var plane = new THREE.PlaneGeometry(67, 67),
+           			geo = new THREE.Geometry(),
+           			mesh = new THREE.Mesh(plane),
+           			materials = [];;
+
+            _.each(tweets, function(tweet, index) {
             	// Convert earth coordinate to point in 3d space relative to our earth sphere.
 	          	var lon = parseInt(tweet.coordinates[0]),
 	          			lat = parseInt(tweet.coordinates[1]),
@@ -159,53 +171,28 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 	          	// Ensure we found a sprite for the given emoji unified unicode.
 	          	if (sprite_info) {
-	          		var sprite = sprite_info.sprite,
-	          				object = new THREE.Mesh(plane, sprite);
+	          		var sprite = sprite_info.sprite;
+
+	          		// Prepare for merger with geo object.
+	          		materials.push(sprite);
+	          		mesh.geometry.faces = setFaceIndexesForMerger(mesh.geometry.faces, index);
 
 		          	// Make plane visible on top and bottom.
-		          	object.material.side = THREE.DoubleSide; // TODO: make sure this isnt a problem with emoji textures.
-		          	// Position object on correct coordinate relative to the Earth in 3D space.
-	            	object.position = position;
-	            	// Tell object to look away from the center of the scene (the center of the Earth sphere).
-	            	lookAwayFromCenter(object);
+		          	mesh.material.side = THREE.DoubleSide; // TODO: make sure this isnt a problem with emoji textures.
+		          	// Position mesh on correct coordinate relative to the Earth in 3D space.
+	            	mesh.position = position;
+	            	// Tell mesh to look away from the center of the scene (the center of the Earth sphere).
+	            	lookAwayFromCenter(mesh);
 
-	            	scene.add(object);
-
-		          	setTimeout(function() {
-		          		// TODO: Rather than N timouts, let's look into having a single interval that checks for old data points
-		          		// and removes them.
-		          		scene.remove(object);
-		          	}, 2000);
+	            	// NOTE: Combine geometries for less draw calls
+	          		//   http://learningthreejs.com/blog/2011/10/05/performance-merging-geometry/
+	            	THREE.GeometryUtils.merge(geo, mesh);
 	          	}
 
             });
-			    }
 
-/*
-			    function addPoints() {
-            var material = new THREE.MeshNormalMaterial(),
-            		plane = new THREE.PlaneGeometry(67, 67),
-            		geo = new THREE.Geometry();
-
-            _.each(tweets, function(tweet) {
-            	// Convert earth coordinate to point in 3d space relative to our earth sphere.
-	          	var lon = parseInt(tweet.coordinates[0]),
-	          			lat = parseInt(tweet.coordinates[1]),
-	          			sprite_info = emoji_sprite_mappings[tweet.unified.toLowerCase()],
-	          			position = latLonToVector3(lon, lat);
-
-	          	// Create new object at our position and tell it to 'look at' the center of our scene (center of earth).
-	          	var object = new THREE.Mesh(plane, material);
-	          	object.material.side = THREE.DoubleSide; // TODO: make sure this isnt a problem with emoji textures.
-            	object.position = position;
-            	lookAwayFromCenter(object);
-
-            	// NOTE: Combine geometries for less draw calls
-          		//   http://learningthreejs.com/blog/2011/10/05/performance-merging-geometry/
-            	THREE.GeometryUtils.merge(geo, object);
-            });
-
-          	var total = new THREE.Mesh(geo, material);
+						var total = new THREE.Mesh(geo, new THREE.MeshFaceMaterial(materials));
+						total.matrixAutoUpdate = false;
           	scene.add(total);
 
           	setTimeout(function() {
@@ -214,7 +201,17 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
           		scene.remove(total);
           	}, 2000);
 			    }
-*/
+
+			    function setFaceIndexesForMerger(faces, index) {
+			    	// NOTE: This make it possible to change the material Index manually.
+        		//   This is especcially handy when you start to merge generated geometries with different materials.
+        		//	 More: https://github.com/mrdoob/three.js/pull/2817 (since removed: https://github.com/mrdoob/three.js/releases/tag/r60)
+						for ( var i = 0; i <= (faces.length - 1); i ++ ) {
+							faces[i].materialIndex = index;
+		 				}
+		 				return faces;
+			    }
+
 			    function lookAwayFromCenter(object) {
 			    	var v = new THREE.Vector3();
 					    v.subVectors(object.position, new THREE.Vector3(0,0,0)).add(object.position);
