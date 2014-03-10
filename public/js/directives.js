@@ -57,6 +57,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 		          // Build Scene Components
 		          addLights();
 		          addEarth();
+		          addFog();
 		          addPoints();
 
 		          // NOTE: Element is provided by the angular directive
@@ -149,6 +150,11 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 			      scene.add(earth);
 	        }
 
+	        function addFog() {
+	        	var start = 1986,
+	        			end = 2300;
+	        	scene.fog = new THREE.Fog(0xffffff, start, end);
+	        }
 
 	        function addPoints() {
             var plane = new THREE.PlaneGeometry(67, 67),
