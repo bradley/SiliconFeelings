@@ -4,10 +4,11 @@ define([
   'directives',
   'controllers',
   '_',
+  '$',
   'angularRoute',
   'angularResource'
   ],
-  function(angular, services, directives, controllers, _) {
+  function(angular, services, directives, controllers, _, $) {
     'use strict';
 
     var myApp = angular.module('myApp', [

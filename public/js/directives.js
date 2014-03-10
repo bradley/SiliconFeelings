@@ -73,6 +73,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 	        /* Helpers */
 
+	        // Calls callback (no parameters) after all resources have loaded.
 	        function loadResources(callback) {
 	        	// TODO: _Really_ need to rethink this chaining. It works but could get unwieldy quickly.
 	        	$http.get('vendor/emoji_sprite_sheet_small.json').success(function(data) {
@@ -93,6 +94,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 				  	});
 	        }
 
+	        // Creates a reusable material for each emoji using our spritesheet.
 	        function mapEmojiTextures(callback) {
 						for(var key in emoji_sprite_mappings) {
 							var sprite_info = emoji_sprite_mappings[key],
@@ -131,11 +133,23 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 	        function addLights() {
 	        	// TODO: Play with the colors for these lights!
-	        	scene.add(new THREE.AmbientLight(0x333333));
+	        	var main_light = light = new THREE.SpotLight(0xffffff),
+	        			ambient_light = new THREE.AmbientLight(0x282F3E),
+	        			backlight = new THREE.DirectionalLight( 0x302A50, 0.8 );
 
-	          light = new THREE.DirectionalLight(0xffffff);
-	          light.position.set(POS_X,POS_Y, POS_Z);
-	          scene.add(light);
+	        	scene.add(ambient_light);
+
+	          // NOTE: We are adding the light to our camera and not the scene.
+	          //  Our trackball control (camera rotating functionality) rotates the
+	          //  camera so if we need a fixed light it must be part of the camera and
+	          //  not the scene. Our positioning is also relative to the camera.
+	          camera.add(main_light);
+	          main_light.position.set(-1800, 1800, 780);
+
+	          // Just a hint of dark light at the bottom right of Earth.
+	          camera.add(backlight);
+	          backlight.position.set(2400, -2400, -3000)
+
 	        }
 
 	        function addEarth() {
@@ -167,7 +181,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 	          	var lon = parseInt(tweet.coordinates[0]),
 	          			lat = parseInt(tweet.coordinates[1]),
 	          			sprite_info = emoji_sprite_mappings[tweet.unified.toLowerCase()],
-	          			position = latLonToVector3(lon, lat);
+	          			position = lonLatToVector3(lon, lat);
 
 	          	// Ensure we found a sprite for the given emoji unified unicode.
 	          	if (sprite_info) {
@@ -175,7 +189,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 	          		// Prepare for merger with geo object.
 	          		materials.push(sprite);
-	          		mesh.geometry.faces = setFaceIndexesForMerger(mesh.geometry.faces, index);
+	          		mesh.geometry.faces = setFaceIndexes(mesh.geometry.faces, index);
 
 		          	// Make plane visible on top and bottom.
 		          	mesh.material.side = THREE.DoubleSide; // TODO: make sure this isnt a problem with emoji textures.
@@ -202,7 +216,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
           	}, 2000);
 			    }
 
-			    function setFaceIndexesForMerger(faces, index) {
+			   	function setFaceIndexes(faces, index) {
 			    	// NOTE: This make it possible to change the material Index manually.
         		//   This is especcially handy when you start to merge generated geometries with different materials.
         		//	 More: https://github.com/mrdoob/three.js/pull/2817 (since removed: https://github.com/mrdoob/three.js/releases/tag/r60)
@@ -218,7 +232,8 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 					    object.lookAt(v);
 			    }
 
-			    function latLonToVector3(lon, lat) {
+			    // Convert a latitude/lon
+			   	function lonLatToVector3(lon, lat) {
 		        var distance_from_surface = 20,
 		        		phi = (lat) * Math.PI / 180,
 		        		theta = (lon - 180) * Math.PI / 180,
@@ -244,7 +259,6 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 	        scope.render = function() {
 	          controls.update();
-
 	          renderer.render(scene, camera);
  						requestAnimationFrame(scope.render);
 	        };
