@@ -27,7 +27,7 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 			    		FAR = 4000,
 			    		RADIUS = 900, // TODO: Make this dynamic with canvas size?
 							camera, scene, renderer, controls, light, earth,
-							planet_texture, emoji_sprites, emoji_sprite_mappings,
+							planet_texture, planet_specular_texture, emoji_sprites, emoji_sprite_mappings,
 							emoji_sprites_new = new Image(),
 							emoji_sprite_sheet_width, emoji_sprite_sheet_height,
 							tweets = [];
@@ -83,8 +83,10 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 
 				    	emoji_sprites_new.onload = function() {
 				        mapEmojiTextures(function() {
-				    			planet_texture = THREE.ImageUtils.loadTexture("vendor/images/earth_4k.jpg", {}, function() {
-				        		callback();
+				    			planet_texture = THREE.ImageUtils.loadTexture("vendor/images/earth.jpg", {}, function() {
+				        		planet_specular_texture = THREE.ImageUtils.loadTexture("vendor/images/specular.png", {}, function() {
+					        		callback();
+					        	});
 				        	});
 				    		});
 				      };
@@ -132,10 +134,10 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 	        }
 
 	        function addLights() {
-	        	// TODO: Play with the colors for these lights!
-	        	var main_light = light = new THREE.SpotLight(0xffffff),
+	        	var main_light = light = new THREE.DirectionalLight(0xffffff, 0.4),
+	        			spot_light = new THREE.SpotLight(0xffffff, 1.25),
 	        			ambient_light = new THREE.AmbientLight(0x282F3E),
-	        			backlight = new THREE.DirectionalLight( 0x302A50, 0.8 );
+	        			backlight = new THREE.DirectionalLight(0x282343, 0.8);
 
 	        	scene.add(ambient_light);
 
@@ -145,6 +147,11 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 	          //  not the scene. Our positioning is also relative to the camera.
 	          camera.add(main_light);
 	          main_light.position.set(-1800, 1800, 780);
+
+	    			// Additional glow on top left of Earth.
+	    			camera.add(spot_light);
+	          spot_light.position.set(-1800, 1800, 780);
+	          spot_light.exponent = 70.0;
 
 	          // Just a hint of dark light at the bottom right of Earth.
 	          camera.add(backlight);
@@ -156,9 +163,11 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 						var sphere = new THREE.SphereGeometry(RADIUS, 50, 50),
 								material = new THREE.MeshPhongMaterial({
 									map: planet_texture,
-									shininess: 0.2
+									shininess: 0.1
 	          		});
 
+						material.specularMap = planet_specular_texture;
+						material.specular = new THREE.Color('white');
 						earth = new THREE.Mesh(sphere, material);
 
 			      scene.add(earth);
@@ -187,7 +196,8 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 	          	if (sprite_info) {
 	          		var sprite = sprite_info.sprite;
 
-	          		// Prepare for merger with geo object.
+	          		// NOTE: Prepare for merger with geo object.
+	          		//   http://learningthreejs.com/blog/2011/10/05/performance-merging-geometry/
 	          		materials.push(sprite);
 	          		mesh.geometry.faces = setFaceIndexes(mesh.geometry.faces, index);
 
