@@ -1,22 +1,36 @@
 requirejs.config({
 	paths: {
-		angular: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min',
-		angularRoute: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-route.min',
-		angularResource: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-resource.min',
-		angularAnimate: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-animate.min',
-		emoji: '//cdn.staticfile.org/emoji/0.2.2/emoji',
-		io: '/socket.io/socket.io.js',
-		$: '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min',
-		three: '/vendor/js/three',
-		trackballControls: '/vendor/js/TrackballControls',
-		_: '/vendor/js/underscore-min'
+		angular           : '//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min',
+		angularRoute      : '//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-route.min',
+		angularResource   : '//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-resource.min',
+		angularAnimate    : '//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-animate.min',
+		emoji             : '//cdn.staticfile.org/emoji/0.2.2/emoji',
+		io                : '/socket.io/socket.io.js',
+		three             : '/vendor/js/three',
+		trackballControls : '/vendor/js/TrackballControls',
+		$                 : '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min',
+		_                 : '/vendor/js/underscore-min',
+		maskPass          : '/vendor/js/postprocessing/MaskPass',
+		renderPass        : '/vendor/js/postprocessing/RenderPass',
+		shaderPass        : '/vendor/js/postprocessing/ShaderPass',
+		effectComposer    : '/vendor/js/postprocessing/EffectComposer',
+		copyShader        : '/vendor/js/shaders/CopyShader',
+		rgbShiftShader    : '/vendor/js/shaders/RGBShiftShader',
+		badTVShader       : '/vendor/js/shaders/BadTVShader'
 	},
 	shim: {
-		'angular': {'exports': 'angular'},
-		'angularRoute': ['angular'],
-		'angularResource': ['angular'],
-		'three': {'exports': 'three'},
-		'trackballControls': ['three']
+		'angular'           : {'exports': 'angular'},
+		'angularRoute'      : ['angular'],
+		'angularResource'   : ['angular'],
+		'three'             : {'exports': 'three'},
+		'trackballControls' : ['three'],
+		'copyShader'        : ['three'],
+		'maskPass'          : ['three'],
+		'renderPass'        : ['three'],
+		'shaderPass'        : ['three'],
+		'effectComposer'    : ['three', 'copyShader', 'maskPass'],
+		'rgbShiftShader'    : ['three'],
+		'badTVShader'       : ['three']
 	},
 	priority: [
 		'angular'

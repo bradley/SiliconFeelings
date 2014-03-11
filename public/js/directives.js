@@ -1,4 +1,4 @@
-define(['angular', 'three', 'trackballControls'], function(angular) {
+define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass', 'shaderPass', 'rgbShiftShader', 'badTVShader'], function(angular) {
 	'use strict';
 
   /* Services */
@@ -26,10 +26,12 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 			    		NEAR = 1,
 			    		FAR = 4000,
 			    		RADIUS = 900, // TODO: Make this dynamic with canvas size?
-							camera, scene, renderer, controls, light, earth,
+							camera, scene, renderer, composer, controls, light, earth,
 							planet_texture, planet_specular_texture, emoji_sprites, emoji_sprite_mappings,
 							emoji_sprites_new = new Image(),
 							emoji_sprite_sheet_width, emoji_sprite_sheet_height,
+							rgbEffect, tvEffect, copyPass,
+							shader_time = 0,
 							tweets = [];
 
 					var scene_ready = false;
@@ -63,6 +65,22 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 		          // NOTE: Element is provided by the angular directive
 		          element[0].appendChild(renderer.domElement);
 		          controls = new THREE.TrackballControls(camera, renderer.domElement);
+
+		          // Postprocessing
+		          composer = new THREE.EffectComposer(renderer);
+							composer.addPass(new THREE.RenderPass(scene, camera));
+							rgbEffect = new THREE.ShaderPass(THREE.RGBShiftShader);
+							rgbEffect.uniforms['amount'].value = 0.0099;
+							composer.addPass(rgbEffect);
+							tvEffect = new THREE.ShaderPass(THREE.BadTVShader);
+							tvEffect.uniforms['distortion'].value = 1.4;
+							tvEffect.uniforms['distortion2'].value = 2.1;
+							tvEffect.uniforms['speed'].value = 0.08;
+							tvEffect.uniforms['rollSpeed'].value = 0.0;
+							composer.addPass(tvEffect);
+							copyPass = new THREE.ShaderPass( THREE.CopyShader );
+							composer.addPass( copyPass );
+							copyPass.renderToScreen = true;
 
 		          // TODO: Dont like this. The rationale is that our tweetData watcher might get called before the scene is ready. Think on it.
 		          scene_ready = true;
@@ -268,8 +286,11 @@ define(['angular', 'three', 'trackballControls'], function(angular) {
 	        /* Lifecycle */
 
 	        scope.render = function() {
+	        	shader_time += 0.1;
+						tvEffect.uniforms['time'].value = shader_time;
 	          controls.update();
-	          renderer.render(scene, camera);
+	          //renderer.render(scene, camera);
+	          composer.render();
  						requestAnimationFrame(scope.render);
 	        };
 
