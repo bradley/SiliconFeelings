@@ -1,4 +1,4 @@
-define(['emoji'], function(emoji) {
+define([], function() {
 	return ['$scope', '$sce', '$rootScope', '$http', '$location', 'socket', function($scope, $sce, $rootScope, $http, $location, socket) {
 
 
@@ -7,6 +7,7 @@ define(['emoji'], function(emoji) {
 	  $scope.tweet_data;
 	  $scope.canvas_width = 1000;
     $scope.canvas_height = 600;
+    $scope.connection_status = false;
 
 
 	  /* Socket Listeners */
@@ -15,11 +16,37 @@ define(['emoji'], function(emoji) {
 	    console.log(data.message);
 	  });
 
+	  socket.on('connecting', function() {
+	  	// TODO
+	  });
+
+	  socket.on('connect', function() {
+	  	$scope.connection_status = true;
+	  });
+
+	  socket.on('disconnect', function() {
+	  	$scope.connection_status = false;
+	  });
+
+	  socket.on('error', function() {
+	  	$scope.connection_status = false;
+	  });
+
+	  socket.on('reconnecting', function() {
+	  	// NOTE: Fires one or more times!
+	  	// TODO
+	  });
+
+	  socket.on('reconnect', function() {
+	  	$scope.connection_status = true;
+	  });
+
+	  socket.on('reconnect_failed', function() {
+	   	// TODO
+	 	});
+
 	  socket.on('new_tweets', function(tweets) {
 	  	$scope.tweet_data = tweets;
-	  	_.each(tweets, function(tweet) {
-	  		// Could get an HTML version of our tweets with emoji.unifiedToHTML(tweet.emoji);
-	  	});
 	  });
 
 

@@ -3,4 +3,4 @@
 <!-- NOTE: The ng-if is important here. Because we load our controller
 		 asynchronously, scope variables are not set when the emojiPlanet
 		 directive attempts to use them. Im open to a better fix for this. -->
-<emoji-planet id="emoji-planet-container" width="canvas_width" height="canvas_height" tweet-data="tweet_data"></emoji-planet>
+<emoji-planet id="emoji-planet-container" width="canvas_width" height="canvas_height" tweet-data="tweet_data" connection-status='connection_status'></emoji-planet>

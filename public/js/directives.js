@@ -10,7 +10,8 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	      scope: {
 	        'width': '=',
 	        'height': '=',
-	        'tweetData': '='
+	        'tweetData': '=',
+	        'connectionStatus': '='
 	      },
 	      link: function postLink(scope, element, attrs) {
 
@@ -30,8 +31,9 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 							planet_texture, planet_specular_texture, emoji_sprites, emoji_sprite_mappings,
 							emoji_sprites_new = new Image(),
 							emoji_sprite_sheet_width, emoji_sprite_sheet_height,
-							rgbEffect, tvEffect, copyPass,
+							rgbEffect, tvEffect, copyPass, renderPass,
 							shader_time = 0,
+							connected,
 							tweets = [];
 
 					var scene_ready = false;
@@ -45,7 +47,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	        		// Camera
 		          camera = new THREE.PerspectiveCamera(FOV, (WIDTH / HEIGHT), NEAR, FAR);
 					    camera.position.set(POS_X,POS_Y, POS_Z);
-					    camera.lookAt(new THREE.Vector3(0,0,0));
+					    camera.lookAt(new THREE.Vector3(0, 0, 0));
 
 		          // Scene
 		          scene = new THREE.Scene();
@@ -60,30 +62,16 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 		          addLights();
 		          addEarth();
 		          addFog();
-		          addPoints();
 
 		          // NOTE: Element is provided by the angular directive
 		          element[0].appendChild(renderer.domElement);
 		          controls = new THREE.TrackballControls(camera, renderer.domElement);
 
 		          // Postprocessing
-		          composer = new THREE.EffectComposer(renderer);
-							composer.addPass(new THREE.RenderPass(scene, camera));
-							rgbEffect = new THREE.ShaderPass(THREE.RGBShiftShader);
-							rgbEffect.uniforms['amount'].value = 0.0099;
-							composer.addPass(rgbEffect);
-							tvEffect = new THREE.ShaderPass(THREE.BadTVShader);
-							tvEffect.uniforms['distortion'].value = 1.4;
-							tvEffect.uniforms['distortion2'].value = 2.1;
-							tvEffect.uniforms['speed'].value = 0.08;
-							tvEffect.uniforms['rollSpeed'].value = 0.0;
-							composer.addPass(tvEffect);
-							copyPass = new THREE.ShaderPass( THREE.CopyShader );
-							composer.addPass( copyPass );
-							copyPass.renderToScreen = true;
+		          addPostprocessing();
 
-		          // TODO: Dont like this. The rationale is that our tweetData watcher might get called before the scene is ready. Think on it.
 		          scene_ready = true;
+		          updateConnectionFeedback();
 		        	scope.render();
 	        	});
 	        };
@@ -168,7 +156,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 	    			// Additional glow on top left of Earth.
 	    			camera.add(spot_light);
-	          spot_light.position.set(-1800, 1800, 780);
+	          spot_light.position.set(-900, 1800, 780);
 	          spot_light.exponent = 70.0;
 
 	          // Just a hint of dark light at the bottom right of Earth.
@@ -272,6 +260,40 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 		        return new THREE.Vector3(x, y, z);
 			    }
 
+			    function addPostprocessing() {
+							composer = new THREE.EffectComposer(renderer);
+
+		          renderPass = new THREE.RenderPass(scene, camera);
+							composer.addPass(renderPass);
+
+							rgbEffect = new THREE.ShaderPass(THREE.RGBShiftShader);
+							rgbEffect.uniforms['amount'].value = 0.007;
+							composer.addPass(rgbEffect);
+
+							tvEffect = new THREE.ShaderPass(THREE.BadTVShader);
+							tvEffect.uniforms['distortion'].value = 1.4;
+							tvEffect.uniforms['distortion2'].value = 2.1;
+							tvEffect.uniforms['speed'].value = 0.04;
+							tvEffect.uniforms['rollSpeed'].value = 0.0;
+							composer.addPass(tvEffect);
+
+							copyPass = new THREE.ShaderPass(THREE.CopyShader);
+							composer.addPass(copyPass);
+
+							copyPass.renderToScreen = true;
+			    }
+
+			    function updateConnectionFeedback() {
+			    	composer = new THREE.EffectComposer(renderer);
+						composer.addPass(renderPass);
+				  	if (!connected) {
+				  		composer.addPass(rgbEffect);
+				  		composer.addPass(tvEffect);
+				  		composer.addPass(copyPass);
+							copyPass.renderToScreen = true;
+				  	}
+			    }
+
 
 			    /* Watches */
 
@@ -282,15 +304,26 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 			    	}
 				  });
 
+				  scope.$watch('connectionStatus', function(state, old_data) {
+				  	connected = state;
+				  	if (scene_ready) {
+				  		updateConnectionFeedback();
+				  	}
+				  });
+
 
 	        /* Lifecycle */
 
 	        scope.render = function() {
 	        	shader_time += 0.1;
 						tvEffect.uniforms['time'].value = shader_time;
+
+						// Update scene with input from trackball controls.
 	          controls.update();
-	          //renderer.render(scene, camera);
-	          composer.render();
+
+	          // Render
+	          renderer.render(scene, camera);
+	          composer.render(0.1);
  						requestAnimationFrame(scope.render);
 	        };
 
