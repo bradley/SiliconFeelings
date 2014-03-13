@@ -4,14 +4,13 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
   /* Services */
 
 	angular.module('myApp.directives', [])
-		.directive('emojiPlanet', ['$rootScope', '$http', function($rootScope, $http) {
+		.directive('emojiPlanet', ['$rootScope', '$http', 'socket', function($rootScope, $http, socket) {
     	return {
 	      restrict: 'E',
 	      scope: {
 	        'width': '=',
 	        'height': '=',
-	        'tweetData': '=',
-	        'connectionStatus': '='
+	        'tweetData': '='
 	      },
 	      link: function postLink(scope, element, attrs) {
 
@@ -313,13 +312,31 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 			    function updateConnectionFeedback() {
 			    	composer = new THREE.EffectComposer(renderer);
 						composer.addPass(renderPass);
-				  	if (!connected) {
+				  	if (!socket.connectionStatus() && scene_ready) {
 				  		composer.addPass(rgbEffect);
 				  		composer.addPass(tvEffect);
 				  		composer.addPass(copyPass);
 							copyPass.renderToScreen = true;
 				  	}
 			    }
+
+			    /* Listeners */
+
+			    socket.on('connect', function() {
+				  	updateConnectionFeedback();
+				  });
+
+				  socket.on('reconnect', function() {
+				  	updateConnectionFeedback();
+				  });
+
+				  socket.on('disconnect', function() {
+				  	updateConnectionFeedback();
+				  });
+
+				  socket.on('error', function() {
+				  	updateConnectionFeedback();
+				  });
 
 
 			    /* Watches */
@@ -332,10 +349,10 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 				  });
 
 				  scope.$watch('connectionStatus', function(state, old_data) {
-				  	connected = state;
-				  	if (scene_ready) {
-				  		updateConnectionFeedback();
-				  	}
+				  	///connected = state;
+				  	//if (scene_ready) {
+				  	//	updateConnectionFeedback();
+				  	//}
 				  });
 
 

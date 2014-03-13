@@ -7,7 +7,6 @@ define([], function() {
 	  $scope.tweet_data;
 	  $scope.canvas_width = 1000;
     $scope.canvas_height = 600;
-    $scope.connection_status = false;
 
 
 	  /* Socket Listeners */
@@ -22,17 +21,19 @@ define([], function() {
 
 	  socket.on('connect', function() {
 	  	$rootScope.message = 'Connected';
-	  	$scope.connection_status = true;
 	  });
+
+	  socket.on('connect_failed', function() {
+	  	$rootScope.message = 'Failure to Connect';
+	   	// TODO
+	 	});
 
 	  socket.on('disconnect', function() {
 	  	$rootScope.message = 'Disconnected';
-	  	$scope.connection_status = false;
 	  });
 
 	  socket.on('error', function() {
 	  	$rootScope.message = 'Error';
-	  	$scope.connection_status = false;
 	  });
 
 	  socket.on('reconnecting', function() {
@@ -43,10 +44,9 @@ define([], function() {
 
 	  socket.on('reconnect', function() {
 	  	$rootScope.message = 'Connected';
-	  	$scope.connection_status = true;
 	  });
 
-	  socket.on('reconnect_failed', function() {
+	 	socket.on('reconnect_failed', function() {
 	  	$rootScope.message = 'Failure to Connect';
 	   	// TODO
 	 	});
