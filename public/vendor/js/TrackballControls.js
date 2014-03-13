@@ -72,6 +72,10 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	// methods
 
+	this.forceMousedown = function(event) {
+		mousedown(event);
+	}
+
 	this.handleResize = function () {
 
 		if ( this.domElement === document ) {

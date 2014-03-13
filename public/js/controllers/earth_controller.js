@@ -9,6 +9,13 @@ define([], function() {
     $scope.canvas_height = 600;
 
 
+    /* Scope Functions */
+
+    $scope.sceneReady = function(message) {
+    	console.log('Resources Loaded');
+    }
+
+
 	  /* Socket Listeners */
 
 	  socket.on('init', function(data) {

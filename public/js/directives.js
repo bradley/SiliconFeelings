@@ -10,7 +10,8 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	      scope: {
 	        'width': '=',
 	        'height': '=',
-	        'tweetData': '='
+	        'tweetData': '=',
+	        'sceneReady': '&onLoad'
 	      },
 	      link: function postLink(scope, element, attrs) {
 
@@ -18,15 +19,16 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	      	/* Setup */
 
 	      	// Constants
-	        var pos_x = 1800,
-	        		pos_y = 500,
-	        		pos_z = 1800,
-	        		width = scope.width || 1000,
+	        var width = scope.width || 1000,
 	        		height = scope.height || 600,
+	        		pos_x = width / 2,
+	        		pos_y = height / 2,
+	        		pos_z = 2540,
 	        		fov = 45,
 			    		near = 1,
 			    		far = 4000,
-			    		radius = 900; // TODO: Make this dynamic with canvas size?
+			    		radius = 900, // TODO: Make this dynamic with canvas size?
+			    		center_of_scene = new THREE.Vector3(0,0,0);
 
 			    // Scene Components
 					var camera,
@@ -53,14 +55,15 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 							tvEffect,
 							copyPass,
 							renderPass,
-							shader_time = 0;
+							step = 0;
 
 					// Scope Data
 					var tweets = [],
 							connected = false;
 
 					// Etc.
-					var scene_ready = false;
+					var scene_ready = false,
+							interaction_initiated = false;
 
 
 			    /* Initialize */
@@ -71,7 +74,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	        		// Camera
 		          camera = new THREE.PerspectiveCamera(fov, (width / height), near, far);
 					    camera.position.set(pos_x, pos_y, pos_z);
-					    camera.lookAt(new THREE.Vector3(0, 0, 0));
+					    camera.lookAt(center_of_scene);
 
 		          // Scene
 		          scene = new THREE.Scene();
@@ -89,13 +92,14 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 		          // NOTE: Element is provided by the angular directive
 		          element[0].appendChild(renderer.domElement);
-		          controls = new THREE.TrackballControls(camera, renderer.domElement);
+		          //controls = new THREE.TrackballControls(camera, renderer.domElement);
 
 		          // Postprocessing
 		          addPostprocessing();
+		          showGlitchyEarthIfDisconnected();
 
 		          scene_ready = true;
-		          updateConnectionFeedback();
+		          scope.sceneReady();
 		        	scope.render();
 	        	});
 	        };
@@ -213,7 +217,6 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
             var plane = new THREE.PlaneGeometry(67, 67),
             		mesh = new THREE.Mesh(plane),
            			geo = new THREE.Geometry(),
-           			quaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,0), 90.0),
            			materials = [];;
 
             _.each(tweets, function(tweet, index) {
@@ -258,34 +261,6 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
           	}, 2000);
 			    }
 
-			   	function setFaceIndexes(faces, index) {
-			    	// NOTE: This make it possible to change the material Index manually.
-        		//   This is especcially handy when you start to merge generated geometries with different materials.
-        		//	 More: https://github.com/mrdoob/three.js/pull/2817 (since removed: https://github.com/mrdoob/three.js/releases/tag/r60)
-						for ( var i = 0; i <= (faces.length - 1); i ++ ) {
-							faces[i].materialIndex = index;
-		 				}
-		 				return faces;
-			    }
-
-			    function lookAwayFromCenter(object) {
-			    	var v = new THREE.Vector3();
-					    v.subVectors(object.position, new THREE.Vector3(0,0,0)).add(object.position);
-					    object.lookAt(v);
-			    }
-
-			    // Convert a lon/lat to a point on our Earth sphere.
-			   	function lonLatToVector3(lon, lat) {
-		        var distance_from_surface = 20,
-		        		phi = (lat) * Math.PI / 180,
-		        		theta = (lon - 180) * Math.PI / 180,
-		        		x = -(radius + distance_from_surface) * Math.cos(phi) * Math.cos(theta),
-		        		y = (radius + distance_from_surface) * Math.sin(phi),
-		        		z = (radius + distance_from_surface) * Math.cos(phi) * Math.sin(theta);
-
-		        return new THREE.Vector3(x, y, z);
-			    }
-
 			    function addPostprocessing() {
 							composer = new THREE.EffectComposer(renderer);
 
@@ -309,7 +284,35 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 							copyPass.renderToScreen = true;
 			    }
 
-			    function updateConnectionFeedback() {
+			    function setFaceIndexes(faces, index) {
+			    	// NOTE: This make it possible to change the material Index manually.
+        		//   This is especcially handy when you start to merge generated geometries with different materials.
+        		//	 More: https://github.com/mrdoob/three.js/pull/2817 (since removed: https://github.com/mrdoob/three.js/releases/tag/r60)
+						for ( var i = 0; i <= (faces.length - 1); i ++ ) {
+							faces[i].materialIndex = index;
+		 				}
+		 				return faces;
+			    }
+
+			    function lookAwayFromCenter(object) {
+			    	var v = new THREE.Vector3();
+					    v.subVectors(object.position, center_of_scene).add(object.position);
+					    object.lookAt(v);
+			    }
+
+			    // Convert a lon/lat to a point on our Earth sphere.
+			   	function lonLatToVector3(lon, lat) {
+		        var distance_from_surface = 20,
+		        		phi = (lat) * Math.PI / 180,
+		        		theta = (lon - 180) * Math.PI / 180,
+		        		x = -(radius + distance_from_surface) * Math.cos(phi) * Math.cos(theta),
+		        		y = (radius + distance_from_surface) * Math.sin(phi),
+		        		z = (radius + distance_from_surface) * Math.cos(phi) * Math.sin(theta);
+
+		        return new THREE.Vector3(x, y, z);
+			    }
+
+			    function showGlitchyEarthIfDisconnected() {
 			    	composer = new THREE.EffectComposer(renderer);
 						composer.addPass(renderPass);
 				  	if (!socket.connectionStatus() && scene_ready) {
@@ -320,22 +323,45 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 				  	}
 			    }
 
+			    function updateCameraPosition(step) {
+			    	if (interaction_initiated) {
+			    		controls.update();
+			    		return;
+			    	}
+			    	// Rotate earth if interaction is not enabled.
+			    	var degree = step * (Math.PI / 180);
+						camera.position.x = pos_x * Math.cos(degree) + pos_z * Math.sin(degree);
+            camera.position.y = (pos_y);
+            camera.position.z = pos_z * Math.cos(degree) - pos_x * Math.sin(degree);
+            camera.lookAt(center_of_scene);
+			    }
+
+
 			    /* Listeners */
 
+			    element.on('mousedown', function(e) {
+			    	if (scene_ready) {
+				    	controls = new THREE.TrackballControls(camera, renderer.domElement);
+				    	controls.forceMousedown(e); // Tell control about this mousedown event.
+				    	interaction_initiated = true;
+				    	element.unbind('mousedown'); // We only need to listen for mousedown once.
+				    }
+			    });
+
 			    socket.on('connect', function() {
-				  	updateConnectionFeedback();
+				  	showGlitchyEarthIfDisconnected();
 				  });
 
 				  socket.on('reconnect', function() {
-				  	updateConnectionFeedback();
+				  	showGlitchyEarthIfDisconnected();
 				  });
 
 				  socket.on('disconnect', function() {
-				  	updateConnectionFeedback();
+				  	showGlitchyEarthIfDisconnected();
 				  });
 
 				  socket.on('error', function() {
-				  	updateConnectionFeedback();
+				  	showGlitchyEarthIfDisconnected();
 				  });
 
 
@@ -348,22 +374,15 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 			    	}
 				  });
 
-				  scope.$watch('connectionStatus', function(state, old_data) {
-				  	///connected = state;
-				  	//if (scene_ready) {
-				  	//	updateConnectionFeedback();
-				  	//}
-				  });
-
 
 	        /* Lifecycle */
 
 	        scope.render = function() {
-	        	shader_time += 0.1;
-						tvEffect.uniforms['time'].value = shader_time;
+	        	step += 0.1;
+						tvEffect.uniforms['time'].value = step;
 
-						// Update scene with input from trackball controls.
-	          controls.update();
+						// Update Camera Position
+	          updateCameraPosition(step);
 
 	          // Render
 	          renderer.render(scene, camera);
