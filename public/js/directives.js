@@ -10,7 +10,8 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	      scope: {
 	        'width': '=',
 	        'height': '=',
-	        'tweetData': '='
+	        'tweetData': '=',
+	        'sceneReady': '&onLoad'
 	      },
 	      link: function postLink(scope, element, attrs) {
 
@@ -18,11 +19,11 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	      	/* Setup */
 
 	      	// Constants
-	        var pos_x = 1800,
-	        		pos_y = 500,
-	        		pos_z = 1800,
-	        		width = scope.width || 1000,
+	        var width = scope.width || 1000,
 	        		height = scope.height || 600,
+	        		pos_x = width / 2,
+	        		pos_y = height / 2,
+	        		pos_z = 2540,
 	        		fov = 45,
 			    		near = 1,
 			    		far = 4000,
@@ -95,9 +96,10 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 		          // Postprocessing
 		          addPostprocessing();
+		          showGlitchyEarthIfDisconnected();
 
 		          scene_ready = true;
-		          showGlitchyEarthIfDisconnected();
+		          scope.sceneReady();
 		        	scope.render();
 	        	});
 	        };
