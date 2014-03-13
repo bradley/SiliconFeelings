@@ -97,7 +97,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 		          addPostprocessing();
 
 		          scene_ready = true;
-		          updateConnectionFeedback();
+		          showGlitchyEarthIfDisconnected();
 		        	scope.render();
 	        	});
 	        };
@@ -259,7 +259,30 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
           	}, 2000);
 			    }
 
-			   	function setFaceIndexes(faces, index) {
+			    function addPostprocessing() {
+							composer = new THREE.EffectComposer(renderer);
+
+		          renderPass = new THREE.RenderPass(scene, camera);
+							composer.addPass(renderPass);
+
+							rgbEffect = new THREE.ShaderPass(THREE.RGBShiftShader);
+							rgbEffect.uniforms['amount'].value = 0.007;
+							composer.addPass(rgbEffect);
+
+							tvEffect = new THREE.ShaderPass(THREE.BadTVShader);
+							tvEffect.uniforms['distortion'].value = 1.4;
+							tvEffect.uniforms['distortion2'].value = 2.1;
+							tvEffect.uniforms['speed'].value = 0.04;
+							tvEffect.uniforms['rollSpeed'].value = 0.0;
+							composer.addPass(tvEffect);
+
+							copyPass = new THREE.ShaderPass(THREE.CopyShader);
+							composer.addPass(copyPass);
+
+							copyPass.renderToScreen = true;
+			    }
+
+			    function setFaceIndexes(faces, index) {
 			    	// NOTE: This make it possible to change the material Index manually.
         		//   This is especcially handy when you start to merge generated geometries with different materials.
         		//	 More: https://github.com/mrdoob/three.js/pull/2817 (since removed: https://github.com/mrdoob/three.js/releases/tag/r60)
@@ -287,30 +310,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 		        return new THREE.Vector3(x, y, z);
 			    }
 
-			    function addPostprocessing() {
-							composer = new THREE.EffectComposer(renderer);
-
-		          renderPass = new THREE.RenderPass(scene, camera);
-							composer.addPass(renderPass);
-
-							rgbEffect = new THREE.ShaderPass(THREE.RGBShiftShader);
-							rgbEffect.uniforms['amount'].value = 0.007;
-							composer.addPass(rgbEffect);
-
-							tvEffect = new THREE.ShaderPass(THREE.BadTVShader);
-							tvEffect.uniforms['distortion'].value = 1.4;
-							tvEffect.uniforms['distortion2'].value = 2.1;
-							tvEffect.uniforms['speed'].value = 0.04;
-							tvEffect.uniforms['rollSpeed'].value = 0.0;
-							composer.addPass(tvEffect);
-
-							copyPass = new THREE.ShaderPass(THREE.CopyShader);
-							composer.addPass(copyPass);
-
-							copyPass.renderToScreen = true;
-			    }
-
-			    function updateConnectionFeedback() {
+			    function showGlitchyEarthIfDisconnected() {
 			    	composer = new THREE.EffectComposer(renderer);
 						composer.addPass(renderPass);
 				  	if (!socket.connectionStatus() && scene_ready) {
@@ -321,7 +321,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 				  	}
 			    }
 
-			    function updateCameraControls(step) {
+			    function updateCameraPosition(step) {
 			    	if (interaction_initiated) {
 			    		controls.update();
 			    		return;
@@ -340,26 +340,26 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 			    element.on('mousedown', function(e) {
 			    	if (scene_ready) {
 				    	controls = new THREE.TrackballControls(camera, renderer.domElement);
-				    	controls.forceMousedown(e);
+				    	controls.forceMousedown(e); // Tell control about this mousedown event.
 				    	interaction_initiated = true;
 				    	element.unbind('mousedown'); // We only need to listen for mousedown once.
 				    }
 			    });
 
 			    socket.on('connect', function() {
-				  	updateConnectionFeedback();
+				  	showGlitchyEarthIfDisconnected();
 				  });
 
 				  socket.on('reconnect', function() {
-				  	updateConnectionFeedback();
+				  	showGlitchyEarthIfDisconnected();
 				  });
 
 				  socket.on('disconnect', function() {
-				  	updateConnectionFeedback();
+				  	showGlitchyEarthIfDisconnected();
 				  });
 
 				  socket.on('error', function() {
-				  	updateConnectionFeedback();
+				  	showGlitchyEarthIfDisconnected();
 				  });
 
 
@@ -380,7 +380,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 						tvEffect.uniforms['time'].value = step;
 
 						// Update Camera Position
-	          updateCameraControls(step);
+	          updateCameraPosition(step);
 
 	          // Render
 	          renderer.render(scene, camera);
