@@ -18,24 +18,49 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 	      	/* Setup */
 
-	        var POS_X = 1800,
-	        		POS_Y = 500,
-	        		POS_Z = 1800,
-	        		WIDTH = scope.width || 1000,
-	        		HEIGHT = scope.height || 600,
-	        		FOV = 45,
-			    		NEAR = 1,
-			    		FAR = 4000,
-			    		RADIUS = 900, // TODO: Make this dynamic with canvas size?
-							camera, scene, renderer, composer, controls, light, earth,
-							planet_texture, planet_specular_texture, emoji_sprites, emoji_sprite_mappings,
-							emoji_sprites_new = new Image(),
-							emoji_sprite_sheet_width, emoji_sprite_sheet_height,
-							rgbEffect, tvEffect, copyPass, renderPass,
-							shader_time = 0,
-							connected,
-							tweets = [];
+	      	// Constants
+	        var pos_x = 1800,
+	        		pos_y = 500,
+	        		pos_z = 1800,
+	        		width = scope.width || 1000,
+	        		height = scope.height || 600,
+	        		fov = 45,
+			    		near = 1,
+			    		far = 4000,
+			    		radius = 900; // TODO: Make this dynamic with canvas size?
 
+			    // Scene Components
+					var camera,
+							scene,
+							renderer,
+							composer,
+							controls,
+							light,
+							earth;
+
+					// Earth Components
+					var planet_texture,
+							planet_specular_texture;
+
+					// Emoji Components
+					var emoji_sprites_new = new Image(),
+							emoji_sprites,
+							emoji_sprite_mappings,
+							emoji_sprite_sheet_width,
+							emoji_sprite_sheet_height;
+
+					// Postprocessing Components
+					var rgbEffect,
+							tvEffect,
+							copyPass,
+							renderPass,
+							shader_time = 0;
+
+					// Scope Data
+					var tweets = [],
+							connected = false;
+
+					// Etc.
 					var scene_ready = false;
 
 
@@ -45,8 +70,8 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	        	// Load Images Prior to Rendering the Scene
 	        	loadResources(function() {
 	        		// Camera
-		          camera = new THREE.PerspectiveCamera(FOV, (WIDTH / HEIGHT), NEAR, FAR);
-					    camera.position.set(POS_X,POS_Y, POS_Z);
+		          camera = new THREE.PerspectiveCamera(fov, (width / height), near, far);
+					    camera.position.set(pos_x, pos_y, pos_z);
 					    camera.lookAt(new THREE.Vector3(0, 0, 0));
 
 		          // Scene
@@ -56,7 +81,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 		         	// Renderer
 		          renderer = new THREE.WebGLRenderer({ antialias: true });
 		          renderer.setClearColor(0xffffff);
-		          renderer.setSize(WIDTH, HEIGHT);
+		          renderer.setSize(width, height);
 
 		          // Build Scene Components
 		          addLights();
@@ -79,7 +104,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 	        /* Helpers */
 
-	        // Calls callback (no parameters) after all resources have loaded.
+	        // Loads all resources, after which calling its callback which allows scene to continue initializing.
 	        function loadResources(callback) {
 	        	// TODO: _Really_ need to rethink this chaining. It works but could get unwieldy quickly.
 	        	$http.get('vendor/emoji_sprite_sheet_small.json').success(function(data) {
@@ -102,7 +127,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 				  	});
 	        }
 
-	        // Creates a reusable material for each emoji using our spritesheet.
+	        // Creates a reusable material for each emoji using our spritesheet, and updates emoji sprite sheet json mapper.
 	        function mapEmojiTextures(callback) {
 						for(var key in emoji_sprite_mappings) {
 							var sprite_info = emoji_sprite_mappings[key],
@@ -117,6 +142,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 							texture = new THREE.Texture(canvas);
 
+							// Add clipped emoji to canvas - minimizing size of texture.
 							context.drawImage(
 								emoji_sprites_new,   // Image
 								sprite_frame.x,      // The x coordinate where to start clipping.
@@ -129,11 +155,10 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 								sprite_frame.h       // The height of the image to use (stretch or reduce the image)
 							);
 
-							texture.needsUpdate = true; // Important!
+							texture.needsUpdate = true;
 
 							material = new THREE.MeshBasicMaterial({ map: texture, transparent: true, depthWrite: false });
 
-							// Add new key/value to current emoji object in emoji_sprite_mappings for this texture.
 							sprite_info.sprite = material;
 						}
 						callback();
@@ -166,7 +191,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	        }
 
 	        function addEarth() {
-						var sphere = new THREE.SphereGeometry(RADIUS, 50, 50),
+						var sphere = new THREE.SphereGeometry(radius, 50, 50),
 								material = new THREE.MeshPhongMaterial({
 									map: planet_texture,
 									shininess: 0.1
@@ -187,8 +212,9 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 	        function addPoints() {
             var plane = new THREE.PlaneGeometry(67, 67),
+            		mesh = new THREE.Mesh(plane),
            			geo = new THREE.Geometry(),
-           			mesh = new THREE.Mesh(plane),
+           			quaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,0), 90.0),
            			materials = [];;
 
             _.each(tweets, function(tweet, index) {
@@ -223,6 +249,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 						var total = new THREE.Mesh(geo, new THREE.MeshFaceMaterial(materials));
 						total.matrixAutoUpdate = false;
+
           	scene.add(total);
 
           	setTimeout(function() {
@@ -248,14 +275,14 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 					    object.lookAt(v);
 			    }
 
-			    // Convert a latitude/lon
+			    // Convert a lon/lat to a point on our Earth sphere.
 			   	function lonLatToVector3(lon, lat) {
 		        var distance_from_surface = 20,
 		        		phi = (lat) * Math.PI / 180,
 		        		theta = (lon - 180) * Math.PI / 180,
-		        		x = -(RADIUS + distance_from_surface) * Math.cos(phi) * Math.cos(theta),
-		        		y = (RADIUS + distance_from_surface) * Math.sin(phi),
-		        		z = (RADIUS + distance_from_surface) * Math.cos(phi) * Math.sin(theta);
+		        		x = -(radius + distance_from_surface) * Math.cos(phi) * Math.cos(theta),
+		        		y = (radius + distance_from_surface) * Math.sin(phi),
+		        		z = (radius + distance_from_surface) * Math.cos(phi) * Math.sin(theta);
 
 		        return new THREE.Vector3(x, y, z);
 			    }

@@ -17,31 +17,37 @@ define([], function() {
 	  });
 
 	  socket.on('connecting', function() {
-	  	// TODO
+	  	$rootScope.message = 'Connecting';
 	  });
 
 	  socket.on('connect', function() {
+	  	$rootScope.message = 'Connected';
 	  	$scope.connection_status = true;
 	  });
 
 	  socket.on('disconnect', function() {
+	  	$rootScope.message = 'Disconnected';
 	  	$scope.connection_status = false;
 	  });
 
 	  socket.on('error', function() {
+	  	$rootScope.message = 'Error';
 	  	$scope.connection_status = false;
 	  });
 
 	  socket.on('reconnecting', function() {
+	  	$rootScope.message = 'Reconnecting...';
 	  	// NOTE: Fires one or more times!
 	  	// TODO
 	  });
 
 	  socket.on('reconnect', function() {
+	  	$rootScope.message = 'Connected';
 	  	$scope.connection_status = true;
 	  });
 
 	  socket.on('reconnect_failed', function() {
+	  	$rootScope.message = 'Failure to Connect';
 	   	// TODO
 	 	});
 
