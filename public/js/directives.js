@@ -330,9 +330,9 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 			    	}
 			    	// Rotate earth if interaction is not enabled.
 			    	var degree = step * (Math.PI / 180);
-						camera.position.x = pos_x * Math.cos(degree) + pos_z * Math.sin(degree);
+						camera.position.x = pos_x * Math.cos(degree) - pos_z * Math.sin(degree);
             camera.position.y = (pos_y);
-            camera.position.z = pos_z * Math.cos(degree) - pos_x * Math.sin(degree);
+            camera.position.z = pos_z * Math.cos(degree) + pos_x * Math.sin(degree);
             camera.lookAt(center_of_scene);
 			    }
 
