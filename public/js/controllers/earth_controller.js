@@ -1,9 +1,9 @@
 define([], function() {
-	return ['$scope', '$sce', '$rootScope', '$http', '$location', 'socket', function($scope, $sce, $rootScope, $http, $location, socket) {
+	return ['$scope', '$sce', '$rootScope', '$http', '$location', 'SharedSocket', function($scope, $sce, $rootScope, $http, $location, SharedSocket) {
 
 
 	  /* Setup */
-
+	  $scope.socket;
 	  $scope.tweet_data;
 	  $scope.canvas_width = 1000;
     $scope.canvas_height = 600;
@@ -13,54 +13,60 @@ define([], function() {
 
     $scope.sceneReady = function(message) {
     	console.log('Resources Loaded');
+    	$scope.socket = new SharedSocket();
+    	setSocketListeners();
     }
 
 
 	  /* Socket Listeners */
 
-	  socket.on('init', function(data) {
-	    console.log(data.message);
-	  });
+	  function setSocketListeners() {
+	  	var socket = $scope.socket;
 
-	  socket.on('connecting', function() {
-	  	$rootScope.message = 'Connecting';
-	  });
+		  socket.on('init', function(data) {
+		    console.log(data.message);
+		  });
 
-	  socket.on('connect', function() {
-	  	$rootScope.message = 'Connected';
-	  });
+		  socket.on('connecting', function() {
+		  	$rootScope.message = 'Connecting';
+		  });
 
-	  socket.on('connect_failed', function() {
-	  	$rootScope.message = 'Failure to Connect';
-	   	// TODO
-	 	});
+		  socket.on('connect', function() {
+		  	$rootScope.message = 'Connected';
+		  });
 
-	  socket.on('disconnect', function() {
-	  	$rootScope.message = 'Disconnected';
-	  });
+		  socket.on('connect_failed', function() {
+		  	$rootScope.message = 'Failure to Connect';
+		   	// TODO
+		 	});
 
-	  socket.on('error', function() {
-	  	$rootScope.message = 'Error';
-	  });
+		  socket.on('disconnect', function() {
+		  	$rootScope.message = 'Disconnected';
+		  });
 
-	  socket.on('reconnecting', function() {
-	  	$rootScope.message = 'Reconnecting...';
-	  	// NOTE: Fires one or more times!
-	  	// TODO
-	  });
+		  socket.on('error', function() {
+		  	$rootScope.message = 'Error';
+		  });
 
-	  socket.on('reconnect', function() {
-	  	$rootScope.message = 'Connected';
-	  });
+		  socket.on('reconnecting', function() {
+		  	$rootScope.message = 'Reconnecting...';
+		  	// NOTE: Fires one or more times!
+		  	// TODO
+		  });
 
-	 	socket.on('reconnect_failed', function() {
-	  	$rootScope.message = 'Failure to Connect';
-	   	// TODO
-	 	});
+		  socket.on('reconnect', function() {
+		  	$rootScope.message = 'Connected';
+		  });
 
-	  socket.on('new_tweets', function(tweets) {
-	  	$scope.tweet_data = tweets;
-	  });
+		 	socket.on('reconnect_failed', function() {
+		  	$rootScope.message = 'Failure to Connect';
+		   	// TODO
+		 	});
+
+		  socket.on('new_tweets', function(tweets) {
+		  	$scope.tweet_data = tweets;
+		  });
+		}
 
 
 	  // Because this has happened asynchroneusly we've missed

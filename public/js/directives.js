@@ -4,13 +4,14 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
   /* Services */
 
 	angular.module('myApp.directives', [])
-		.directive('emojiPlanet', ['$rootScope', '$http', 'socket', function($rootScope, $http, socket) {
+		.directive('emojiPlanet', ['$rootScope', '$http', function($rootScope, $http) {
     	return {
 	      restrict: 'E',
 	      scope: {
 	        'width': '=',
 	        'height': '=',
 	        'tweetData': '=',
+	        'socket': '=',
 	        'sceneReady': '&onLoad'
 	      },
 	      link: function postLink(scope, element, attrs) {
@@ -59,7 +60,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 					// Scope Data
 					var tweets = [],
-							connected = false;
+							current_socket;
 
 					// Etc.
 					var scene_ready = false,
@@ -96,7 +97,6 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 		          // Postprocessing
 		          addPostprocessing();
-		          showGlitchyEarthIfDisconnected();
 
 		          scene_ready = true;
 		          scope.sceneReady();
@@ -315,7 +315,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 			    function showGlitchyEarthIfDisconnected() {
 			    	composer = new THREE.EffectComposer(renderer);
 						composer.addPass(renderPass);
-				  	if (!socket.connectionStatus() && scene_ready) {
+				  	if (!current_socket.connectionStatus() && scene_ready) {
 				  		composer.addPass(rgbEffect);
 				  		composer.addPass(tvEffect);
 				  		composer.addPass(copyPass);
@@ -348,21 +348,23 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 				    }
 			    });
 
-			    socket.on('connect', function() {
-				  	showGlitchyEarthIfDisconnected();
-				  });
+			    function setSocketListeners() {
+				    current_socket.on('connect', function() {
+					  	showGlitchyEarthIfDisconnected();
+					  });
 
-				  socket.on('reconnect', function() {
-				  	showGlitchyEarthIfDisconnected();
-				  });
+					  current_socket.on('reconnect', function() {
+					  	showGlitchyEarthIfDisconnected();
+					  });
 
-				  socket.on('disconnect', function() {
-				  	showGlitchyEarthIfDisconnected();
-				  });
+					  current_socket.on('disconnect', function() {
+					  	showGlitchyEarthIfDisconnected();
+					  });
 
-				  socket.on('error', function() {
-				  	showGlitchyEarthIfDisconnected();
-				  });
+					  current_socket.on('error', function() {
+					  	showGlitchyEarthIfDisconnected();
+					  });
+					}
 
 
 			    /* Watches */
@@ -371,6 +373,14 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 			    	if (scene_ready && new_data) {
 			    		tweets = new_data;
 			    		addPoints();
+			    	}
+				  });
+
+				  scope.$watch('socket', function(new_socket, _) {
+			    	if (new_socket) {
+			    		current_socket = new_socket;
+			    		//showGlitchyEarthIfDisconnected();
+			    		setSocketListeners();
 			    	}
 				  });
 

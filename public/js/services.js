@@ -4,31 +4,51 @@ define(['angular', 'io'], function(angular) {
   /* Services */
 
 	angular.module('myApp.services', [])
-		.factory('socket', ['$rootScope', function($rootScope) {
-			// TODO: Adjust these options to better suit our needs once we know them.
-		  var socket = io.connect('/', {});
-		  return {
-		  	connectionStatus: function() {
-		  		return socket.socket.connected;
+		.factory('SharedSocket', ['$rootScope', function($rootScope) {
+		  // Singleton class constructor
+			var Singleton = function() {
+			    return function(params) {
+			        if (Singleton.prototype._singletonInstance) {
+					      return Singleton.prototype._singletonInstance;
+					    }
+					    Singleton.prototype._singletonInstance = this;
+
+			        // Call initialize method (does not accept params).
+			        this.initialize.apply(this);
+			    }
+			}
+
+		  var SharedSocket = Singleton();
+		  SharedSocket.prototype = {
+		    initialize: function() {
+		    	this.connection = io.connect('/', {});
+		    },
+		    connectionStatus: function() {
+		  		return this.connection.socket.connected;
 		  	},
 		    on: function(eventName, callback) {
-		      socket.on(eventName, function() {
+		    	var self = this;
+		      this.connection.on(eventName, function() {
 		        var args = arguments;
 		        $rootScope.$apply(function() {
-		          callback.apply(socket, args);
+		          callback.apply(self.connection, args);
 		        });
 		      });
 		    },
 		    emit: function(eventName, data, callback) {
-		      socket.emit(eventName, data, function() {
+		    	var self = this;
+		      this.connection.emit(eventName, data, function() {
 		        var args = arguments;
 		        $rootScope.$apply(function() {
 		          if (callback) {
-		            callback.apply(socket, args);
+		            callback.apply(self.connection, args);
 		          }
 		        });
 		      })
 		    }
-		  };
+		  }
+
+		  return SharedSocket;
+
 		}]);
 });
