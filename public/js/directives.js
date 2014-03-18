@@ -126,7 +126,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 				      };
 
 				      // Set src for image so that the onload event is triggered.
-				    	emoji_sprites_new.src = 'vendor/images/emoji_sprite_sheet_small.png';
+				    	emoji_sprites_new.src = 'vendor/images/' + data.meta.image;
 				  	});
 	        }
 

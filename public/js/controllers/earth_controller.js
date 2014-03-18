@@ -3,18 +3,26 @@ define([], function() {
 
 
 	  /* Setup */
+
 	  $scope.socket;
 	  $scope.tweet_data;
 	  $scope.canvas_width = 1000;
     $scope.canvas_height = 600;
 
+    $rootScope.message = 'Loading Resources';
 
     /* Scope Functions */
 
     $scope.sceneReady = function(message) {
     	console.log('Resources Loaded');
-    	$scope.socket = new SharedSocket();
-    	setSocketListeners();
+    	$rootScope.message = 'Connecting';
+    	$scope.$apply();
+
+    	// NOTE: Artificial timeout for desired UX. Not functionally necessary.
+    	setTimeout(function() {
+    		$scope.socket = new SharedSocket();
+    		setSocketListeners();
+    	}, 1400);
     }
 
 
