@@ -1,6 +1,7 @@
 define(['angular', 'services'], function(angular) {
 	'use strict';
 
+
 	/* Controllers */
 
 	return angular.module('myApp.controllers', [])

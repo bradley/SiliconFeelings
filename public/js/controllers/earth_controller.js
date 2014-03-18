@@ -6,8 +6,6 @@ define([], function() {
 
 	  $scope.socket;
 	  $scope.tweet_data;
-	  $scope.canvas_width = 1000;
-    $scope.canvas_height = 600;
 
     $rootScope.message = 'Loading Resources';
 

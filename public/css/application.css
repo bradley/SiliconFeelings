@@ -1,4 +1,4 @@
-/* 	Resets and Basics
+/* 	1. Resets
 	------------------------------------- */
 
 /*
@@ -9,13 +9,9 @@
 [ng\:cloak], [ng-cloak], .ng-cloak {
   display: none !important;
 }
-body {
-	padding: 100px;
-}
 
 
-
-/* 	Typography
+/* 	2. Typography
 	------------------------------------- */
 
 @font-face {
@@ -28,7 +24,7 @@ body {
 }
 
 
-/* 	Base
+/* 	3. Base
 	------------------------------------- */
 
 body {
@@ -40,4 +36,13 @@ body {
 }
 p {
 	font-family: "DejaVuSansMono", "Courier New", Courier, monospace;
+}
+
+
+/* 5. Earth
+	------------------------------------- */
+
+#emoji-planet-container > canvas {
+	width: 100%!important;
+	height: auto!important;
 }

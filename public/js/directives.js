@@ -1,15 +1,14 @@
 define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass', 'shaderPass', 'rgbShiftShader', 'badTVShader'], function(angular) {
 	'use strict';
 
-  /* Services */
+
+  /* Directives */
 
 	angular.module('myApp.directives', [])
-		.directive('emojiPlanet', ['$rootScope', '$http', function($rootScope, $http) {
+		.directive('emojiPlanet', ['$rootScope', '$http', '$window', function($rootScope, $http, $window) {
     	return {
 	      restrict: 'E',
 	      scope: {
-	        'width': '=',
-	        'height': '=',
 	        'tweetData': '=',
 	        'socket': '=',
 	        'sceneReady': '&onLoad'
@@ -20,8 +19,8 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	      	/* Setup */
 
 	      	// Constants
-	        var width = scope.width || 1000,
-	        		height = scope.height || 600,
+	        var width = 1000,
+	        		height = 600,
 	        		pos_x = width / 2,
 	        		pos_y = height / 2,
 	        		pos_z = 2540,
@@ -85,6 +84,8 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 		          renderer = new THREE.WebGLRenderer({ antialias: true });
 		          renderer.setClearColor(0xffffff);
 		          renderer.setSize(width, height);
+		          // NOTE: https://github.com/mrdoob/three.js/issues/4469#issuecomment-36291287
+		          renderer.context.getProgramInfoLog = function () { return '' };
 
 		          // Build Scene Components
 		          addLights();
@@ -93,7 +94,6 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 		          // NOTE: Element is provided by the angular directive
 		          element[0].appendChild(renderer.domElement);
-		          //controls = new THREE.TrackballControls(camera, renderer.domElement);
 
 		          // Postprocessing
 		          addPostprocessing();
@@ -337,15 +337,22 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 			    }
 
 
+
 			    /* Listeners */
 
 			    element.on('mousedown', function(e) {
 			    	if (scene_ready) {
-				    	controls = new THREE.TrackballControls(camera, renderer.domElement);
+				    	controls = controls || new THREE.TrackballControls(camera, renderer.domElement);
 				    	controls.forceMousedown(e); // Tell control about this mousedown event.
 				    	interaction_initiated = true;
 				    	element.unbind('mousedown'); // We only need to listen for mousedown once.
 				    }
+			    });
+
+			    angular.element($window).bind('resize', function(e) {
+			    	if (controls) {
+			    		controls.handleResize();
+			    	}
 			    });
 
 			    function setSocketListeners() {
@@ -379,7 +386,6 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 				  scope.$watch('socket', function(new_socket, _) {
 			    	if (new_socket) {
 			    		current_socket = new_socket;
-			    		//showGlitchyEarthIfDisconnected();
 			    		setSocketListeners();
 			    	}
 				  });

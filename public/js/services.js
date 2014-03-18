@@ -1,6 +1,7 @@
 define(['angular', 'io'], function(angular) {
 	'use strict';
 
+
   /* Services */
 
 	angular.module('myApp.services', [])

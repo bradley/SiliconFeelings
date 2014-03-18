@@ -5,7 +5,7 @@ requirejs.config({
 		angularResource   : '//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-resource.min',
 		angularAnimate    : '//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-animate.min',
 		io                : '/socket.io/socket.io.js',
-		three             : '/vendor/js/three',
+		three             : '/vendor/js/three.min',
 		trackballControls : '/vendor/js/TrackballControls',
 		$                 : '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min',
 		_                 : '/vendor/js/underscore-min',
