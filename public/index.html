@@ -25,13 +25,40 @@
   <!-- Primary Page Layout
 	================================================== -->
 
-	<header>
-		<!-- <h1>EmojiEarth</h1> -->
-	</header>
-	{{message}}
-  <div class="view-container">
-    <div ng-view class="view-frame"></div>
-  </div>
+  <header id='site-banner'>
+      <div class='grid'>
+          <div class='side'>
+              <hgroup>
+                  <h1>EMOJI</h1>
+              </hgroup>
+          </div>
+          <div class='main'>
+              <div class='row'>
+                  <div id='connection-status' class='pull-left ng-cloak'>
+                      {{message}}
+                  </div>
+                  <div id='rotation-toggler' class='pull-right ng-cloak'>
+
+                  </div>
+              </div>
+          </div>
+      </div>
+  </header>
+
+  <section id='body-container'>
+    <div class='grid'>
+      <div class='side'>
+        foo bar
+      </div>
+      <div class='main'>
+        <div class='row'>
+          <div ng-view class="view-frame"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
   <script data-main="js/main" src="/bower_components/requirejs/require.js"></script>
 
 </body>

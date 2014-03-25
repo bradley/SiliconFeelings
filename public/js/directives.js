@@ -20,10 +20,10 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 	      	// Constants
 	        var width = 1000,
-	        		height = 600,
+	        		height = 1000,
 	        		pos_x = width / 2,
 	        		pos_y = height / 2,
-	        		pos_z = 2540,
+	        		pos_z = 2250,//2540,
 	        		fov = 45,
 			    		near = 1,
 			    		far = 4000,
@@ -208,8 +208,8 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	        }
 
 	        function addFog() {
-	        	var start = 1986,
-	        			end = 2300;
+	        	var start = 1780,
+	        			end = 1940;
 	        	scene.fog = new THREE.Fog(0xffffff, start, end);
 	        }
 

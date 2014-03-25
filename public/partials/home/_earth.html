@@ -1,6 +1,3 @@
 <!-- Emoji Planet
 ================================================== -->
-<!-- NOTE: The ng-if is important here. Because we load our controller
-		 asynchronously, scope variables are not set when the emojiPlanet
-		 directive attempts to use them. Im open to a better fix for this. -->
 <emoji-planet id='emoji-planet-container' tweet-data='tweet_data' socket='socket' on-load='sceneReady()'></emoji-planet>

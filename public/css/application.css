@@ -19,6 +19,10 @@
 	src: url(../vendor/fonts/DejaVuSans.ttf);
 }
 @font-face {
+	font-family: DejaVuSans-ExtraLight;
+	src: url(../vendor/fonts/DejaVuSans-ExtraLight.ttf);
+}
+@font-face {
 	font-family: DejaVuMono;
 	src: url(../vendor/fonts/DejaVuMono.ttf);
 }
@@ -28,16 +32,41 @@
 	------------------------------------- */
 
 body {
-	font: 14px/21px "DejaVuSans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font: 14px "DejaVuSans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	line-height: 32px; /* This is 1.5x (rounded down) our multiline Minion Pro 22px font. Keep this. */
 	color: #444;
-	/* background-image: url('http://i.imgur.com/OstnFIv.png'); */
 	-webkit-font-smoothing: antialiased; /* Fix for webkit rendering */
 	-webkit-text-size-adjust: 100%;
+	padding: 0;
+	margin: 0;
 }
 p {
-	font-family: "DejaVuSansMono", "Courier New", Courier, monospace;
+	font: 22px "Minion Pro", serif;
 }
-
+.grid > * {
+    margin: 0 0;
+}
+@media all and (min-width:630px) {
+    .grid {
+        padding-left: 300px;
+        overflow: hidden;
+    }
+    .grid > .main {
+        width: 100%;
+        float: right;
+        margin: 0;
+    }
+    .grid > .main > .row {
+    	width: 600px;
+    	margin: 0 auto;
+    }
+    .grid > .side {
+        width: 300px;
+        float: left;
+        margin: 0;
+        margin-left: -300px;
+    }
+}
 
 /* 5. Earth
 	------------------------------------- */
