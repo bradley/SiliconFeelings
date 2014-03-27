@@ -33,15 +33,20 @@
 
 body {
 	font: 14px "DejaVuSans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-	line-height: 32px; /* This is 1.5x (rounded down) our multiline Minion Pro 22px font. Keep this. */
+	line-height: 20px; /* This is 1.5x our font size, rounded down. */
 	color: #444;
 	-webkit-font-smoothing: antialiased; /* Fix for webkit rendering */
 	-webkit-text-size-adjust: 100%;
 	padding: 0;
 	margin: 0;
 }
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
 p {
-	font: 22px "Minion Pro", serif;
+	font-size: 16px;
+    line-height: 24px; /* This is 1.5x our font size, rounded down. */
 }
 .grid > * {
     margin: 0 0;
@@ -51,27 +56,82 @@ p {
         padding-left: 300px;
         overflow: hidden;
     }
-    .grid > .main {
-        width: 100%;
-        float: right;
-        margin: 0;
-    }
-    .grid > .main > .row {
-    	width: 600px;
-    	margin: 0 auto;
-    }
-    .grid > .side {
+    .grid > .side-content {
         width: 300px;
         float: left;
         margin: 0;
         margin-left: -300px;
     }
+    .grid > .main-content {
+        width: 100%;
+        float: right;
+        margin: 0;
+    }
+    .grid > .main-content > .column {
+    	width: 500px;
+    	margin: 0 auto;
+    }
+
+}
+.panel {
+    margin: 16px 0;
+}
+.left {
+    float: left;
+    clear: left;
+}
+.right {
+    float: right;
+    clear: right;
 }
 
-/* 5. Earth
+
+/* 4. Masthead
+    ------------------------------------- */
+
+header#masthead {
+    height: 80px;
+    padding: 16px;
+    -moz-box-sizing: border-box;
+         box-sizing: border-box;
+    background: #EEE;
+}
+
+
+/* 5. Main
+    ------------------------------------- */
+
+
+
+/* 6. Earth
 	------------------------------------- */
 
+#emoji-planet-container {
+    width: 500px!important;
+    height: 500px!important;
+    -webkit-border-radius: 50%;
+            border-radius: 50%;
+    overflow: hidden;
+    display: block;
+}
+#emoji-planet-container.ec-circle-hover {
+    cursor: -webkit-grab!important;
+    cursor: -moz-grab!important;
+}
+#emoji-planet-container.ec-circle-hover:active {
+    cursor: -webkit-grabbing!important;
+    cursor: -moz-grabbing!important;
+}
 #emoji-planet-container > canvas {
-	width: 100%!important;
-	height: auto!important;
+    width: 100%!important;
+    height: auto!important;
+    position: static;
+}
+
+
+/* 7. Footer
+    ------------------------------------- */
+footer#footer {
+    height: 80px;
+    background: #eee;
 }

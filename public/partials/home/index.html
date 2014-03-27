@@ -1,1 +1,17 @@
-<div ng-include="'partials/home/_earth.html'">
+<div ng-include="'partials/home/_masthead.html'"></div>
+<section id='main'>
+  <div class='grid'>
+    <div class='side-content'>
+    	<div class='panel'>
+	      <h4>What's this all about?</h4>
+	      <p>This is a real time display of Tweets containing emoji at the location of their origin.</p>
+	    </div>
+    </div>
+    <div class='main-content'>
+      <div class='column'>
+        <div class='panel' ng-include="'partials/home/_earth.html'"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<div ng-include="'partials/home/_footer.html'"></div>

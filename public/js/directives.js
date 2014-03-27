@@ -23,7 +23,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	        		height = 1000,
 	        		pos_x = width / 2,
 	        		pos_y = height / 2,
-	        		pos_z = 2250,//2540,
+	        		pos_z = 2250,
 	        		fov = 45,
 			    		near = 1,
 			    		far = 4000,
@@ -71,6 +71,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	        scope.init = function() {
 	        	// Load Images Prior to Rendering the Scene
 	        	loadResources(function() {
+
 	        		// Camera
 		          camera = new THREE.PerspectiveCamera(fov, (width / height), near, far);
 					    camera.position.set(pos_x, pos_y, pos_z);
@@ -93,7 +94,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 		          addFog();
 
 		          // NOTE: Element is provided by the angular directive
-		          element[0].appendChild(renderer.domElement);
+		          element.append(renderer.domElement);
 
 		          // Postprocessing
 		          addPostprocessing();
@@ -339,6 +340,18 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 
 			    /* Listeners */
+
+					$(element[0]).circlemouse({
+						onMouseEnter: function(el) {
+							el.addClass('ec-circle-hover');
+						},
+						onMouseLeave: function(el) {
+							el.removeClass('ec-circle-hover');
+						},
+						onClick: function(el) {
+							// Do something. Or don't. Do you.
+						}
+					});
 
 			    element.on('mousedown', function(e) {
 			    	if (scene_ready) {
