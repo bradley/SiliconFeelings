@@ -11,7 +11,7 @@
 	$.CircleEventManager.defaults 	= {
 		onMouseEnter: function() { return false },
 		onMouseLeave: function() { return false },
-		onClick: function() { return false }
+		onMouseDown: function() { return false }
   };
 
 	$.CircleEventManager.prototype 	= {
@@ -98,7 +98,7 @@
 					}
 
 				},
-				'click.circlemouse': function(event) {
+				'mousedown.circlemouse': function(event) {
 
 					// allow the click only when inside the circle
 
@@ -107,7 +107,7 @@
 					if(!el.data('inside'))
 						return false;
 					else
-						_self.options.onClick(_self.$el);
+						_self.options.onMouseDown(event);
 
 				}
 			});

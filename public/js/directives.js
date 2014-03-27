@@ -63,7 +63,8 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 					// Etc.
 					var scene_ready = false,
-							interaction_initiated = false;
+							interaction_initiated = false,
+							mouse_hovering = false;
 
 
 			    /* Initialize */
@@ -326,7 +327,9 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 			    function updateCameraPosition(step) {
 			    	if (interaction_initiated) {
-			    		controls.update();
+			    		if (mouse_hovering) {
+			    			controls.update();
+			    		}
 			    		return;
 			    	}
 			    	// Rotate earth if interaction is not enabled.
@@ -343,24 +346,27 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 					$(element[0]).circlemouse({
 						onMouseEnter: function(el) {
+							if (controls) {
+								controls.enabled = true;
+							}
+							mouse_hovering = true;
 							el.addClass('ec-circle-hover');
 						},
 						onMouseLeave: function(el) {
+							if (controls) {
+								controls.enabled = false;
+							}
+							mouse_hovering = false
 							el.removeClass('ec-circle-hover');
 						},
-						onClick: function(el) {
-							// Do something. Or don't. Do you.
+						onMouseDown: function(event) {
+							if (scene_ready) {
+					    	controls = controls || new THREE.TrackballControls(camera, renderer.domElement);
+					    	controls.forceMousedown(event); // Tell control about this mousedown event.
+					    	interaction_initiated = true;
+					    }
 						}
 					});
-
-			    element.on('mousedown', function(e) {
-			    	if (scene_ready) {
-				    	controls = controls || new THREE.TrackballControls(camera, renderer.domElement);
-				    	controls.forceMousedown(e); // Tell control about this mousedown event.
-				    	interaction_initiated = true;
-				    	element.unbind('mousedown'); // We only need to listen for mousedown once.
-				    }
-			    });
 
 			    angular.element($window).bind('resize', function(e) {
 			    	if (controls) {
