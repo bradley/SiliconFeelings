@@ -275,7 +275,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 							tvEffect = new THREE.ShaderPass(THREE.BadTVShader);
 							tvEffect.uniforms['distortion'].value = 1.4;
-							tvEffect.uniforms['distortion2'].value = 2.1;
+							tvEffect.uniforms['distortion2'].value = 6.1;
 							tvEffect.uniforms['speed'].value = 0.04;
 							tvEffect.uniforms['rollSpeed'].value = 0.0;
 							composer.addPass(tvEffect);
