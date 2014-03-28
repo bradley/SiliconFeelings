@@ -59,7 +59,7 @@
 
 							// inside element / circle
 							el.css('cursor', el.data('cursor')).data('inside', true);
-							_self.options.onMouseEnter( _self.$el );
+							_self.options.onMouseEnter(event, _self.$el);
 
 						}
 						else {
@@ -68,14 +68,14 @@
 
 								// inside element / circle
 								el.css('cursor', el.data('cursor')).data('inside', true);
-								_self.options.onMouseEnter(_self.$el);
+								_self.options.onMouseEnter(event, _self.$el);
 
 							}
 							else if(distance > circlePos.radius && el.data('inside')) {
 
 								// inside element / outside circle
 								el.css('cursor', 'default').data('inside', false);
-								_self.options.onMouseLeave(_self.$el);
+								_self.options.onMouseLeave(event, _self.$el);
 
 							}
 
@@ -93,7 +93,7 @@
 					if( el.data('inside') ) {
 
 						el.data('inside', false);
-						_self.options.onMouseLeave(_self.$el);
+						_self.options.onMouseLeave(event, _self.$el);
 
 					}
 
@@ -107,7 +107,7 @@
 					if(!el.data('inside'))
 						return false;
 					else
-						_self.options.onMouseDown(event);
+						_self.options.onMouseDown(event,  _self.$el);
 
 				}
 			});

@@ -275,7 +275,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 							tvEffect = new THREE.ShaderPass(THREE.BadTVShader);
 							tvEffect.uniforms['distortion'].value = 1.4;
-							tvEffect.uniforms['distortion2'].value = 6.1;
+							tvEffect.uniforms['distortion2'].value = 2.1;
 							tvEffect.uniforms['speed'].value = 0.04;
 							tvEffect.uniforms['rollSpeed'].value = 0.0;
 							composer.addPass(tvEffect);
@@ -327,7 +327,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 			    function updateCameraPosition(step) {
 			    	if (interaction_initiated) {
-			    		if (mouse_hovering) {
+			    		if (mouse_hovering && controls.enabled) {
 			    			controls.update();
 			    		}
 			    		return;
@@ -345,23 +345,22 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 			    /* Listeners */
 
 					$(element[0]).circlemouse({
-						onMouseEnter: function(el) {
-							if (controls) {
-								controls.enabled = true;
-							}
+						onMouseEnter: function(event, el) {
 							mouse_hovering = true;
 							el.addClass('ec-circle-hover');
 						},
-						onMouseLeave: function(el) {
+						onMouseLeave: function(event, el) {
 							if (controls) {
+								controls.forceMouseup(event);
 								controls.enabled = false;
 							}
 							mouse_hovering = false
 							el.removeClass('ec-circle-hover');
 						},
-						onMouseDown: function(event) {
+						onMouseDown: function(event, el) {
 							if (scene_ready) {
 					    	controls = controls || new THREE.TrackballControls(camera, renderer.domElement);
+					    	controls.enabled = true;
 					    	controls.forceMousedown(event); // Tell control about this mousedown event.
 					    	interaction_initiated = true;
 					    }
