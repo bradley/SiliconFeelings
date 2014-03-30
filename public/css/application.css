@@ -1,137 +1,150 @@
 /* 	1. Resets
 	------------------------------------- */
-
 /*
   Allow angular.js to be loaded in body, hiding cloaked elements until
   templates compile.  The !important is important given that there may be
   other selectors that are more specific or come later and might alter display.
  */
-[ng\:cloak], [ng-cloak], .ng-cloak {
+[ng\:cloak],
+[ng-cloak],
+.ng-cloak {
   display: none !important;
 }
-
-
 /* 	2. Typography
 	------------------------------------- */
-
 @font-face {
-	font-family: DejaVuSans;
-	src: url(../vendor/fonts/DejaVuSans.ttf);
+  font-family: DejaVuSans;
+  src: url(../vendor/fonts/DejaVuSans.ttf);
 }
 @font-face {
-	font-family: DejaVuSans-ExtraLight;
-	src: url(../vendor/fonts/DejaVuSans-ExtraLight.ttf);
+  font-family: DejaVuSans-ExtraLight;
+  src: url(../vendor/fonts/DejaVuSans-ExtraLight.ttf);
 }
 @font-face {
-	font-family: DejaVuMono;
-	src: url(../vendor/fonts/DejaVuMono.ttf);
+  font-family: DejaVuMono;
+  src: url(../vendor/fonts/DejaVuMono.ttf);
 }
-
-
 /* 	3. Base
 	------------------------------------- */
-
 body {
-	font: 14px "DejaVuSans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-	line-height: 20px; /* This is 1.5x our font size, rounded down. */
-	color: #444;
-	-webkit-font-smoothing: antialiased; /* Fix for webkit rendering */
-	-webkit-text-size-adjust: 100%;
-	padding: 0;
-	margin: 0;
+  height: 100vh;
+  font: 14px "DejaVuSans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 20px;
+  /* This is 1.5x our font size, rounded down. */
+
+  color: #444;
+  -webkit-font-smoothing: antialiased;
+  /* Fix for webkit rendering */
+
+  -webkit-text-size-adjust: 100%;
+  padding: 0;
+  margin: 0;
 }
-h1, h2, h3, h4, h5, h6 {
-    margin: 0;
-    padding: 0;
+#root-container {
+  height: 100%;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
 }
 p {
-	font-size: 16px;
-    line-height: 24px; /* This is 1.5x our font size, rounded down. */
+  font-size: 16px;
+  line-height: 24px;
+  /* This is 1.5x our font size, rounded down. */
+
 }
 .grid > * {
-    margin: 0 0;
+  margin: 0 0;
+  height: 100%;
 }
-@media all and (min-width:630px) {
-    .grid {
-        padding-left: 300px;
-        overflow: hidden;
-    }
-    .grid > .side-content {
-        width: 300px;
-        float: left;
-        margin: 0;
-        margin-left: -300px;
-    }
-    .grid > .main-content {
-        width: 100%;
-        float: right;
-        margin: 0;
-    }
-    .grid > .main-content > .column {
-    	width: 500px;
-    	margin: 0 auto;
-    }
-
+@media all and (min-width: 630px) {
+  .grid {
+    height: 100%;
+    padding-left: 300px;
+    overflow: hidden;
+  }
+  .grid > .side-content {
+    width: 300px;
+    height: 100%;
+    float: left;
+    margin: 0;
+    margin-left: -300px;
+  }
+  .grid > .main-content {
+    width: 100%;
+    height: 100%;
+    float: right;
+    margin: 0;
+  }
+  .grid > .main-content > .column {
+    width: 30%;
+    min-width: 470px;
+    height: 100%;
+    margin: 0 auto;
+  }
 }
 .panel {
-    margin: 16px 0;
+  height: 100%;
+  display: table;
+  box-sizing: border-box;
+}
+.panel .panel-center {
+  display: table-cell;
+  vertical-align: middle;
 }
 .left {
-    float: left;
-    clear: left;
+  float: left;
+  clear: left;
 }
 .right {
-    float: right;
-    clear: right;
+  float: right;
+  clear: right;
 }
-
-
 /* 4. Masthead
     ------------------------------------- */
-
 header#masthead {
-    height: 80px;
-    padding: 16px;
-    -moz-box-sizing: border-box;
-         box-sizing: border-box;
-    background: #EEE;
+  height: 80px;
+  padding: 16px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background: #EEE;
 }
-
-
 /* 5. Main
     ------------------------------------- */
-
-
-
+section#main {
+  height: 100%;
+  margin-top: -160px;
+  padding-top: 160px;
+  box-sizing: border-box;
+}
 /* 6. Earth
 	------------------------------------- */
-
 #emoji-planet-container {
-    width: 500px!important;
-    height: 500px!important;
-    -webkit-border-radius: 50%;
-            border-radius: 50%;
-    overflow: hidden;
-    display: block;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  overflow: hidden;
 }
 #emoji-planet-container.ec-circle-hover {
-    cursor: -webkit-grab!important;
-    cursor: -moz-grab!important;
+  cursor: -webkit-grab !important;
+  cursor: -moz-grab !important;
 }
 #emoji-planet-container.ec-circle-hover:active {
-    cursor: -webkit-grabbing!important;
-    cursor: -moz-grabbing!important;
+  cursor: -webkit-grabbing !important;
+  cursor: -moz-grabbing !important;
 }
 #emoji-planet-container > canvas {
-    width: 100%!important;
-    height: auto!important;
-    position: static;
+  width: 100%!important;
+  height: auto!important;
+  position: static;
 }
-
-
 /* 7. Footer
     ------------------------------------- */
 footer#footer {
-    height: 80px;
-    background: #eee;
+  height: 80px;
+  background: #eee;
 }
