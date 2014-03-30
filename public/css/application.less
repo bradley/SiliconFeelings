@@ -117,6 +117,14 @@ header#masthead {
     -moz-box-sizing: border-box;
          box-sizing: border-box;
     background: #EEE;
+    #connection-status {
+        p {
+            margin: 0;
+            padding: 16px 0;
+            line-height: inherit;
+            font-size: inherit;
+        }
+    }
 }
 
 
@@ -124,9 +132,11 @@ header#masthead {
     ------------------------------------- */
 section#main {
     height: 100%;
+    min-height: 666px;
     margin-top: -@main_offset;
     padding-top: @main_offset;
-    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+         box-sizing: border-box;
 }
 
 
@@ -157,5 +167,16 @@ section#main {
     ------------------------------------- */
 footer#footer {
     height: @header_footer_height;
+    padding: 16px;
+    -moz-box-sizing: border-box;
+         box-sizing: border-box;
     background: #eee;
+    #regards {
+        p {
+            margin: 0;
+            padding: 16px 0;
+            line-height: inherit;
+            font-size: inherit;
+        }
+    }
 }

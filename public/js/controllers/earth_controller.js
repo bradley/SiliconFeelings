@@ -7,13 +7,12 @@ define([], function() {
 	  $scope.socket;
 	  $scope.tweet_data;
 
-    $rootScope.message = 'loading resources';
 
     /* Scope Functions */
 
-    $scope.sceneReady = function(message) {
+    $scope.sceneReady = function(connection_status) {
     	//console.log('Resources Loaded');
-    	$rootScope.message = 'connecting';
+    	$rootScope.connection_status = 'connecting';
     	$scope.$apply();
 
     	// NOTE: Artificial timeout for desired UX. Not functionally necessary.
@@ -30,42 +29,42 @@ define([], function() {
 	  	var socket = $scope.socket;
 
 		  socket.on('init', function(data) {
-		    console.log(data.message);
+		    console.log(data.connection_status);
 		  });
 
 		  socket.on('connecting', function() {
-		  	$rootScope.message = 'connecting...';
+		  	$rootScope.connection_status = 'connecting...';
 		  });
 
 		  socket.on('connect', function() {
-		  	$rootScope.message = 'connected';
+		  	$rootScope.connection_status = 'connected';
 		  });
 
 		  socket.on('connect_failed', function() {
-		  	$rootScope.message = 'failed to connect';
+		  	$rootScope.connection_status = 'failed to connect';
 		   	// TODO
 		 	});
 
 		  socket.on('disconnect', function() {
-		  	$rootScope.message = 'disconnected';
+		  	$rootScope.connection_status = 'disconnected';
 		  });
 
 		  socket.on('error', function() {
-		  	$rootScope.message = 'error connecting';
+		  	$rootScope.connection_status = 'error connecting';
 		  });
 
 		  socket.on('reconnecting', function() {
-		  	$rootScope.message = 'reconnecting...';
+		  	$rootScope.connection_status = 'reconnecting...';
 		  	// NOTE: Fires one or more times!
 		  	// TODO
 		  });
 
 		  socket.on('reconnect', function() {
-		  	$rootScope.message = 'connected';
+		  	$rootScope.connection_status = 'connected';
 		  });
 
 		 	socket.on('reconnect_failed', function() {
-		  	$rootScope.message = 'failed to connect';
+		  	$rootScope.connection_status = 'failed to connect';
 		   	// TODO
 		 	});
 

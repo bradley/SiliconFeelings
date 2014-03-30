@@ -114,12 +114,20 @@ header#masthead {
   box-sizing: border-box;
   background: #EEE;
 }
+header#masthead #connection-status p {
+  margin: 0;
+  padding: 16px 0;
+  line-height: inherit;
+  font-size: inherit;
+}
 /* 5. Main
     ------------------------------------- */
 section#main {
   height: 100%;
+  min-height: 666px;
   margin-top: -160px;
   padding-top: 160px;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 /* 6. Earth
@@ -146,5 +154,14 @@ section#main {
     ------------------------------------- */
 footer#footer {
   height: 80px;
+  padding: 16px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   background: #eee;
+}
+footer#footer #regards p {
+  margin: 0;
+  padding: 16px 0;
+  line-height: inherit;
+  font-size: inherit;
 }
