@@ -80,8 +80,9 @@ p {
         margin: 0;
     }
     .grid > .main-content > .column {
-    	width: 30%;
+    	width: 45%;
         min-width: 470px;
+        max-width: 840px;
         height: 100%;
     	margin: 0 auto;
     }
@@ -112,11 +113,11 @@ p {
     ------------------------------------- */
 
 header#masthead {
+    min-width: 100%;
     height: @header_footer_height;
     padding: 16px;
     -moz-box-sizing: border-box;
          box-sizing: border-box;
-    background: #EEE;
     #connection-status {
         p {
             margin: 0;
@@ -131,12 +132,17 @@ header#masthead {
 /* 5. Main
     ------------------------------------- */
 section#main {
-    height: 100%;
-    min-height: 666px;
+    width: 100%;
+    min-height: 100%;
+    display: table;
     margin-top: -@main_offset;
     padding-top: @main_offset;
     -moz-box-sizing: border-box;
          box-sizing: border-box;
+    .grid {
+        display: table-cell;
+        vertical-align: middle;
+    }
 }
 
 
@@ -166,11 +172,11 @@ section#main {
 /* 7. Footer
     ------------------------------------- */
 footer#footer {
+    min-width: 100%;
     height: @header_footer_height;
     padding: 16px;
     -moz-box-sizing: border-box;
          box-sizing: border-box;
-    background: #eee;
     #regards {
         p {
             margin: 0;
