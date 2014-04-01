@@ -5,6 +5,19 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
   /* Directives */
 
 	angular.module('myApp.directives', [])
+		.directive('glitchLogo', ['$window', function($window) {
+			return {
+				restrict: 'E',
+				scope: {
+					'logoText': '='
+				},
+				link: function(scope, element, attrs) {
+					// Create camera
+					// Create texture for text
+					//
+				}
+			}
+		}])
 		.directive('emojiPlanet', ['$rootScope', '$http', '$window', function($rootScope, $http, $window) {
     	return {
 	      restrict: 'E',
@@ -13,7 +26,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	        'socket': '=',
 	        'sceneReady': '&onLoad'
 	      },
-	      link: function postLink(scope, element, attrs) {
+	      link: function(scope, element, attrs) {
 
 
 	      	/* Setup */
@@ -64,7 +77,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 					// Etc.
 					var scene_ready = false,
 							interaction_initiated = false,
-							mouse_hovering = false;
+							holding_earth = false;
 
 
 			    /* Initialize */
@@ -327,7 +340,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 			    function updateCameraPosition(step) {
 			    	if (interaction_initiated) {
-			    		if (mouse_hovering && controls.enabled) {
+			    		if (holding_earth) {
 			    			controls.update();
 			    		}
 			    		return;
@@ -346,26 +359,24 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 					$(element[0]).circlemouse({
 						onMouseEnter: function(event, el) {
-							mouse_hovering = true;
 							el.addClass('ec-circle-hover');
 						},
 						onMouseLeave: function(event, el) {
-							if (controls) {
-								controls.forceMouseup(event);
-								controls.enabled = false;
-							}
-							mouse_hovering = false
 							el.removeClass('ec-circle-hover');
 						},
 						onMouseDown: function(event, el) {
 							if (scene_ready) {
 					    	controls = controls || new THREE.TrackballControls(camera, renderer.domElement);
-					    	controls.enabled = true;
 					    	controls.forceMousedown(event); // Tell control about this mousedown event.
 					    	interaction_initiated = true;
+								holding_earth = true;
 					    }
 						}
 					});
+
+					$(document).bind('mouseup', function(e) {
+			    	holding_earth = false;
+			    });
 
 			    angular.element($window).bind('resize', function(e) {
 			    	if (controls) {
