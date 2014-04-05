@@ -41,14 +41,26 @@
 
 body {
     height: 100vh;
-	font: 14px "DejaVuMono", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font: 14px "DejaVuSans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	line-height: 20px; /* This is 1.5x our font size, rounded down. */
 	color: @storm;
-    background-color: @mist;
 	-webkit-font-smoothing: antialiased; /* Fix for webkit rendering */
 	-webkit-text-size-adjust: 100%;
 	padding: 0;
 	margin: 0;
+    background: #FFFFFF;
+    background-image:
+      -webkit-linear-gradient(top, rgba(230, 231, 226, 0.2) 0%, rgba(210, 212, 201, 0.09) 100%),
+      -webkit-linear-gradient(315deg, rgba(229, 230, 225, 0.3), rgba(214, 214, 206, 0.09));
+    background-image:
+      -moz-linear-gradient(top, rgba(230, 231, 226, 0.2) 0%, rgba(210, 212, 201, 0.09) 100%),
+      -moz-linear-gradient(315deg, rgba(229, 230, 225, 0.3), rgba(214, 214, 206, 0.09));
+    background-image:
+      -o-linear-gradient(top, rgba(230, 231, 226, 0.2) 0%, rgba(210, 212, 201, 0.09) 100%),
+      -o-linear-gradient(315deg, rgba(229, 230, 225, 0.3), rgba(214, 214, 206, 0.09));
+    background-image:
+      linear-gradient(to top, rgba(230, 231, 226, 0.2) 0%, rgba(210, 212, 201, 0.09) 100%),
+      linear-gradient(315deg, rgba(229, 230, 225, 0.3), rgba(214, 214, 206, 0.09));
 }
 #root-container {
     min-width: 100%;
@@ -130,18 +142,6 @@ p {
 
 header#masthead {
     font-family: "DejaVuSans-ExtraLight", "Helvetica", Arial;
-    background-image:
-      -webkit-linear-gradient(top, rgba(230, 231, 226, 0.4) 0%, rgba(210, 212, 201, 0.2) 100%),
-      -webkit-linear-gradient(315deg, rgba(229, 230, 225, 1.0), rgba(214, 214, 206, 0.3));
-    background-image:
-      -moz-linear-gradient(top, rgba(230, 231, 226, 0.4) 0%, rgba(210, 212, 201, 0.2) 100%),
-      -moz-linear-gradient(315deg, rgba(229, 230, 225, 1.0), rgba(214, 214, 206, 0.3));
-    background-image:
-      -o-linear-gradient(top, rgba(230, 231, 226, 0.4) 0%, rgba(210, 212, 201, 0.2) 100%),
-      -o-linear-gradient(315deg, rgba(229, 230, 225, 1.0), rgba(214, 214, 206, 0.3));
-    background-image:
-      linear-gradient(to top, rgba(230, 231, 226, 0.4) 0%, rgba(210, 212, 201, 0.2) 100%),
-      linear-gradient(315deg, rgba(229, 230, 225, 1.0), rgba(214, 214, 206, 0.3));
     min-width: 100%;
     height: @header_footer_height;
     padding: 16px;
@@ -153,6 +153,10 @@ header#masthead {
             font-size: 36px;
             line-height: 48px;
 
+        }
+        img {
+            max-width: 100%;
+            max-height: 100%;
         }
     }
     #connection-status {

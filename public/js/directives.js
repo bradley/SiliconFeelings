@@ -232,10 +232,10 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 			          scene.add(camera);
 
 			         	// Renderer
-			          //renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-			          //renderer.setClearColor(0x000000, 0);
-			          renderer = new THREE.WebGLRenderer({ antialias: true });
-			          renderer.setClearColor(0xE5E6E1);
+			          renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+			          renderer.setClearColor(0x000000, 0);
+			          //renderer = new THREE.WebGLRenderer({ antialias: true });
+			          //renderer.setClearColor(0xE5E6E1);
 			          renderer.setSize(width, height);
 			          // NOTE: https://github.com/mrdoob/three.js/issues/4469#issuecomment-36291287
 			          renderer.context.getProgramInfoLog = function () { return '' };
@@ -364,7 +364,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 		        	var start = 1780,
 		        			end = 1940;
 
-		        	scene.fog = new THREE.Fog(0xE5E6E1, start, end);
+		        	scene.fog = new THREE.Fog(0xF4F5F3, start, end);
 		        }
 
 		        function addPoints() {
@@ -426,9 +426,9 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 								composer.addPass(rgbEffect);
 
 								tvEffect = new THREE.ShaderPass(THREE.BadTVShader);
-								tvEffect.uniforms['distortion'].value = 1.4;
+								tvEffect.uniforms['distortion'].value = 1.5;
 								tvEffect.uniforms['distortion2'].value = 2.1;
-								tvEffect.uniforms['speed'].value = 0.04;
+								tvEffect.uniforms['speed'].value = 0.07;
 								tvEffect.uniforms['rollSpeed'].value = 0.0;
 								composer.addPass(tvEffect);
 

@@ -13,9 +13,8 @@ THREE.EffectComposer = function ( renderer, renderTarget ) {
 		var width = window.innerWidth || 1;
 		var height = window.innerHeight || 1;
 
-		this.renderTargetParameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false };
+		this.renderTargetParameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, stencilBuffer: false };
 		this.renderTarget1 = new THREE.WebGLRenderTarget( width, height, this.renderTargetParameters );
-
 	}
 
 	this.renderTarget2 = this.renderTarget1.clone();
