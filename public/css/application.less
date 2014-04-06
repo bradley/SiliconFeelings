@@ -1,4 +1,4 @@
-@storm: #545454;
+@storm: #121924;
 @mist: #EFEFEF;
 @white_gold: #E5E6E1;
 
@@ -147,13 +147,34 @@ header#masthead {
     padding: 16px;
     -moz-box-sizing: border-box;
          box-sizing: border-box;
-    hgroup {
-        h1 {
-            color: @storm;
-            font-size: 36px;
-            line-height: 48px;
+    img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    .side-content {
+        /* Internet Explorer 10 */
+               display:-ms-flexbox;
+         -ms-flex-pack:center;
+        -ms-flex-align:center;
 
-        }
+        /* Firefox */
+               display:-moz-box;
+         -moz-box-pack:center;
+        -moz-box-align:center;
+
+        /* Safari, Opera, and Chrome */
+                  display:-webkit-box;
+         -webkit-box-pack:center;
+        -webkit-box-align:center;
+
+        /* W3C */
+          display:box;
+         box-pack:center;
+        box-align:center;
+    }
+    canvas {
+        max-width: 100%;
+        max-height: 100%;
         img {
             max-width: 100%;
             max-height: 100%;

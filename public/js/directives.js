@@ -1,4 +1,4 @@
-define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass', 'shaderPass', 'rgbShiftShader', 'badTVShader'], function(angular) {
+define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass', 'shaderPass', 'rgbShiftShader', 'badTVShader', 'tripShader'], function(angular) {
 	'use strict';
 
 
@@ -7,148 +7,105 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	angular.module('myApp.directives', [])
 		.directive('glitchLogo', ['$window', function($window) {
 			return {
-				restrict: 'E',
-				scope: {
-					'logoText': '='
-				},
-				link: function(scope, element, attrs) {
+				restrict: 'A',
+				link: function(scope, element) {
+					console.log('here');
+					(function(scope, element) {
 
-					(function(scope, element, attrs) {
+						var c = element[0],
+								ctx = c.getContext("2d");
 
+						var font_size = 58,
+					      first_word = 'Emoji',
+					      first_font = font_size + "px 'Minion Pro', 'Crimson Text', Minion Pro', Times, 'Times New Roman', serif",
+					      second_word = 'INTERNATIONAL',
+					      second_font = "italic bold " + font_size + "px 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, 'Liberation Sans', Arimo, Arial, sans-serif",
+					      gradient,
+					      first_word_width;
 
-						/* Setup */
+						var colors = new Array(
+						  [118, 200, 215],
+						  [93, 161, 153],
+						  [80, 140, 169],
+						  [107, 184, 200],
+						  [114, 214, 206],
+						  [115, 207, 166]);
 
-		      	// Constants
-						var width = 500,
-		        		height = 100,
-		        		pos_x = width / 2,
-		        		pos_y = height / 2,
-		        		pos_z = 2250,
-		        		fov = 45,
-				    		near = 1,
-				    		far = 3000;
+						var step = 0,
+								colorIndices = [0,1,2,3],
+								gradientSpeed = 0.009;
 
-				    // Scene Components
-						var camera,
-								scene,
-								renderer,
-								composer,
-								textPlane;
+						function updateGradient() {
 
-				    // Postprocessing Components
-						var tvEffect,
-								copyPass,
-								renderPass,
-								step = 0;
+							var c0_0 = colors[colorIndices[0]],
+									c0_1 = colors[colorIndices[1]],
+									c1_0 = colors[colorIndices[2]],
+									c1_1 = colors[colorIndices[3]];
 
+							var istep = 1 - step,
+									r1 = Math.round(istep * c0_0[0] + step * c0_1[0]),
+									g1 = Math.round(istep * c0_0[1] + step * c0_1[1]),
+									b1 = Math.round(istep * c0_0[2] + step * c0_1[2]),
+									color1 = "#"+((r1 << 16) | (g1 << 8) | b1).toString(16);
 
-						/* Initialize */
+							var r2 = Math.round(istep * c1_0[0] + step * c1_1[0]),
+									g2 = Math.round(istep * c1_0[1] + step * c1_1[1]),
+									b2 = Math.round(istep * c1_0[2] + step * c1_1[2]),
+									color2 = "#"+((r2 << 16) | (g2 << 8) | b2).toString(16);
 
-		        function init() {
-
-	        		// Camera
-		          camera = new THREE.PerspectiveCamera(55, 1080 / 720, 20, 3000);
-							camera.position.z = 1000;
-					    //camera.lookAt(center_of_scene);
-
-		          // Scene
-		          scene = new THREE.Scene();
-
-		         	// Renderer
-		          renderer = new THREE.WebGLRenderer({ antialias: true });
-		          //renderer.setClearColor(0xffffff);
-		          renderer.setSize(width, height);
-		          // NOTE: https://github.com/mrdoob/three.js/issues/4469#issuecomment-36291287
-		          renderer.context.getProgramInfoLog = function () { return '' };
-
-		          // Build Scene Components
-		          addTextPlane();
-
-		          // NOTE: Element is provided by the angular directive
-		         // element.append(renderer.domElement);
-		         $('#masthead').append(renderer.domElement);
-
-		          // Postprocessing
-		          addPostprocessing();
-
-		        	render();
-
-		        };
+							updateLogoText(color1, color2);
 
 
-		        /* Helpers */
+						  step += gradientSpeed;
+						  if ( step >= 1 )
+						  {
+						    step %= 1;
+						    colorIndices[0] = colorIndices[1];
+						    colorIndices[2] = colorIndices[3];
 
-		        function addTextPlane() {
-							var canvas = document.createElement('canvas'),
-									context = canvas.getContext('2d');
+						    //pick two new target color indices
+						    //do not pick the same as the current one
+						    colorIndices[1] = ( colorIndices[1] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
+						    colorIndices[3] = ( colorIndices[3] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
 
-							canvas.width = width;
-							canvas.height = height;
-							var font_size = 90;
+						  }
+						}
 
-							context.fillStyle = 'white';
-							context.fillRect(0,0,1080,720);
-							context.font = 'Normal ' + font_size + 'px Arial';
-							context.textAlign = 'center';
+						function resizeCanvasForFonts() {
+							var text_width = 0;
 
-							context.font = 'Normal 90px Arial';
-							var half_text_height =  (font_size / 2);
+							ctx.font = first_font;
+						  first_word_width = ctx.measureText(first_word).width + 5;
+						  ctx.font = second_font;
+						  text_width = first_word_width + ctx.measureText(second_word).width;
+						  if (c.width != text_width) {
+						    c.width = text_width;
+						    c.height = 66;
+						  }
+						}
 
-							console.log(context.measureText('EMOJI').height );
-							context.fillStyle = 'black';
-							context.fillText('EMOJI', width / 2, (height / 2) + half_text_height);
+						function updateLogoText(color1, color2) {
 
+						  // Reset
+						  ctx.clearRect(0, 0, c.width, c.height);
 
+						  resizeCanvasForFonts();
 
-							var texture = new THREE.Texture(canvas);
-							texture.needsUpdate = true;
+						  // Draw Logo Text
+						  ctx.font = first_font;
+						  ctx.fillStyle = "#121924";
+						  ctx.fillText(first_word, 0, 48);
+						  ctx.font = second_font;
+						  gradient = ctx.createLinearGradient(0,0,c.width,0);
+						  gradient.addColorStop("0",color1);
+						  gradient.addColorStop("1.0",color2);
+						  ctx.fillStyle = gradient;
+						  ctx.fillText(second_word, first_word_width, 48);
+						}
 
-							var material = new THREE.MeshBasicMaterial({
-										map: texture,
-										depthWrite: false
-									}),
-									plane = new THREE.PlaneGeometry(1080, 720, 1, 1);
+						setInterval(updateGradient,10);
 
-		          textPlane = new THREE.Mesh(plane, material);
-							scene.add(textPlane);
-							textPlane.z = 0;
-							textPlane.scale.x = textPlane.scale.y = 1.45;
-		        }
-
-		        function addPostprocessing() {
-								composer = new THREE.EffectComposer(renderer);
-
-			          renderPass = new THREE.RenderPass(scene, camera);
-								composer.addPass(renderPass);
-
-								tvEffect = new THREE.ShaderPass(THREE.BadTVShader);
-								tvEffect.uniforms['distortion'].value = 4.4;
-								tvEffect.uniforms['distortion2'].value = 0.1;
-								tvEffect.uniforms['speed'].value = 0.01;
-								tvEffect.uniforms['rollSpeed'].value = 0.0;
-								composer.addPass(tvEffect);
-
-								copyPass = new THREE.ShaderPass(THREE.CopyShader);
-								composer.addPass(copyPass);
-
-								copyPass.renderToScreen = true;
-				    }
-
-
-				    /* Lifecycle */
-
-		        function render() {
-		        	step += 0.1;
-							tvEffect.uniforms['time'].value = step;
-
-		          // Render
-		          renderer.render(scene, camera);
-		          composer.render(0.1);
-	 						requestAnimationFrame(render);
-		        };
-
-		        init();
-	        })(scope, element, attrs);
+	        })(scope, element);
 				}
 			}
 		}])

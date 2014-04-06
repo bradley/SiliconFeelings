@@ -18,7 +18,8 @@ requirejs.config({
 		effectComposer    : '/vendor/js/postprocessing/EffectComposer',
 		copyShader        : '/vendor/js/shaders/CopyShader',
 		rgbShiftShader    : '/vendor/js/shaders/RGBShiftShader',
-		badTVShader       : '/vendor/js/shaders/BadTVShader'
+		badTVShader       : '/vendor/js/shaders/BadTVShader',
+		tripShader        : '/vendor/js/shaders/ColorTripShader'
 	},
 	shim: {
 		'angular'           : {'exports': 'angular'},
@@ -33,7 +34,8 @@ requirejs.config({
 		'shaderPass'        : ['three'],
 		'effectComposer'    : ['three', 'copyShader', 'maskPass'],
 		'rgbShiftShader'    : ['three'],
-		'badTVShader'       : ['three']
+		'badTVShader'       : ['three'],
+		'tripShader'				: ['three']
 	},
 	priority: [
 		'angular'
