@@ -17,11 +17,12 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 						var font_size = 58,
 					      first_word = 'Emoji',
-					      first_font = font_size + "px 'Minion Pro', 'Crimson Text', Minion Pro', Times, 'Times New Roman', serif",
+					      first_font = "italic bold " + font_size + "px 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, 'Liberation Sans', 'Arimo', Arial, sans-serif",
 					      second_word = 'International',
-					      second_font = "italic bold " + font_size + "px 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, 'Liberation Sans', 'Arimo', Arial, sans-serif",
+					      second_font = 20 + "px 'Minion Pro', 'Crimson Text', Minion Pro', Times, 'Times New Roman', serif",
 					      gradient,
-					      first_word_width;
+					      first_word_width,
+					      second_word_width;
 
 						var colors = new Array(
 						  [118, 200, 215],
@@ -75,12 +76,14 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 							var text_width = 0;
 
 							ctx.font = first_font;
-						  first_word_width = ctx.measureText(first_word).width + 5;
+						  first_word_width = ctx.measureText(first_word).width;
 						  ctx.font = second_font;
-						  text_width = first_word_width + ctx.measureText(second_word).width;
+						  second_word_width = ctx.measureText(second_word).width;
+
+						  text_width = Math.max(first_word_width,second_word_width);
 						  if (c.width != text_width) {
 						    c.width = text_width;
-						    c.height = 66;
+						    c.height = 90;
 						  }
 						}
 
@@ -93,14 +96,14 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 						  // Draw Logo Text
 						  ctx.font = first_font;
-						  ctx.fillStyle = "#121924";
-						  ctx.fillText(first_word, 0, 48);
-						  ctx.font = second_font;
 						  gradient = ctx.createLinearGradient(0,0,c.width,0);
 						  gradient.addColorStop("0",color1);
 						  gradient.addColorStop("1.0",color2);
 						  ctx.fillStyle = gradient;
-						  ctx.fillText(second_word, first_word_width, 48);
+						  ctx.fillText(first_word, (c.width/2) - (first_word_width / 2), 48);
+						  ctx.font = second_font;
+						  ctx.fillStyle = "#121924";
+						  ctx.fillText(second_word, (c.width/2) - (second_word_width / 2), 80);
 						}
 
 						setInterval(updateGradient,10);
