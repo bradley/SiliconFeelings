@@ -17,9 +17,9 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 						var font_size = 58,
 					      first_word = 'Emoji',
-					      first_font = "italic bold " + font_size + "px 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, 'Liberation Sans', 'Arimo', Arial, sans-serif",
+					      first_font = "italic bold " + 116 + "px 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, 'Liberation Sans', 'Arimo', Arial, sans-serif",
 					      second_word = 'International',
-					      second_font = 20 + "px 'Minion Pro', 'Crimson Text', Minion Pro', Times, 'Times New Roman', serif",
+					      second_font = 40 + "px 'Minion Pro', 'Crimson Text', Minion Pro', Times, 'Times New Roman', serif",
 					      gradient,
 					      first_word_width,
 					      second_word_width;
@@ -82,8 +82,8 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 						  text_width = Math.max(first_word_width,second_word_width);
 						  if (c.width != text_width) {
-						    c.width = text_width;
-						    c.height = 90;
+						    c.width = text_width + 10;
+						    c.height = 150;
 						  }
 						}
 
@@ -100,10 +100,10 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 						  gradient.addColorStop("0",color1);
 						  gradient.addColorStop("1.0",color2);
 						  ctx.fillStyle = gradient;
-						  ctx.fillText(first_word, (c.width/2) - (first_word_width / 2), 48);
+						  ctx.fillText(first_word, (c.width/2) - (first_word_width / 2), 85);
 						  ctx.font = second_font;
 						  ctx.fillStyle = "#121924";
-						  ctx.fillText(second_word, (c.width/2) - (second_word_width / 2), 80);
+						  ctx.fillText(second_word, (c.width/2) - (second_word_width / 2), 145);
 						}
 
 						setInterval(updateGradient,10);
