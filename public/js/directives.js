@@ -18,8 +18,8 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 						var font_size = 58,
 					      first_word = 'Emoji',
 					      first_font = font_size + "px 'Minion Pro', 'Crimson Text', Minion Pro', Times, 'Times New Roman', serif",
-					      second_word = 'INTERNATIONAL',
-					      second_font = "italic bold " + font_size + "px 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, 'Liberation Sans', Arimo, Arial, sans-serif",
+					      second_word = 'International',
+					      second_font = "italic bold " + font_size + "px 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, 'Liberation Sans', 'Arimo', Arial, sans-serif",
 					      gradient,
 					      first_word_width;
 
