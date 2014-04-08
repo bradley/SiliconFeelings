@@ -48,24 +48,38 @@ body {
 	-webkit-text-size-adjust: 100%;
 	padding: 0;
 	margin: 0;
+    position: relative;
     background: #FFFFFF;
     background-image:
-      -webkit-linear-gradient(top, rgba(230, 231, 226, 0.2) 0%, rgba(210, 212, 201, 0.09) 100%),
-      -webkit-linear-gradient(315deg, rgba(229, 230, 225, 0.3), rgba(214, 214, 206, 0.09));
+      -webkit-linear-gradient(top, rgba(254, 254, 252, 0.05) 0%, rgba(246, 242, 239, 0.8) 100%),
+      -webkit-linear-gradient(315deg, rgba(154, 143, 147, 0.02), rgba(255, 255, 255, 1.0));
     background-image:
-      -moz-linear-gradient(top, rgba(230, 231, 226, 0.2) 0%, rgba(210, 212, 201, 0.09) 100%),
-      -moz-linear-gradient(315deg, rgba(229, 230, 225, 0.3), rgba(214, 214, 206, 0.09));
+      -moz-linear-gradient(top, rgba(254, 254, 252, 0.05) 0%, rgba(246, 242, 239, 0.8) 100%),
+      -moz-linear-gradient(315deg, rgba(154, 143, 147, 0.02), rgba(255, 255, 255, 1.0));
     background-image:
-      -o-linear-gradient(top, rgba(230, 231, 226, 0.2) 0%, rgba(210, 212, 201, 0.09) 100%),
-      -o-linear-gradient(315deg, rgba(229, 230, 225, 0.3), rgba(214, 214, 206, 0.09));
+      -o-linear-gradient(top, rgba(254, 254, 252, 0.05) 0%, rgba(246, 242, 239, 0.8) 100%),
+      -o-linear-gradient(315deg, rgba(154, 143, 147, 0.02), rgba(255, 255, 255, 1.0));
     background-image:
-      linear-gradient(to top, rgba(230, 231, 226, 0.2) 0%, rgba(210, 212, 201, 0.09) 100%),
-      linear-gradient(315deg, rgba(229, 230, 225, 0.3), rgba(214, 214, 206, 0.09));
+      linear-gradient(to top, rgba(254, 254, 252, 0.5) 0%, rgba(251, 255, 255, 0.8) 100%),
+      linear-gradient(315deg, rgba(154, 143, 147, 0.2), rgba(255, 255, 255, 1.0));
 }
 #root-container {
+
     min-width: 100%;
     height: 100%;
     display: inline-block;
+    margin: 0 auto;
+}
+@media all and (min-width:2040px) {
+    #root-container {
+        min-width: 0px;
+        width: 2040px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
 }
 h1, h2, h3, h4, h5, h6 {
     margin: 0;
@@ -175,6 +189,7 @@ header#masthead {
     canvas {
         max-width: 100%;
         max-height: 100%;
+        padding-top: 9px;
         img {
             max-width: 100%;
             max-height: 100%;

@@ -191,8 +191,6 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 			         	// Renderer
 			          renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 			          renderer.setClearColor(0x000000, 0);
-			          //renderer = new THREE.WebGLRenderer({ antialias: true });
-			          //renderer.setClearColor(0xE5E6E1);
 			          renderer.setSize(width, height);
 			          // NOTE: https://github.com/mrdoob/three.js/issues/4469#issuecomment-36291287
 			          renderer.context.getProgramInfoLog = function () { return '' };
@@ -321,7 +319,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 		        	var start = 1780,
 		        			end = 1940;
 
-		        	scene.fog = new THREE.Fog(0xF4F5F3, start, end);
+		        	scene.fog = new THREE.Fog(0xFBFDFD, start, end);
 		        }
 
 		        function addPoints() {
