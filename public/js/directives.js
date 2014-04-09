@@ -537,7 +537,16 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	        })(scope, element, attrs);
 	      }
 	    }
-
-
-    }]);
+    }])
+		.directive('shareButton', ['$window', function($window) {
+			return {
+				restrict: 'E',
+				templateUrl: 'partials/components/share-button.html',
+				link: function(scope, element) {
+					$('.perspective-button-container').click(function() {
+			    	$(this).toggleClass('active');
+			    });
+				}
+			}
+		}]);
 });

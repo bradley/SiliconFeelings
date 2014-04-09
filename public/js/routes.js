@@ -9,6 +9,10 @@ define(['angular', 'app'], function(angular, app) {
       templateUrl: '/partials/home/index.html',
       controller: 'earthController'
     });
+    $routeProvider.when('/about', {
+      templateUrl: '/partials/about/index.html',
+      controller: 'aboutController'
+    });
     $routeProvider.otherwise({
       templateUrl: '/404.html'
     });
