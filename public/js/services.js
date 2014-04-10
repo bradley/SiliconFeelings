@@ -22,7 +22,16 @@ define(['angular', 'io'], function(angular) {
 		  var SharedSocket = Singleton();
 		  SharedSocket.prototype = {
 		    initialize: function() {
-		    	this.connection = io.connect('/', {});
+		    	this.options = {};
+		    	this.options['force new connection'] = true;
+
+		    	this.connection = io.connect('/', this.options);
+		    },
+		    disconnect: function() {
+		    	this.connection.disconnect();
+		    },
+		    reconnect: function() {
+		    	this.connection.socket.connect('/', this.options);
 		    },
 		    connectionStatus: function() {
 		  		return this.connection.socket.connected;

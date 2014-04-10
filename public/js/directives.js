@@ -9,7 +9,8 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 			return {
 				restrict: 'A',
 				link: function(scope, element) {
-					console.log('here');
+
+
 					(function(scope, element) {
 
 						var c = element[0],
@@ -366,10 +367,14 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 	          	scene.add(total);
 
+	          	// Clean up
 	          	setTimeout(function() {
 	          		// TODO: Rather than N timouts, let's look into having a single interval that checks for old data points
 	          		// and removes them.
+	          		scene.remove(mesh);
 	          		scene.remove(total);
+	          		plane.dispose();
+								geo.dispose();
 	          	}, 2000);
 				    }
 
@@ -544,7 +549,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 				templateUrl: 'partials/components/share-button.html',
 				link: function(scope, element) {
 					$('.perspective-button-container').click(function() {
-			    	$(this).toggleClass('active');
+			        $(this).toggleClass('active');
 			    });
 				}
 			}

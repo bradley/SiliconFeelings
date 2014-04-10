@@ -12,14 +12,14 @@ define([], function() {
 
     $scope.sceneReady = function(connection_status) {
     	//console.log('Resources Loaded');
-    	$rootScope.connection_status = 'connecting';
+    	$rootScope.connection_status = 'connecting...';
     	$scope.$apply();
 
     	// NOTE: Artificial timeout for desired UX. Not functionally necessary.
-    	setTimeout(function() {
-    		$scope.socket = new SharedSocket();
-    		setSocketListeners();
-    	}, 1400);
+			setTimeout(function() {
+				$scope.socket = new SharedSocket();
+				setSocketListeners();
+			}, 1400);
     }
 
 
@@ -29,7 +29,7 @@ define([], function() {
 	  	var socket = $scope.socket;
 
 		  socket.on('init', function(data) {
-		    console.log(data.connection_status);
+
 		  });
 
 		  socket.on('connecting', function() {
