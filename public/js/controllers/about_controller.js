@@ -1,5 +1,5 @@
 define([], function() {
-	return ['$scope', '$sce', '$rootScope', '$http', '$location', 'SharedSocket', function($scope, $sce, $rootScope, $http, $location, SharedSocket) {
+	return ['$scope', '$sce', '$rootScope', '$http', '$location', function($scope, $sce, $rootScope, $http, $location) {
 
 
 	  // Because this has happened asynchroneusly we've missed

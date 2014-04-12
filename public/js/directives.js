@@ -172,7 +172,8 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 								current_socket;
 
 						// Etc.
-						var scene_ready = false,
+						var requestId,
+								scene_ready = false,
 								interaction_initiated = false,
 								holding_earth = false;
 
@@ -209,6 +210,9 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 			          // Postprocessing
 			          addPostprocessing();
+
+			          // Clean up
+			          scope.$on('$destroy', teardownListeners);
 
 			          scene_ready = true;
 			          scope.sceneReady();
@@ -330,7 +334,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	            var plane = new THREE.PlaneGeometry(67, 67),
 	            		mesh = new THREE.Mesh(plane),
 	           			geo = new THREE.Geometry(),
-	           			materials = [];;
+	           			materials = [];
 
 	            _.each(tweets, function(tweet, index) {
 	            	// Convert earth coordinate to point in 3d space relative to our earth sphere.
@@ -363,6 +367,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	            });
 
 							var total = new THREE.Mesh(geo, new THREE.MeshFaceMaterial(materials));
+							materials = null;
 							total.matrixAutoUpdate = false;
 
 	          	scene.add(total);
@@ -371,10 +376,9 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	          	setTimeout(function() {
 	          		// TODO: Rather than N timouts, let's look into having a single interval that checks for old data points
 	          		// and removes them.
-	          		scene.remove(mesh);
+	          		//
 	          		scene.remove(total);
-	          		plane.dispose();
-								geo.dispose();
+	          		total = null;
 	          	}, 2000);
 				    }
 
@@ -430,9 +434,10 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 				    }
 
 				    function showGlitchyEarthIfDisconnected() {
-				    	composer = new THREE.EffectComposer(renderer);
-							composer.addPass(renderPass);
+				    	composer = null;
 					  	if (!current_socket.connectionStatus() && scene_ready) {
+					  		composer = new THREE.EffectComposer(renderer);
+								composer.addPass(renderPass);
 					  		composer.addPass(rgbEffect);
 					  		composer.addPass(tvEffect);
 					  		composer.addPass(copyPass);
@@ -454,7 +459,6 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	            camera.position.z = pos_z * Math.cos(degree) + pos_x * Math.sin(degree);
 	            camera.lookAt(center_of_scene);
 				    }
-
 
 
 				    /* Listeners */
@@ -533,9 +537,17 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 		          // Render
 		          renderer.render(scene, camera);
-		          composer.render(0.1);
-	 						requestAnimationFrame(render);
+		          if (composer) {
+		          	composer.render(0.1);
+		          }
+							requestId = requestAnimationFrame(render);
 		        };
+
+		        function teardownListeners() {
+		        	composer = null;
+		        	cancelAnimationFrame(requestId);
+       				requestId = undefined;
+		        }
 
 		        init();
 
