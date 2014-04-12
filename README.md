@@ -27,4 +27,6 @@ I'd like to give a massive thank you to Tom Patterson at [shadedrelief.com](http
 
 As for my understanding of working with emoji in the browser, and with streaming emoji data from Twitter, the blogging and public source code offerings of [Matthew Rothenberg](https://medium.com/medium-long/179cfd8238ac) (creator of [emojitracker.com](http://www.emojitracker.com/)) were extremely influential and helpful... much of my work in app/lib is in part a port of his code in Ruby to Javascript.
 
+I'd also like to thank [Sergey Yakunin](http://yakunins.com/my-work/) for allowing me to use his font, [Rayon](http://yakunins.com/rayon/specimen/rayon.html) for this project.
+
 Finally, I used the [hi resolution emoji images](https://github.com/greaterweb/emoji-highres) provided by [greaterweb](https://github.com/greaterweb) – shrunken slightly and mapped to a sprite sheet using [TexturePacker](http://www.codeandweb.com/texturepacker) – for the emoji displayed on the client side.

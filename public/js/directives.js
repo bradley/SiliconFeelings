@@ -9,7 +9,8 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 			return {
 				restrict: 'A',
 				link: function(scope, element) {
-					console.log('here');
+
+
 					(function(scope, element) {
 
 						var c = element[0],
@@ -17,11 +18,12 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 						var font_size = 58,
 					      first_word = 'Emoji',
-					      first_font = font_size + "px 'Minion Pro', 'Crimson Text', Minion Pro', Times, 'Times New Roman', serif",
-					      second_word = 'INTERNATIONAL',
-					      second_font = "italic bold " + font_size + "px 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, 'Liberation Sans', Arimo, Arial, sans-serif",
+					      first_font = "italic bold " + 116 + "px 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, 'Liberation Sans', 'Arimo', Arial, sans-serif",
+					      second_word = 'International',
+					      second_font = 40 + "px 'Minion Pro', 'Crimson Text', Minion Pro', Times, 'Times New Roman', serif",
 					      gradient,
-					      first_word_width;
+					      first_word_width,
+					      second_word_width;
 
 						var colors = new Array(
 						  [118, 200, 215],
@@ -75,12 +77,14 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 							var text_width = 0;
 
 							ctx.font = first_font;
-						  first_word_width = ctx.measureText(first_word).width + 5;
+						  first_word_width = ctx.measureText(first_word).width;
 						  ctx.font = second_font;
-						  text_width = first_word_width + ctx.measureText(second_word).width;
+						  second_word_width = ctx.measureText(second_word).width;
+
+						  text_width = Math.max(first_word_width,second_word_width);
 						  if (c.width != text_width) {
-						    c.width = text_width;
-						    c.height = 66;
+						    c.width = text_width + 10;
+						    c.height = 150;
 						  }
 						}
 
@@ -93,14 +97,14 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 						  // Draw Logo Text
 						  ctx.font = first_font;
-						  ctx.fillStyle = "#121924";
-						  ctx.fillText(first_word, 0, 48);
-						  ctx.font = second_font;
 						  gradient = ctx.createLinearGradient(0,0,c.width,0);
 						  gradient.addColorStop("0",color1);
 						  gradient.addColorStop("1.0",color2);
 						  ctx.fillStyle = gradient;
-						  ctx.fillText(second_word, first_word_width, 48);
+						  ctx.fillText(first_word, (c.width/2) - (first_word_width / 2), 85);
+						  ctx.font = second_font;
+						  ctx.fillStyle = "#121924";
+						  ctx.fillText(second_word, (c.width/2) - (second_word_width / 2), 145);
 						}
 
 						setInterval(updateGradient,10);
@@ -168,7 +172,8 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 								current_socket;
 
 						// Etc.
-						var scene_ready = false,
+						var requestId,
+								scene_ready = false,
 								interaction_initiated = false,
 								holding_earth = false;
 
@@ -205,6 +210,9 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 			          // Postprocessing
 			          addPostprocessing();
+
+			          // Clean up
+			          scope.$on('$destroy', teardownListeners);
 
 			          scene_ready = true;
 			          scope.sceneReady();
@@ -326,50 +334,67 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	            var plane = new THREE.PlaneGeometry(67, 67),
 	            		mesh = new THREE.Mesh(plane),
 	           			geo = new THREE.Geometry(),
-	           			materials = [];;
+	           			materials = [];
+
+	           	// NOTE: Rid ourselves of any tweets we cant find the emoji for. This shouldn't
+	           	//   happen since we've refined our mappings, but this will prevent errors if
+	           	//   we've missed anything.
+	           	tweets = _.reject(tweets, function(tweet, index) {
+	           		return typeof emoji_sprite_mappings[tweet.unified.toLowerCase()] === 'undefined';
+	           	});
 
 	            _.each(tweets, function(tweet, index) {
 	            	// Convert earth coordinate to point in 3d space relative to our earth sphere.
 		          	var lon = parseInt(tweet.coordinates[0]),
 		          			lat = parseInt(tweet.coordinates[1]),
-		          			sprite_info = emoji_sprite_mappings[tweet.unified.toLowerCase()],
+		          			sprite = emoji_sprite_mappings[tweet.unified.toLowerCase()].sprite,
 		          			position = lonLatToVector3(lon, lat);
 
-		          	// Ensure we found a sprite for the given emoji unified unicode.
-		          	if (sprite_info) {
-		          		var sprite = sprite_info.sprite;
+	          		// NOTE: Prepare for merger with geo object.
+	          		//   http://learningthreejs.com/blog/2011/10/05/performance-merging-geometry/
+	          		materials.push(sprite);
+	          		mesh.geometry.faces = setFaceIndexes(mesh.geometry.faces, index);
 
-		          		// NOTE: Prepare for merger with geo object.
-		          		//   http://learningthreejs.com/blog/2011/10/05/performance-merging-geometry/
-		          		materials.push(sprite);
-		          		mesh.geometry.faces = setFaceIndexes(mesh.geometry.faces, index);
+		          	// Make plane visible on top and bottom.
+		          	mesh.material.side = THREE.DoubleSide; // TODO: make sure this isnt a problem with emoji textures.
+		          	// Position mesh on correct coordinate relative to the Earth in 3D space.
+	            	mesh.position = position;
+	            	// Tell mesh to look away from the center of the scene (the center of the Earth sphere).
+	            	lookAwayFromCenter(mesh);
 
-			          	// Make plane visible on top and bottom.
-			          	mesh.material.side = THREE.DoubleSide; // TODO: make sure this isnt a problem with emoji textures.
-			          	// Position mesh on correct coordinate relative to the Earth in 3D space.
-		            	mesh.position = position;
-		            	// Tell mesh to look away from the center of the scene (the center of the Earth sphere).
-		            	lookAwayFromCenter(mesh);
-
-		            	// NOTE: Combine geometries for less draw calls
-		          		//   http://learningthreejs.com/blog/2011/10/05/performance-merging-geometry/
-		            	THREE.GeometryUtils.merge(geo, mesh);
-		          	}
+	            	// NOTE: Combine geometries for less draw calls
+	          		//   http://learningthreejs.com/blog/2011/10/05/performance-merging-geometry/
+	            	THREE.GeometryUtils.merge(geo, mesh);
 
 	            });
 
-							var total = new THREE.Mesh(geo, new THREE.MeshFaceMaterial(materials));
-							total.matrixAutoUpdate = false;
+							if (materials.length > 0) {
+								var total = new THREE.Mesh(geo, new THREE.MeshFaceMaterial(materials));
+								materials = null;
+								total.matrixAutoUpdate = false;
 
-	          	scene.add(total);
+		          	scene.add(total);
 
-	          	setTimeout(function() {
-	          		// TODO: Rather than N timouts, let's look into having a single interval that checks for old data points
-	          		// and removes them.
-	          		scene.remove(total);
-	          	}, 2000);
+		          	test(total);
+		          	//// Clean up
+		          	//setTimeout(function() {
+		          	//	// TODO: Rather than N timouts, let's look into having a single interval that checks for old data points
+		          	//	// and removes them.
+								//	scene.remove(total);
+//
+		          	//}, 2000);
+		          }
 				    }
 
+
+				    function test(total) {
+				    	setTimeout(function() {
+		          		// TODO: Rather than N timouts, let's look into having a single interval that checks for old data points
+		          		// and removes them.
+									scene.remove(total);
+
+		          	}, 2000);
+				    }
 				    function addPostprocessing() {
 								composer = new THREE.EffectComposer(renderer);
 
@@ -397,7 +422,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 				    	// NOTE: This make it possible to change the material Index manually.
 	        		//   This is especcially handy when you start to merge generated geometries with different materials.
 	        		//	 More: https://github.com/mrdoob/three.js/pull/2817 (since removed: https://github.com/mrdoob/three.js/releases/tag/r60)
-							for ( var i = 0; i <= (faces.length - 1); i ++ ) {
+							for (var i = 0; i < faces.length; i ++) {
 								faces[i].materialIndex = index;
 			 				}
 			 				return faces;
@@ -405,8 +430,8 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 				    function lookAwayFromCenter(object) {
 				    	var v = new THREE.Vector3();
-						    v.subVectors(object.position, center_of_scene).add(object.position);
-						    object.lookAt(v);
+					    v.subVectors(object.position, center_of_scene).add(object.position);
+					    object.lookAt(v);
 				    }
 
 				    // Convert a lon/lat to a point on our Earth sphere.
@@ -422,9 +447,10 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 				    }
 
 				    function showGlitchyEarthIfDisconnected() {
-				    	composer = new THREE.EffectComposer(renderer);
-							composer.addPass(renderPass);
+				    	composer = null;
 					  	if (!current_socket.connectionStatus() && scene_ready) {
+					  		composer = new THREE.EffectComposer(renderer);
+								composer.addPass(renderPass);
 					  		composer.addPass(rgbEffect);
 					  		composer.addPass(tvEffect);
 					  		composer.addPass(copyPass);
@@ -446,7 +472,6 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	            camera.position.z = pos_z * Math.cos(degree) + pos_x * Math.sin(degree);
 	            camera.lookAt(center_of_scene);
 				    }
-
 
 
 				    /* Listeners */
@@ -525,16 +550,33 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 		          // Render
 		          renderer.render(scene, camera);
-		          composer.render(0.1);
-	 						requestAnimationFrame(render);
+		          if (composer) {
+		          	composer.render(0.1);
+		          }
+							requestId = requestAnimationFrame(render);
 		        };
+
+		        function teardownListeners() {
+		        	composer = null;
+		        	cancelAnimationFrame(requestId);
+       				requestId = undefined;
+		        }
 
 		        init();
 
 	        })(scope, element, attrs);
 	      }
 	    }
-
-
-    }]);
+    }])
+		.directive('shareButton', ['$window', function($window) {
+			return {
+				restrict: 'E',
+				templateUrl: 'partials/components/share-button.html',
+				link: function(scope, element) {
+					$('.perspective-button-container').click(function() {
+			        $(this).toggleClass('active');
+			    });
+				}
+			}
+		}]);
 });

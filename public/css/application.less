@@ -21,7 +21,8 @@
 
 /* 	2. Typography
 	------------------------------------- */
-
+@import url(http://fonts.googleapis.com/css?family=Arimo:400,400italic,700,700italic);
+@import url(http://fonts.googleapis.com/css?family=Varela+Round);
 @font-face {
 	font-family: DejaVuSans;
 	src: url(../vendor/fonts/DejaVuSans.ttf);
@@ -34,14 +35,25 @@
 	font-family: DejaVuMono;
 	src: url(../vendor/fonts/DejaVuSansMono.ttf);
 }
-
+@font-face {
+    font-family: Rayon;
+    src: url(../vendor/fonts/GrayonText-hinted.ttf);
+}
+@font-face {
+    font-family: Rayon-Bold;
+    src: url(../vendor/fonts/GrayonText-bold-hinted.ttf);
+}
+@font-face {
+    font-family: Rayon-Italic;
+    src: url(../vendor/fonts/GrayonText-italic-hinted.ttf);
+}
 
 /* 	3. Base
 	------------------------------------- */
 
 body {
     height: 100vh;
-	font: 14px "DejaVuSans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font: 14px "Rayon", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	line-height: 20px; /* This is 1.5x our font size, rounded down. */
 	color: @storm;
 	-webkit-font-smoothing: antialiased; /* Fix for webkit rendering */
@@ -85,9 +97,13 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
     padding: 0;
 }
+h3 {
+    font-size: 16px;
+    font-weight: normal;
+}
 p {
-	font-size: 14px;
-    line-height: 21px; /* This is 1.5x our font size. */
+	font-size: 16px;
+    line-height: 24px; /* This is 1.5x our font size. */
 }
 .grid {
 
@@ -155,7 +171,6 @@ p {
     ------------------------------------- */
 
 header#masthead {
-    font-family: "DejaVuSans-ExtraLight", "Helvetica", Arial;
     min-width: 100%;
     height: @header_footer_height;
     padding: 16px;
@@ -189,7 +204,6 @@ header#masthead {
     canvas {
         max-width: 100%;
         max-height: 100%;
-        padding-top: 9px;
         img {
             max-width: 100%;
             max-height: 100%;
@@ -267,9 +281,111 @@ footer#footer {
     #regards {
         p {
             margin: 0;
-            padding: 16px 0 16px 16px;
+            padding: 15px 0px 15px 16px;
             line-height: inherit;
             font-size: inherit;
         }
     }
 }
+
+
+/* 8. Et Cetera
+    ------------------------------------- */
+
+.perspective-button-container {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    margin: 4px 16px 0 0;
+    &:hover {
+        cursor: pointer;
+        button {
+            background: #FEFFFF;
+            box-shadow: 0px 4px 10px 0 rgba(0,0,0,0.1),0px 2px 10px 0px rgba(0,0,0,0.1);
+        }
+        .pseudo {
+            &::before {
+
+            }
+        }
+    }
+    button {
+        height: 40px;
+        padding: 0 16px;
+        position: relative;
+        color: @storm;
+        background: #F0F0F0;
+        box-shadow: rgba(0,0,0,0.2) 0px 1px 1px 0px,rgba(0,0,0,0.1) 0px 1px 2px 0px;
+        text-transform: uppercase;
+        letter-spacing: 0.13em;
+        font-size: 12px;
+        line-height: 25px;
+        vertical-align: middle;
+        font-weight: normal;
+        white-space: nowrap;
+        -webkit-border-radius: 2px;
+           -moz-border-radius: 2px;
+                border-radius: 2px;
+        border: none;
+        outline: none;
+        transition:all 0.1s ease-in;
+        z-index: 1;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+    .pseudo {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition:all 0.1s ease-in;
+        &::before {
+            width: 20px;
+            height: 38px;
+            content: '';
+            position: absolute;
+            top: 1px;
+            left: -8px;
+            background: #B8B6B9;
+            -webkit-border-radius: 2px;
+               -moz-border-radius: 2px;
+                    border-radius: 2px;
+            box-shadow: rgba(0,0,0,0.2) 0px 1px 1px 0px,rgba(0,0,0,0.1) 0px 1px 2px 0px;
+            -webkit-transform: perspective(350) rotateY(-90deg);
+               -moz-transform: perspective(350) rotateY(-90deg);
+                -ms-transform: perspective(350) rotateY(-90deg);
+                 -o-transform: perspective(350) rotateY(-90deg);
+                    transform: perspective(350) rotateY(-90deg);
+            transition:all 0.1s ease-in;
+            z-index: -1;
+        }
+    }
+    &.active {
+        .pseudo::before {
+            left: -11px;
+            -webkit-transform: perspective(210) rotateY(-70deg);
+               -moz-transform: perspective(210) rotateY(-70deg);
+                -ms-transform: perspective(210) rotateY(-70deg);
+                 -o-transform: perspective(210) rotateY(-70deg);
+                    transform: perspective(210) rotateY(-70deg);
+            -webkit-border-top-left-radius: 3px;
+               -moz-border-top-left-radius: 3px;
+                    border-top-left-radius: 3px;
+        }
+        .perspective {
+            -webkit-transform: perspective(350) rotateY(50deg);
+               -moz-transform: perspective(350) rotateY(50deg);
+                -ms-transform: perspective(350) rotateY(50deg);
+                 -o-transform: perspective(350) rotateY(50deg);
+                    transform: perspective(350) rotateY(50deg);
+        }
+        button {
+            -webkit-border-top-left-radius: 1px;
+               -moz-border-top-left-radius: 1px;
+                    border-top-left-radius: 1px;
+        }
+    }
+}
+
