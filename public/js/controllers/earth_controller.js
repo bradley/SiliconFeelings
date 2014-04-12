@@ -5,6 +5,7 @@ define([], function() {
 		    $scope.socket.disconnect();
 		    //unsetSocketListeners();
 		    $scope.socket = null;
+		    $rootScope.connection_status = '';
 		});
 	  /* Setup */
 

@@ -336,52 +336,65 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	           			geo = new THREE.Geometry(),
 	           			materials = [];
 
+	           	// NOTE: Rid ourselves of any tweets we cant find the emoji for. This shouldn't
+	           	//   happen since we've refined our mappings, but this will prevent errors if
+	           	//   we've missed anything.
+	           	tweets = _.reject(tweets, function(tweet, index) {
+	           		return typeof emoji_sprite_mappings[tweet.unified.toLowerCase()] === 'undefined';
+	           	});
+
 	            _.each(tweets, function(tweet, index) {
 	            	// Convert earth coordinate to point in 3d space relative to our earth sphere.
 		          	var lon = parseInt(tweet.coordinates[0]),
 		          			lat = parseInt(tweet.coordinates[1]),
-		          			sprite_info = emoji_sprite_mappings[tweet.unified.toLowerCase()],
+		          			sprite = emoji_sprite_mappings[tweet.unified.toLowerCase()].sprite,
 		          			position = lonLatToVector3(lon, lat);
 
-		          	// Ensure we found a sprite for the given emoji unified unicode.
-		          	if (sprite_info) {
-		          		var sprite = sprite_info.sprite;
+	          		// NOTE: Prepare for merger with geo object.
+	          		//   http://learningthreejs.com/blog/2011/10/05/performance-merging-geometry/
+	          		materials.push(sprite);
+	          		mesh.geometry.faces = setFaceIndexes(mesh.geometry.faces, index);
 
-		          		// NOTE: Prepare for merger with geo object.
-		          		//   http://learningthreejs.com/blog/2011/10/05/performance-merging-geometry/
-		          		materials.push(sprite);
-		          		mesh.geometry.faces = setFaceIndexes(mesh.geometry.faces, index);
+		          	// Make plane visible on top and bottom.
+		          	mesh.material.side = THREE.DoubleSide; // TODO: make sure this isnt a problem with emoji textures.
+		          	// Position mesh on correct coordinate relative to the Earth in 3D space.
+	            	mesh.position = position;
+	            	// Tell mesh to look away from the center of the scene (the center of the Earth sphere).
+	            	lookAwayFromCenter(mesh);
 
-			          	// Make plane visible on top and bottom.
-			          	mesh.material.side = THREE.DoubleSide; // TODO: make sure this isnt a problem with emoji textures.
-			          	// Position mesh on correct coordinate relative to the Earth in 3D space.
-		            	mesh.position = position;
-		            	// Tell mesh to look away from the center of the scene (the center of the Earth sphere).
-		            	lookAwayFromCenter(mesh);
-
-		            	// NOTE: Combine geometries for less draw calls
-		          		//   http://learningthreejs.com/blog/2011/10/05/performance-merging-geometry/
-		            	THREE.GeometryUtils.merge(geo, mesh);
-		          	}
+	            	// NOTE: Combine geometries for less draw calls
+	          		//   http://learningthreejs.com/blog/2011/10/05/performance-merging-geometry/
+	            	THREE.GeometryUtils.merge(geo, mesh);
 
 	            });
 
-							var total = new THREE.Mesh(geo, new THREE.MeshFaceMaterial(materials));
-							materials = null;
-							total.matrixAutoUpdate = false;
+							if (materials.length > 0) {
+								var total = new THREE.Mesh(geo, new THREE.MeshFaceMaterial(materials));
+								materials = null;
+								total.matrixAutoUpdate = false;
 
-	          	scene.add(total);
+		          	scene.add(total);
 
-	          	// Clean up
-	          	setTimeout(function() {
-	          		// TODO: Rather than N timouts, let's look into having a single interval that checks for old data points
-	          		// and removes them.
-	          		//
-	          		scene.remove(total);
-	          		total = null;
-	          	}, 2000);
+		          	test(total);
+		          	//// Clean up
+		          	//setTimeout(function() {
+		          	//	// TODO: Rather than N timouts, let's look into having a single interval that checks for old data points
+		          	//	// and removes them.
+								//	scene.remove(total);
+//
+		          	//}, 2000);
+		          }
 				    }
 
+
+				    function test(total) {
+				    	setTimeout(function() {
+		          		// TODO: Rather than N timouts, let's look into having a single interval that checks for old data points
+		          		// and removes them.
+									scene.remove(total);
+
+		          	}, 2000);
+				    }
 				    function addPostprocessing() {
 								composer = new THREE.EffectComposer(renderer);
 
@@ -409,7 +422,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 				    	// NOTE: This make it possible to change the material Index manually.
 	        		//   This is especcially handy when you start to merge generated geometries with different materials.
 	        		//	 More: https://github.com/mrdoob/three.js/pull/2817 (since removed: https://github.com/mrdoob/three.js/releases/tag/r60)
-							for ( var i = 0; i <= (faces.length - 1); i ++ ) {
+							for (var i = 0; i < faces.length; i ++) {
 								faces[i].materialIndex = index;
 			 				}
 			 				return faces;
@@ -417,8 +430,8 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 
 				    function lookAwayFromCenter(object) {
 				    	var v = new THREE.Vector3();
-						    v.subVectors(object.position, center_of_scene).add(object.position);
-						    object.lookAt(v);
+					    v.subVectors(object.position, center_of_scene).add(object.position);
+					    object.lookAt(v);
 				    }
 
 				    // Convert a lon/lat to a point on our Earth sphere.
