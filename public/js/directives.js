@@ -340,14 +340,15 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	           	//   happen since we've refined our mappings, but this will prevent errors if
 	           	//   we've missed anything.
 	           	tweets = _.reject(tweets, function(tweet, index) {
-	           		return typeof emoji_sprite_mappings[tweet.unified.toLowerCase()] === 'undefined';
+	           		return typeof emoji_sprite_mappings[tweet.unified] === 'undefined';
 	           	});
 
 	            _.each(tweets, function(tweet, index) {
 	            	// Convert earth coordinate to point in 3d space relative to our earth sphere.
 		          	var lon = parseInt(tweet.coordinates[0]),
 		          			lat = parseInt(tweet.coordinates[1]),
-		          			sprite = emoji_sprite_mappings[tweet.unified.toLowerCase()].sprite,
+		          			unified = tweet['unified'],
+		          			sprite = emoji_sprite_mappings[unified].sprite.clone(),
 		          			position = lonLatToVector3(lon, lat);
 
 	          		// NOTE: Prepare for merger with geo object.
@@ -365,36 +366,27 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	            	// NOTE: Combine geometries for less draw calls
 	          		//   http://learningthreejs.com/blog/2011/10/05/performance-merging-geometry/
 	            	THREE.GeometryUtils.merge(geo, mesh);
-
+	            	sprite.dispose();
 	            });
 
 							if (materials.length > 0) {
-								var total = new THREE.Mesh(geo, new THREE.MeshFaceMaterial(materials));
-								materials = null;
+								var combined_material = new THREE.MeshFaceMaterial(materials);
+								combined_material.needsUpdate=true;
+								var total = new THREE.Mesh(geo, combined_material);
+
 								total.matrixAutoUpdate = false;
 
 		          	scene.add(total);
 
-		          	test(total);
-		          	//// Clean up
-		          	//setTimeout(function() {
-		          	//	// TODO: Rather than N timouts, let's look into having a single interval that checks for old data points
-		          	//	// and removes them.
-								//	scene.remove(total);
-//
-		          	//}, 2000);
-		          }
-				    }
-
-
-				    function test(total) {
-				    	setTimeout(function() {
+		          	// Clean up
+		          	setTimeout(function() {
 		          		// TODO: Rather than N timouts, let's look into having a single interval that checks for old data points
 		          		// and removes them.
 									scene.remove(total);
-
 		          	}, 2000);
+		          }
 				    }
+
 				    function addPostprocessing() {
 								composer = new THREE.EffectComposer(renderer);
 
