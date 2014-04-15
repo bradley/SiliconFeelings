@@ -12,9 +12,27 @@
 </head>
 <body>
   <section id='root-container'>
-    <div ng-include='"partials/_masthead.html"'></div>
+    <header id='masthead'>
+      <div class='grid'>
+        <div class='side-content'>
+          <!--<canvas width="643" height="115" glitch-logo><img src='images/temp-logo-emoji.svg'></img></canvas>-->
+        </div>
+        <div class='main-content'>
+          <div class='column'>
+            <ng-include src="mastheadInner"></ng-include>
+          </div>
+        </div>
+      </div>
+    </header>
     <div ng-view id='view-frame'></div>
-    <div ng-include='"partials/_footer.html"'></div>
+    <footer id='footer'>
+      <div id='regards' class='left'>
+        <p>With love, from <a href='http://twitter.com/bradleygriffith'>@bradleygriffith</a>.</p>
+      </div>
+      <div id='share' class='right'>
+        <share-button></share-button>
+      </div>
+    </footer>
   </section>
   <script data-main="js/main" src="/bower_components/requirejs/require.js"></script>
 </body>
