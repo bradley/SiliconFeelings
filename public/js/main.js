@@ -24,6 +24,7 @@ requirejs.config({
 	shim: {
 		'angular'           : {'exports': 'angular'},
 		'angularRoute'      : ['angular'],
+		'angularAnimate'    : ['angular'],
 		'angularResource'   : ['angular'],
 		'three'             : {'exports': 'three'},
 		'trackballControls' : ['three'],
@@ -47,9 +48,11 @@ window.name = 'NG_DEFER_BOOTSTRAP!';
 
 define([
 	'angular',
+	'angularRoute',
+	'angularAnimate',
 	'app',
 	'routes',
-], function(angular, app, routes) {
+], function(angular, angularRoute, angularAnimate, app, routes) {
 	'use strict';
 	var $html = angular.element(document.getElementsByTagName('html')[0]);
 

@@ -7,7 +7,8 @@ define([
   '$',
   'circlemouse',
   'angularRoute',
-  'angularResource'
+  'angularResource',
+  'angularAnimate'
   ],
   function(angular, services, directives, controllers, _, $, circlemouse) {
     'use strict';
@@ -15,6 +16,7 @@ define([
     var myApp = angular.module('myApp', [
       'ngRoute',
       'ngResource',
+      'ngAnimate',
       'myApp.services',
       'myApp.directives',
       'myApp.controllers'

@@ -1,19 +1,26 @@
 define([], function() {
 	return ['$scope', '$sce', '$rootScope', '$http', '$location', 'Socket', function($scope, $sce, $rootScope, $http, $location, Socket) {
 
-		$scope.$on('$locationChangeStart', function( event ) {
-		    $scope.socket.disconnect();
-		    //unsetSocketListeners();
-		    $scope.socket = null;
-		    $rootScope.connection_status = '';
-		});
+
 	  /* Setup */
 
 	  $scope.socket;
 	  $scope.tweet_data;
+	  $rootScope.connection_status = '';
 
 
     /* Scope Functions */
+
+    $rootScope.$on('$locationChangeStart', function(event) {
+			// NOTE: setTimeout forces this to be syncronous, saving us from a
+			//  rootScope inProg error. http://docs.angularjs.org/error/$rootScope/inprog?p0=$apply
+			setTimeout(function() {
+				if ($scope.socket) {
+					$scope.socket.disconnect();
+					$scope.socket = null;
+				}
+			}, 100);
+		});
 
     $scope.sceneReady = function(connection_status) {
     	//console.log('Resources Loaded');
@@ -88,9 +95,9 @@ define([], function() {
 		};
 
 
-	  // Because this has happened asynchroneusly we've missed
+	  // Because this has happened asynchronously we've missed
 		// Angular's initial call to $apply after the controller has been loaded
-		// hence we need to explicityly call it at the end of our Controller constructor
+		// hence we need to explicitly call it at the end of our Controller constructor
 	  $scope.$apply();
 	}];
 });
