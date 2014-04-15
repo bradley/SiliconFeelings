@@ -22,7 +22,7 @@ EmojiStream.prototype = {
         emojiData,
         emojis;
 
-    // Only use the 'top' 200 emoji (determined Feb 26, 2014 using http://www.emojitracker.com/)
+    // Only use the 'top' 400 emoji (determined Feb 26, 2014 using http://www.emojitracker.com/)
     // if we still only have basic stream access... i.e.; if Twitter never got back to us. 😔
     emojiData = new EmojiData({ top_emojis: config.twitter.has_basic_access });
     emojis = emojiData.emojis;

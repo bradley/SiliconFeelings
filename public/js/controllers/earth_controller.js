@@ -7,7 +7,7 @@ define([], function() {
 	  $scope.socket;
 	  $scope.tweet_data;
 	  $rootScope.connection_status = '';
-
+	  $rootScope.mastheadInner = 'masthead-inner';
 
     /* Scope Functions */
 

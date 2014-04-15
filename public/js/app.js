@@ -24,7 +24,7 @@ define([
 
     myApp.run(function($rootScope, $http){
       $rootScope.connection_status = '';
-
+      $rootScope.mastheadInner = '';
       // Log a love note to our users.
       console.log('%c Hey there, lovely.', 'font-size: 14px; color: #264CCA');
     });
