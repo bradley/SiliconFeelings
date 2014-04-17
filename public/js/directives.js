@@ -327,7 +327,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 		        	var start = 1780,
 		        			end = 1940;
 
-		        	scene.fog = new THREE.Fog(0xFBFDFD, start, end);
+		        	scene.fog = new THREE.Fog(0xF8F8F8, start, end);
 		        }
 
 		        function addPoints() {

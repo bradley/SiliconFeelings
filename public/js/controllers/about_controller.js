@@ -1,5 +1,6 @@
 define([], function() {
 	return ['$scope', '$sce', '$rootScope', '$http', '$location', function($scope, $sce, $rootScope, $http, $location) {
+		$rootScope.frame_class = 'about-view';
 		$rootScope.mastheadInner = '';
 
 	  // Because this has happened asynchronously we've missed

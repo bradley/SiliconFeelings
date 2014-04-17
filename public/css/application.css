@@ -47,10 +47,8 @@ html {
 body {
   height: 100%;
   font: 14px "Rayon", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  line-height: 20px;
-  /* This is 1.5x our font size, rounded down. */
-
-  color: #121924;
+  line-height: 21px;
+  color: #362738;
   -webkit-font-smoothing: antialiased;
   /* Fix for webkit rendering */
 
@@ -58,10 +56,10 @@ body {
   padding: 0;
   margin: 0;
   position: relative;
-  background: #FFFFFF;
-  background-image: -webkit-linear-gradient(top, rgba(254, 254, 252, 0.05) 0%, rgba(246, 242, 239, 0.8) 100%), -webkit-linear-gradient(315deg, rgba(154, 143, 147, 0.02), #ffffff);
-  background-image: -moz-linear-gradient(top, rgba(254, 254, 252, 0.05) 0%, rgba(246, 242, 239, 0.8) 100%), -moz-linear-gradient(315deg, rgba(154, 143, 147, 0.02), #ffffff);
-  background-image: -o-linear-gradient(top, rgba(254, 254, 252, 0.05) 0%, rgba(246, 242, 239, 0.8) 100%), -o-linear-gradient(315deg, rgba(154, 143, 147, 0.02), #ffffff);
+  background: #d4c4ab;
+  background-image: -webkit-linear-gradient(top, rgba(254, 254, 252, 0.05) 0%, rgba(246, 242, 239, 0.8) 100%), -webkit-linear-gradient(145deg, rgba(154, 143, 147, 0.2), #ffffff);
+  background-image: -moz-linear-gradient(top, rgba(254, 254, 252, 0.05) 0%, rgba(246, 242, 239, 0.8) 100%), -moz-linear-gradient(145deg, rgba(154, 143, 147, 0.2), #ffffff);
+  background-image: -o-linear-gradient(top, rgba(254, 254, 252, 0.05) 0%, rgba(246, 242, 239, 0.8) 100%), -o-linear-gradient(145deg, rgba(154, 143, 147, 0.2), #ffffff);
   background-image: linear-gradient(to top, rgba(254, 254, 252, 0.5) 0%, rgba(251, 255, 255, 0.8) 100%), linear-gradient(315deg, rgba(154, 143, 147, 0.2), #ffffff);
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -80,9 +78,13 @@ body {
   height: inherit;
   display: table;
   margin-top: -160px;
-  padding: 160px 16px 0;
+  padding: 176px 16px 16px;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+#view-frame.about-view {
+  display: block;
+  overflow: scroll;
 }
 /*
     #view-frame.ng-enter {
@@ -119,16 +121,32 @@ h3,
 h4,
 h5,
 h6 {
+  color: #0d0f17;
   margin: 0;
   padding: 0;
+  text-rendering: optimizeLegibility;
 }
 h3 {
   font-size: 16px;
   font-weight: bold;
 }
+a {
+  color: #1480CD;
+  transition: color 0.1s ease-in;
+}
+a:visited {
+  color: #0d0f17 !important;
+}
+a:hover {
+  color: #26CADB;
+}
 p {
   font-size: 15px;
   line-height: 22px;
+}
+p.small {
+  font-size: 12px;
+  line-height: 18px;
 }
 .grid > * {
   margin: 0 0;
@@ -288,17 +306,32 @@ section#main .grid .side-content {
   margin-left: 0px;
   margin-right: 32px;
 }
-#main .about-column h3 {
+#main .about-column .about-group {
+  margin-bottom: 64px;
+}
+#main .about-column .about-group:last-child {
+  margin-bottom: 0;
+}
+#main .about-column .about-group h3 {
   margin-bottom: 32px;
 }
-#main .about-column .qa-group {
+#main .about-column .about-group .qa-group {
   margin-bottom: 16px;
 }
-#main .about-column .qa-group p {
+#main .about-column .about-group .qa-group p {
   margin: 0px;
 }
-#main .about-column .qa-group p span.qa-tag {
+#main .about-column .about-group .qa-group p:first-child {
+  margin-bottom: 2px;
+}
+#main .about-column .about-group .qa-group p span.qa-tag {
   font-weight: bold;
+  margin-right: 1px;
+}
+#main .about-column .about-group ul#credits {
+  margin: 0;
+  list-style: none;
+  padding: 0;
 }
 /*  Footer
     ------------------------------------- */
@@ -312,8 +345,8 @@ footer#footer {
 footer#footer #regards p {
   margin: 0;
   padding: 15px 0px 15px 16px;
-  line-height: inherit;
-  font-size: inherit;
+  font-size: 13px;
+  line-height: 19px;
 }
 /*  Et Cetera
     ------------------------------------- */
@@ -334,7 +367,7 @@ footer#footer #regards p {
   height: 40px;
   padding: 0 16px;
   position: relative;
-  color: #121924;
+  color: #362738;
   background: #F0F0F0;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 1px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
   text-transform: uppercase;
@@ -375,31 +408,30 @@ footer#footer #regards p {
   -moz-border-radius: 2px;
   border-radius: 2px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 1px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
-  -webkit-transform: perspective(350) rotateY(-90deg);
-  -moz-transform: perspective(350) rotateY(-90deg);
-  -ms-transform: perspective(350) rotateY(-90deg);
-  -o-transform: perspective(350) rotateY(-90deg);
-  transform: perspective(350) rotateY(-90deg);
+  -webkit-transform: perspective(350px) rotateY(-90deg);
+  -moz-transform: perspective(350px) rotateY(-90deg);
+  -ms-transform: perspective(350px) rotateY(-90deg);
+  -o-transform: perspective(350px) rotateY(-90deg);
+  transform: perspective(350px) rotateY(-90deg);
   transition: all 0.1s ease-in;
   z-index: -1;
 }
 .perspective-button-container.active .pseudo::before {
   left: -11px;
-  -webkit-transform: perspective(210) rotateY(-70deg);
-  -moz-transform: perspective(210) rotateY(-70deg);
-  -ms-transform: perspective(210) rotateY(-70deg);
-  -o-transform: perspective(210) rotateY(-70deg);
-  transform: perspective(210) rotateY(-70deg);
+  -webkit-transform: perspective(210px) rotateY(-70deg);
+  -moz-transform: perspective(210px) rotateY(-70deg);
+  -ms-transform: perspective(210px) rotateY(-70deg);
+  -o-transform: perspective(210px) rotateY(-70deg);
+  transform: perspective(210px) rotateY(-70deg);
   -webkit-border-top-left-radius: 3px;
   -moz-border-top-left-radius: 3px;
   border-top-left-radius: 3px;
 }
 .perspective-button-container.active .perspective {
-  -webkit-transform: perspective(350) rotateY(50deg);
-  -moz-transform: perspective(350) rotateY(50deg);
-  -ms-transform: perspective(350) rotateY(50deg);
-  -o-transform: perspective(350) rotateY(50deg);
-  transform: perspective(350) rotateY(50deg);
+  -webkit-transform: perspective(350px) rotateY(50deg);
+  -moz-transform: perspective(350px) rotateY(50deg);
+  -ms-transform: perspective(350px) rotateY(50deg);
+  -o-transform: perspective(350px) rotateY(50deg);
 }
 .perspective-button-container.active button {
   -webkit-border-top-left-radius: 1px;

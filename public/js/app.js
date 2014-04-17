@@ -23,8 +23,10 @@ define([
     ]);
 
     myApp.run(function($rootScope, $http){
-      $rootScope.connection_status = '';
+      $rootScope.frame_class = '';
       $rootScope.mastheadInner = '';
+      $rootScope.connection_status = '';
+
       // Log a love note to our users.
       console.log('%c Hey there, lovely.', 'font-size: 14px; color: #264CCA');
     });
