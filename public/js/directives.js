@@ -567,6 +567,19 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 				link: function(scope, element) {
 					$('.perspective-button-container').click(function() {
 			        $(this).toggleClass('active');
+			        $('#share-text-container').toggleClass('active');
+			    });
+			    var $shareable_text = $('#share-text'),
+			    		$shareable_text_input = $shareable_text.find('input');
+
+
+			    $shareable_text_input.blur(function() {
+			    	$shareable_text.removeClass('focused');
+			    });
+
+			    $shareable_text.click(function(e) {
+			    	$shareable_text.addClass('focused');
+			    	$shareable_text_input.select();
 			    });
 				}
 			}
