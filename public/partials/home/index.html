@@ -1,14 +1,26 @@
-<script type="text/ng-template" id="masthead-inner">
-  <div ng-include='"partials/home/_masthead_inner.html"'></div>
-</script>
+<header id='masthead'>
+  <div class='grid'>
+    <div class='side-content'>
+      <!--<canvas width="643" height="115" glitch-logo><img src='images/temp-logo-emoji.svg'></img></canvas>-->
+    </div>
+    <div class='main-content'>
+      <div class='column'>
+        <div id='connection-status' class='left ng-cloak'>
+          <p class='left'>{{connection_status}}</p>
+        </div>
+        <div id='rotation-toggler' class='right ng-cloak'>
 
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
 <section id='main'>
   <div class='grid'>
     <div class='side-content'>
     	<div class='panel'>
         <div class='panel-center'>
-  	      <p>What is this?</p>
-          <p>Emoji being tweeted,<br/>displayed where it’s tweeted from,<br/>in real time.</p>
+          <p>This is a real time display of Emoji being tweeted by people across Earth.</p>
           <a href='#/about'>more information</a>
         </div>
 	    </div>

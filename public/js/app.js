@@ -24,7 +24,6 @@ define([
 
     myApp.run(function($rootScope, $http){
       $rootScope.frame_class = '';
-      $rootScope.mastheadInner = '';
       $rootScope.connection_status = '';
 
       // Log a love note to our users.

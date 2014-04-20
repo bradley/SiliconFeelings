@@ -572,7 +572,6 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 			    var $shareable_text = $('#share-text'),
 			    		$shareable_text_input = $shareable_text.find('input');
 
-
 			    $shareable_text_input.blur(function() {
 			    	$shareable_text.removeClass('focused');
 			    });

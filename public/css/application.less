@@ -24,7 +24,7 @@
 
 /* 	Typography
 	------------------------------------- */
-
+/*
 @import url(http://fonts.googleapis.com/css?family=Arimo:400,400italic,700,700italic);
 @import url(http://fonts.googleapis.com/css?family=Varela+Round);
 @font-face {
@@ -38,7 +38,7 @@
 @font-face {
 	font-family: DejaVuMono;
 	src: url(../vendor/fonts/DejaVuSansMono.ttf);
-}
+}*/
 @font-face {
     font-family: Rayon;
     src: url(../vendor/fonts/GrayonText-hinted.ttf);
@@ -68,6 +68,7 @@ body {
 	padding: 0;
 	margin: 0;
     position: relative;
+    /*
     background: @white_gold;
     background-image:
       -webkit-linear-gradient(top, rgba(254, 254, 252, 0.05) 0%, rgba(246, 242, 239, 0.8) 100%),
@@ -80,9 +81,15 @@ body {
       -o-linear-gradient(145deg, rgba(154, 143, 147, 0.2), rgba(255, 255, 255, 1.0));
     background-image:
       linear-gradient(to top, rgba(254, 254, 252, 0.5) 0%, rgba(251, 255, 255, 0.8) 100%),
-      linear-gradient(315deg, rgba(154, 143, 147, 0.2), rgba(255, 255, 255, 1.0));
+      linear-gradient(315deg, rgba(154, 143, 147, 0.2), rgba(255, 255, 255, 1.0)); */
     background-repeat: no-repeat;
     background-attachment: fixed;
+}
+::selection {
+    background: #FFD5D0; /* Consider this color: #94F9D3; */
+}
+::-moz-selection {
+    background: #FFD5D0; /* Consider this color: #94F9D3; */
 }
 #root-container-wrap {
     height: 100vh;
@@ -94,36 +101,34 @@ body {
     margin: 0 auto;
 }
 #view-frame {
+    position: relative;
     min-width: 100%;
     height: inherit;
-    display: table;
-    margin-top: -@main_offset;
-    padding: (@main_offset + 16px) 16px 16px;
+    margin-top: -@header_footer_height;
+    padding: @header_footer_height 16px 0;
     -moz-box-sizing: border-box;
          box-sizing: border-box;
-    &.about-view {
-        display: block;
-        overflow: scroll;
-    }
+    left: 0;
 }
-/*
-    #view-frame.ng-enter {
-        -webkit-transition: 2.0s linear all;
-        transition: 2.0s linear all;
-        opacity: 0;
-    }
-    #view-frame.ng-enter.ng-enter-active {
-        opacity: 1;
-    }
-    #view-frame.ng-leave {
-        -webkit-transition: 2.0s linear all;
-        transition: 2.0s linear all;
-        opacity: 1;
-    }
-    #view-frame.ng-leave.ng-leave-active {
-        opacity: 0;
-    }
-*/
+
+#view-frame.ng-enter {
+    -webkit-transition: 1.0s linear all;
+    transition: 1.0s linear all;
+    left: 100%;
+    float:left;
+}
+#view-frame.ng-enter.ng-enter-active {
+    left: 0;
+}
+#view-frame.ng-leave {
+    float:left;
+    -webkit-transition: 1.0s linear all;
+    transition: 1.0s linear all;
+    left: 0;
+}
+#view-frame.ng-leave.ng-leave-active {
+    left: -100%;
+}
 @media all and (min-width:2040px) {
     #root-container {
         min-width: 0px;
@@ -142,17 +147,24 @@ h1, h2, h3, h4, h5, h6 {
     text-rendering: optimizeLegibility;
 }
 h3 {
-    font-size: 16px;
+    font-size: 19px;
     font-weight: bold;
+    line-height: 27px;
 }
 a {
-    color: #1480CD;
+    color: #1A56F2;
     transition: color 0.1s ease-in;
+    text-decoration: none;
+    padding-bottom: 1px;
+    border-bottom: 1px solid #1A56F2;
     &:visited {
       /* color: @darker-text-color!important; */
     }
     &:hover {
-        color: #26CADB;
+        color: #6E95F1;
+        padding-bottom: 4px;
+        border-bottom: 0;
+        background: url(../images/squiggle.gif) bottom repeat-x;
     }
 }
 p {
@@ -287,6 +299,8 @@ section#main {
     display: table;
     -moz-box-sizing: border-box;
          box-sizing: border-box;
+    margin-top: -@header_footer_height;
+    padding: @header_footer_height + 16px 0 16px;
     .grid {
         display: table-cell;
         vertical-align: middle;
@@ -324,8 +338,15 @@ section#main {
     }
 }
 
+
 /*  About Page
     ------------------------------------- */
+#about-container {
+    height: 100%;
+    min-height: 544px;
+    overflow: scroll;
+    display: block;
+}
 #main .about-column {
     width: 470px;
     padding: 0 16px;
@@ -359,10 +380,24 @@ section#main {
                 }
             }
         }
-        ul#credits {
+        ul#contacts {
             margin: 0;
             list-style: none;
             padding: 0;
+        }
+        #source-code {
+            float: right;
+            a, img {
+                float: right;
+            }
+            a {
+                margin-top: 17px;
+                margin-right: 8px;
+            }
+            img {
+                height: 46px;
+                margin-top: 4px;
+            }
         }
     }
 }
@@ -422,9 +457,11 @@ footer#footer {
                     border-style: solid;
                     background: transparent;
                 }*/
-                &.focused {
-                    border-color: blue;
-                }
+                /*&.focused {
+                    outline: none;
+                    border-color: #1480CD;
+                    box-shadow: 0 0 5px rgba(38, 202, 219, 0.5);
+                }*/
                 a {
                     left: 12px;
                     top: 4px;
@@ -440,7 +477,7 @@ footer#footer {
                 }
             }
             &.active {
-                width: 279px;
+                width: 295px;
             }
         }
     }
@@ -469,18 +506,17 @@ footer#footer {
     }
     button {
         height: 40px;
-        padding: 0 16px;
+        padding: 4px 16px 0;
         position: relative;
         color: @text-color;
+        vertical-align: middle;
+        font-family: "Rayon", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+        text-rendering: optimizeLegibility;
+        white-space: nowrap;
         background: #F0F0F0;
         box-shadow: rgba(0,0,0,0.2) 0px 1px 1px 0px,rgba(0,0,0,0.1) 0px 1px 2px 0px;
-        text-transform: uppercase;
-        letter-spacing: 0.13em;
-        font-size: 12px;
-        line-height: 25px;
-        vertical-align: middle;
-        font-weight: normal;
-        white-space: nowrap;
         -webkit-border-radius: 2px;
            -moz-border-radius: 2px;
                 border-radius: 2px;
