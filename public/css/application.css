@@ -111,18 +111,36 @@ body {
   padding-top: 80px;
   box-sizing: border-box;
   position: absolute;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform-style: preserve-3d;
 }
 #view-frame > #animation-wrap.ng-enter {
-  -webkit-transition: 0.10s linear all;
-  transition: 0.10s linear all;
+  -webkit-transition: all 0.2s;
+  -webkit-transition-delay: 0.08s;
+  -moz-transition: all 0.2s 0.08s;
+  -o-transition: all 0.2s 0.08s;
+  transition: all 0.2s 0.08s;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  backface-visibility: hidden;
   opacity: 0;
 }
 #view-frame > #animation-wrap.ng-enter.ng-enter-active {
   opacity: 1;
 }
 #view-frame > #animation-wrap.ng-leave {
-  -webkit-transition: 0.10s linear all;
-  transition: 0.10s linear all;
+  -webkit-transition: all 0.2s;
+  -webkit-transition-delay: 0.08s;
+  -moz-transition: all 0.2s 0.08s;
+  -o-transition: all 0.2s 0.08s;
+  transition: all 0.2s 0.08s;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  backface-visibility: hidden;
   opacity: 1;
 }
 #view-frame > #animation-wrap.ng-leave.ng-leave-active {
@@ -322,6 +340,7 @@ section#main .grid .side-content {
   cursor: -moz-grabbing !important;
 }
 #emoji-planet-container > canvas {
+  backface-visibility: hidden;
   width: 100%!important;
   height: auto!important;
   position: static;
