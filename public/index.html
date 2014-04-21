@@ -13,7 +13,9 @@
 <body>
   <div id='root-container-wrap'>
     <section id='root-container'>
-      <div ng-view id='view-frame' class={{frame_class}}></div>
+      <div id='view-frame' class={{frame_class}}>
+        <div ng-view id='animation-wrap'></div>
+      </div>
       <footer id='footer'>
         <div id='regards' class='left'>
           <p>With love, from <a href='http://twitter.com/bradleygriffith'>@bradleygriffith</a>.</p>
