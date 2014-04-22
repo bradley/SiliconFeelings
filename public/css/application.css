@@ -295,6 +295,10 @@ header#masthead canvas img {
   max-width: 100%;
   max-height: 100%;
 }
+header#masthead img {
+  max-width: 100%;
+  max-height: 100%;
+}
 header#masthead #connection-status p {
   margin: 0;
   padding: 12px 0;
@@ -343,6 +347,16 @@ section#main .grid .side-content {
   backface-visibility: hidden;
   width: 100%!important;
   height: auto!important;
+  max-width: 100%;
+  max-height: 100%;
+  position: static;
+}
+#emoji-planet-container > img {
+  backface-visibility: hidden;
+  width: 100%!important;
+  height: auto!important;
+  max-width: 100%;
+  max-height: 100%;
   position: static;
 }
 /*  About Page

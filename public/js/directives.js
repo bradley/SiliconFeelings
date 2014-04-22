@@ -553,6 +553,12 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 		        	composer = null;
 		        	cancelAnimationFrame(requestId);
        				requestId = undefined;
+
+       				//var image = new Image();
+							//image.id = "pic"
+							//image.src = renderer.domElement.toDataURL();
+							//$(image).width =
+							//element.html('').append(image);
 		        }
 
 		        init();

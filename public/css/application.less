@@ -304,6 +304,10 @@ header#masthead {
             max-height: 100%;
         }
     }
+    img {
+        max-width: 100%;
+        max-height: 100%;
+    }
     #connection-status {
         p {
             margin: 0;
@@ -356,10 +360,20 @@ section#main {
             cursor: -moz-grabbing!important;
         }
     }
-     > canvas {
+    > canvas {
         backface-visibility: hidden;
         width: 100%!important;
         height: auto!important;
+        max-width: 100%;
+        max-height: 100%;
+        position: static;
+    }
+    > img {
+        backface-visibility: hidden;
+        width: 100%!important;
+        height: auto!important;
+        max-width: 100%;
+        max-height: 100%;
         position: static;
     }
 }
@@ -367,6 +381,7 @@ section#main {
 
 /*  About Page
     ------------------------------------- */
+
 #about-container {
     height: 100%;
     min-height: 544px;
