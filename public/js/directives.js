@@ -123,6 +123,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 	      },
 	      link: function(scope, element, attrs) {
 
+
 					(function(scope, element, attrs) {
 
 
@@ -212,7 +213,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 			          addPostprocessing();
 
 			          // Clean up
-			          scope.$on('$destroy', teardownListeners);
+			          scope.$on('$destroy', teardown);
 
 			          scene_ready = true;
 			          scope.sceneReady();
@@ -548,7 +549,7 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 							requestId = requestAnimationFrame(render);
 		        };
 
-		        function teardownListeners() {
+		        function teardown() {
 		        	composer = null;
 		        	cancelAnimationFrame(requestId);
        				requestId = undefined;

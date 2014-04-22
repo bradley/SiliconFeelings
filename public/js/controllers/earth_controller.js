@@ -24,7 +24,6 @@ define([], function() {
 		});
 
     $scope.sceneReady = function(connection_status) {
-    	//console.log('Resources Loaded');
     	$rootScope.connection_status = 'connecting...';
     	$scope.$apply();
 
