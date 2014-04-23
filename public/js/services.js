@@ -5,7 +5,7 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
   /* Services */
 
 	angular.module('myApp.services', [])
-		.service('Socket', ['$rootScope', function($rootScope) {
+		.factory('Socket', ['$rootScope', function($rootScope) {
 		  var Socket = {
 		    init: function() {
 		    	this.options = {};
@@ -43,6 +43,9 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 		          }
 		        });
 		      })
+		    },
+		    getSocket: function() {
+		      return this.connection;
 		    }
 		  }
 
@@ -56,7 +59,7 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 
 				// Setup
 	    	var self = this;
-	    	this.element = $('#emoji-planet-container');
+	    	this.element;
 
 	    	// Constants
         this.width = 1000;
@@ -112,7 +115,7 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 		    	// Setup
 		    	var self = this;
 		    	this.callback = callback;
-		    	this.element = $('#emoji-planet-container');
+		    	this.element;
 
 		    	// Constants
 	        this.width = 1000;
@@ -159,7 +162,6 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 					this.scene_ready = false;
 					this.interaction_initiated = false;
 					this.holding_earth = false;
-
 
 		    	this.loadResources();
 		    },
@@ -314,28 +316,28 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 
 					this.copyPass.renderToScreen = true;
 		    },
-		    setSocketListeners: function() {
+		    setSocketListeners: function(should_set) {
 		    	var self = this;
-		    	this.current_socket.on('connect', function() {
-				  	self.showGlitchyEarthIfDisconnected();
-				  });
+		    	var socketConnectionListener = function() {
+		    		self.showGlitchyEarthIfDisconnected();
+		    	}
 
-				  this.current_socket.on('reconnect', function() {
-				  	self.showGlitchyEarthIfDisconnected();
-				  });
-
-				  this.current_socket.on('disconnect', function() {
-				  	self.showGlitchyEarthIfDisconnected();
-				  });
-
-				  this.current_socket.on('error', function() {
-				  	self.showGlitchyEarthIfDisconnected();
-				  });
+		    	if (should_set) {
+		    		this.current_socket.on('connect', socketConnectionListener);
+					  this.current_socket.on('reconnect', socketConnectionListener);
+					  this.current_socket.on('disconnect', socketConnectionListener);
+					  this.current_socket.on('error', socketConnectionListener);
+		    	}
+		    	else {
+		    		this.current_socket.getSocket().removeAllListeners();
+		    	}
 		    },
 		    setSocket: function(socket) {
+		    	if (this.current_socket) {
+		    		this.setSocketListeners(false);
+		    	}
 		    	this.current_socket = socket;
-		    	console.log(this.current_socket);
-		    	this.setSocketListeners();
+		    	this.setSocketListeners(true);
 		    },
 		    addPoints: function(tweets) {
 		    	var self = this;
@@ -464,6 +466,13 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
    				this.holding_earth = false;
    			},
    			play: function(callback) {
+   				// NOTE: LUNCH TESTSSSSSS. MAYBE TRY this.element.remove() too??
+   				if (this.element) {
+   					console.log('called');
+   					this.renderer.domElement.remove();
+   					this.element = null
+   				}
+
    				this.element = $('#emoji-planet-container');
           this.element.append(this.renderer.domElement);
           this.render();

@@ -128,15 +128,17 @@ define(['angular'], function(angular) {
 					(function(scope, element, attrs) {
 
 						// TODO: URGENT: REMOVE ALL LISTENERS AND TIMEOUTS WHEN SCOPE IS TO BE DESTROYED. THIS WILL LIKELY SOLVE OUR LAG ISSUE AFTER SEVERAL ROUTING ACTIONS.
+						// ALSO MAKE SURE THE PLAY FUNCTION AND STUFF OVER IN THE FACTORY ISNT MAKING THIS DRAW IN MULTIPLE CANVASES OR SOMETHING.
 						var emojiPlanet = {
 							init: function() {
 								this.setScopeWatcher();
+								this.timeout;
 							},
 							setScopeWatcher: function() {
 								var self = this;
 								scope.$watch('scopeReady', function(scope_is_ready, _) {
 									if (scope_is_ready) {
-										setTimeout(function() {
+										self.timeout = setTimeout(function() {
 											EarthScene.init(function(){
 												self.setAllWatchers();
 												self.setListeners();
@@ -147,6 +149,7 @@ define(['angular'], function(angular) {
 								});
 							},
 							setAllWatchers: function() {
+								// NOTE: All watchers are automatically destroyed along with the scope.
 								scope.$watch('tweetData', function(new_data, old_data) {
 						    	EarthScene.addPoints(new_data);
 							  });
@@ -158,7 +161,28 @@ define(['angular'], function(angular) {
 							  });
 							},
 							setListeners: function() {
-								scope.$on('$destroy', EarthScene.stop);
+								var self = this;
+								scope.$on('$destroy', function() {
+									clearTimeout(self.timeout);
+
+									EarthScene.stop();
+
+									$(element[0]).circlemouse({
+										onMouseEnter: function(event, el) {
+											return false;
+										},
+										onMouseLeave: function(event, el) {
+											return false;
+										},
+										onMouseDown: function(event, el) {
+									    return false;
+										}
+									});
+
+									$(document).unbind('mouseup', self.isNotHoldingEarth);
+
+									angular.element($window).unbind('resize', self.handleResize);
+								});
 
 								$(element[0]).circlemouse({
 									onMouseEnter: function(event, el) {
@@ -168,18 +192,24 @@ define(['angular'], function(angular) {
 										el.removeClass('ec-circle-hover');
 									},
 									onMouseDown: function(event, el) {
-								    EarthScene.isHoldingEarth(true);
+								    self.isHoldingEarth();
 									}
 								});
 
-								$(document).bind('mouseup', function(e) {
-						    	EarthScene.isHoldingEarth(false);
-						    });
+								$(document).bind('mouseup', this.isNotHoldingEarth);
 
-						    angular.element($window).bind('resize', function(e) {
-						    	EarthScene.handleResize();
-						    });
+						    angular.element($window).bind('resize', this.handleResize);
+							},
+							handleResize: function() {
+								EarthScene.handleResize();
+							},
+							isNotHoldingEarth: function() {
+								EarthScene.isHoldingEarth(false);
+							},
+							isHoldingEarth: function() {
+								EarthScene.isHoldingEarth(true);
 							}
+
 						}
 
 						emojiPlanet.init();
