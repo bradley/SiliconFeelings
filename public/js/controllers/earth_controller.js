@@ -93,6 +93,7 @@ define([], function() {
 			}
 		};
 
+		$scope.scope_ready = true;
 
 	  // Because this has happened asynchronously we've missed
 		// Angular's initial call to $apply after the controller has been loaded
