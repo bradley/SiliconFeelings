@@ -7,14 +7,14 @@
 	<meta name="author" content="Bradley Griffith">
   <meta name="viewport" content="width=device-width">
 
-  <script src="http://www.modernizr.com/downloads/modernizr-latest.js"></script>
+  <script src="vendor/js/modernizr.js"></script>
   <link href="css/application.css" rel="stylesheet" type="text/css">
 </head>
 <body>
   <div id='root-container-wrap'>
     <section id='root-container'>
-      <div id='view-frame' class={{frame_class}}>
-        <div ng-view id='animation-wrap'></div>
+      <div id='view-frame'>
+        <div ng-view id='animation-wrap' anim-class></div>
       </div>
       <footer id='footer'>
         <div id='regards' class='left'>

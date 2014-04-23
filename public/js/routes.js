@@ -7,11 +7,13 @@ define(['angular', 'app'], function(angular, app) {
 	return app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/', {
       templateUrl: '/partials/home/index.html',
-      controller: 'earthController'
+      controller: 'earthController',
+      animate: 'home-view'
     });
     $routeProvider.when('/about', {
       templateUrl: '/partials/about/index.html',
-      controller: 'aboutController'
+      controller: 'aboutController',
+      animate: 'about-view'
     });
     $routeProvider.otherwise({
       templateUrl: '/404.html'

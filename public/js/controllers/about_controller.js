@@ -1,6 +1,5 @@
 define([], function() {
 	return ['$scope', '$sce', '$rootScope', '$http', '$location', function($scope, $sce, $rootScope, $http, $location) {
-		$rootScope.frame_class = 'about-view';
 
 	  // Because this has happened asynchronously we've missed
 		// Angular's initial call to $apply after the controller has been loaded

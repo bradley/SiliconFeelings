@@ -6,7 +6,6 @@ define([], function() {
 
 	  $scope.socket;
 	  $scope.tweet_data;
-	  $rootScope.frame_class = 'home-view';
 	  $rootScope.connection_status = '';
 
 

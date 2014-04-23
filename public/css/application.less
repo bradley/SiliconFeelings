@@ -122,37 +122,68 @@ body {
     -webkit-transform-style: preserve-3d;
 }
 
-#view-frame > #animation-wrap.ng-enter {
-    -webkit-transition: all 0.2s;
+#view-frame > #animation-wrap.ng-enter, #view-frame > #animation-wrap.ng-leave {
+    -webkit-transition: all 0.75s 0.08s;
     -webkit-transition-delay: 0.08s;
-    -moz-transition: all 0.2s 0.08s;
-    -o-transition: all 0.2s 0.08s;
-    transition: all 0.2s 0.08s;
+    -moz-transition: all 0.75s 0.08s;
+    -o-transition: all 0.75s 0.08s;
+    transition: all 0.75s 0.08s;
     -webkit-backface-visibility: hidden;
     -moz-backface-visibility: hidden;
     -ms-backface-visibility: hidden;
     -o-backface-visibility: hidden;
     backface-visibility: hidden;
+}
+
+#view-frame > #animation-wrap.ng-enter {
     opacity: 0;
 }
 #view-frame > #animation-wrap.ng-enter.ng-enter-active {
     opacity: 1;
 }
 #view-frame > #animation-wrap.ng-leave {
-    -webkit-transition: all 0.2s;
-    -webkit-transition-delay: 0.08s;
-    -moz-transition: all 0.2s 0.08s;
-    -o-transition: all 0.2s 0.08s;
-    transition: all 0.2s 0.08s;
-    -webkit-backface-visibility: hidden;
-    -moz-backface-visibility: hidden;
-    -ms-backface-visibility: hidden;
-    -o-backface-visibility: hidden;
-    backface-visibility: hidden;
     opacity: 1;
 }
 #view-frame > #animation-wrap.ng-leave.ng-leave-active {
     opacity: 0;
+}
+
+#view-frame > #animation-wrap.home-view.ng-enter {
+    left: -100%;
+}
+#view-frame > #animation-wrap.home-view.ng-enter.ng-enter-active {
+    left: 16px;
+}
+#view-frame > #animation-wrap.home-view.ng-leave {
+    left: 16px;
+}
+#view-frame > #animation-wrap.home-view.ng-leave.ng-leave-active {
+    left: -100%;
+}
+#view-frame > #animation-wrap.home-view.ng-enter:first-child {
+    left: 100%;
+}
+#view-frame > #animation-wrap.home-view.ng-leave.ng-leave-active:first-child {
+    left: 100%;
+}
+
+#view-frame > #animation-wrap.about-view.ng-enter {
+    left: 100%;
+}
+#view-frame > #animation-wrap.about-view.ng-enter.ng-enter-active {
+    left: 16px;
+}
+#view-frame > #animation-wrap.about-view.ng-leave {
+    left: 16px;
+}
+#view-frame > #animation-wrap.about-view.ng-leave.ng-leave-active {
+    left: 100%;
+}
+#view-frame > #animation-wrap.about-view.ng-enter:first-child {
+    left: -100%;
+}
+#view-frame > #animation-wrap.about-view.ng-leave.ng-leave-active:first-child {
+    left: -100%;
 }
 @media all and (min-width:2040px) {
     #root-container {

@@ -200,7 +200,6 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 			          renderer.setSize(width, height);
 			          // NOTE: https://github.com/mrdoob/three.js/issues/4469#issuecomment-36291287
 			          renderer.context.getProgramInfoLog = function () { return '' };
-
 			          // Build Scene Components
 			          addLights();
 			          addEarth();
@@ -550,18 +549,34 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 		        };
 
 		        function teardown() {
-		        	composer = null;
 		        	cancelAnimationFrame(requestId);
+		        	composer = null;
+		 					renderer = null;
        				requestId = undefined;
 
-       				//var image = new Image();
-							//image.id = "pic"
-							//image.src = renderer.domElement.toDataURL();
-							//$(image).width =
-							//element.html('').append(image);
+       				scene = null;
+    					projector = null;
+    					camera = null;
+    					controls = null;
+
+       				element.html('');
 		        }
 
-		        init();
+						//$rootScope.$on("$routeChangeStart", function (event, current, previous, rejection) {
+						//	var image = new Image();
+						//	image.src = renderer.domElement.toDataURL();
+						//	element.html('').append(image);
+  					//});
+
+						//var animationHandler = function() {
+						//	init();
+						//	$("#animation-wrap").unbind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", animationHandler);
+						//}
+
+  					//$("#animation-wrap").bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", animationHandler);
+  					setTimeout(function() {
+  						init();
+  					}, 1500);
 
 	        })(scope, element, attrs);
 	      }
@@ -589,5 +604,17 @@ define(['angular', 'three', 'trackballControls', 'effectComposer', 'renderPass',
 			    });
 				}
 			}
+		}])
+		.directive('animClass', ['$route', function($route){
+		  return {
+		    link: function(scope, elm, attrs){
+		      var enterClass = $route.current.animate;
+		      elm.addClass(enterClass);
+		      scope.$on('$destroy',function(){
+		        elm.removeClass(enterClass);
+		        elm.addClass($route.current.animate);
+		      })
+		    }
+		  }
 		}]);
 });
