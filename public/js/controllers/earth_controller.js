@@ -6,7 +6,6 @@ define([], function() {
 
 	  $scope.socket;
 	  $scope.tweet_data;
-	  $rootScope.frame_class = 'home-view';
 	  $rootScope.connection_status = '';
 
 
@@ -24,7 +23,6 @@ define([], function() {
 		});
 
     $scope.sceneReady = function(connection_status) {
-    	//console.log('Resources Loaded');
     	$rootScope.connection_status = 'connecting...';
     	$scope.$apply();
 
@@ -95,6 +93,7 @@ define([], function() {
 			}
 		};
 
+		$scope.scope_ready = true;
 
 	  // Because this has happened asynchronously we've missed
 		// Angular's initial call to $apply after the controller has been loaded
