@@ -6,53 +6,51 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 
 	angular.module('myApp.services', [])
 		.factory('Socket', ['$rootScope', function($rootScope) {
-		  var Socket = {
-		    init: function() {
-		    	this.options = {};
-		    	this.options['force new connection'] = true;
+			var options = { 'force new connection': true },
+					connection = io.connect('/', options);
 
-		    	this.connection = io.connect('/', this.options);
-
-		    	return this;
-		    },
+		  return {
 		    disconnect: function() {
-		    	this.connection.disconnect();
+		    	if (this.connectionStatus()) {
+		    		connection.disconnect();
+		    		window.connection = connection;
+		    	}
 		    },
 		    reconnect: function() {
-		    	this.connection.socket.connect('/', this.options);
+		    	this.disconnect();
+		    	connection.socket.connect('/', options);
 		    },
 		    connectionStatus: function() {
-		  		return this.connection.socket.connected;
+		  		return connection.socket.connected;
 		  	},
 		    on: function(eventName, callback) {
-		    	var self = this;
-		      this.connection.on(eventName, function() {
+		      connection.on(eventName, function() {
 		        var args = arguments;
 		        $rootScope.$apply(function() {
-		          callback.apply(self.connection, args);
+		          callback.apply(connection, args);
 		        });
 		      });
 		    },
+		    off: function(eventName, callback) {
+		    	connection.removeListener(eventName, callback);
+		    },
 		    emit: function(eventName, data, callback) {
-		    	var self = this;
-		      this.connection.emit(eventName, data, function() {
+		      connection.emit(eventName, data, function() {
 		        var args = arguments;
 		        $rootScope.$apply(function() {
 		          if (callback) {
-		            callback.apply(self.connection, args);
+		            callback.apply(connection, args);
 		          }
 		        });
 		      })
 		    },
 		    getSocket: function() {
-		      return this.connection;
+		      return connection;
 		    }
 		  }
 
-		  return Socket;
-
 		}])
-		.factory('EarthScene', ['$rootScope', '$http', '$window', function($rootScope, $http, $window) {
+		.factory('EarthScene', ['$rootScope', '$http', '$window', 'Socket', function($rootScope, $http, $window, Socket) {
 			var EarthScene = EarthScene || {};
 
 			EarthScene.Scene = function(callback) {
@@ -101,7 +99,6 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 				this.step = 0;
 
 				// Etc
-				this.current_socket = null;
 	    	this.requestId = null;
 				this.scene_ready = false;
 				this.interaction_initiated = false;
@@ -157,7 +154,6 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 					this.step = 0;
 
 					// Etc
-					this.current_socket = null;
 		    	this.requestId;
 					this.scene_ready = false;
 					this.interaction_initiated = false;
@@ -209,6 +205,8 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
           this.addEarth();
           this.addFog();
           this.addPostprocessing();
+
+          this.setSocketListeners();
 
           this.scene_ready = true;
           if (typeof this.callback == 'function') {
@@ -321,23 +319,10 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 		    	var socketConnectionListener = function() {
 		    		self.showGlitchyEarthIfDisconnected();
 		    	}
-
-		    	if (should_set) {
-		    		this.current_socket.on('connect', socketConnectionListener);
-					  this.current_socket.on('reconnect', socketConnectionListener);
-					  this.current_socket.on('disconnect', socketConnectionListener);
-					  this.current_socket.on('error', socketConnectionListener);
-		    	}
-		    	else {
-		    		this.current_socket.getSocket().removeAllListeners();
-		    	}
-		    },
-		    setSocket: function(socket) {
-		    	if (this.current_socket) {
-		    		this.setSocketListeners(false);
-		    	}
-		    	this.current_socket = socket;
-		    	this.setSocketListeners(true);
+	    		Socket.on('connect', socketConnectionListener);
+				  Socket.on('reconnect', socketConnectionListener);
+				  Socket.on('disconnect', socketConnectionListener);
+				  Socket.on('error', socketConnectionListener);
 		    },
 		    addPoints: function(tweets) {
 		    	var self = this;
@@ -425,7 +410,7 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
    			},
    			showGlitchyEarthIfDisconnected: function() {
    				this.composer = null;
-			  	if (!this.current_socket.connectionStatus() && this.scene_ready) {
+			  	if (!Socket.connectionStatus() && this.scene_ready) {
 			  		this.composer = new THREE.EffectComposer(this.renderer);
 						this.composer.addPass(this.renderPass);
 			  		this.composer.addPass(this.rgbEffect);
@@ -528,9 +513,6 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 		  	stop: function() {
 		  		earthScene.stop();
 		  	},
-		  	setSocket: function(socket) {
-		  		earthScene.setSocket(socket);
-		  	},
 		  	addPoints: function(tweets) {
 		  		earthScene.addPoints(tweets);
 		  	},
@@ -545,7 +527,6 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 		  var scene = {
 		  	init: sharedScene.init,
 		  	stop: sharedScene.stop,
-		  	setSocket: sharedScene.setSocket,
 		  	addPoints: sharedScene.addPoints,
 		  	handleResize: sharedScene.handleResize,
 		  	isHoldingEarth: sharedScene.isHoldingEarth

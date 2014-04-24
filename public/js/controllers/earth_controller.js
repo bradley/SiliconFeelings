@@ -1,69 +1,63 @@
 define([], function() {
-	return ['$scope', '$sce', '$rootScope', '$http', '$location', 'Socket', function($scope, $sce, $rootScope, $http, $location, Socket) {
+	return ['$scope', '$sce', '$rootScope', '$http', '$location', '$timeout', 'Socket', function($scope, $sce, $rootScope, $http, $location, $timeout, Socket) {
 
 
 	  /* Setup */
-
-	  $scope.socket;
+	  var scene_ready_timer;
 	  $scope.tweet_data;
-	  $rootScope.connection_status = '';
-
+	  $scope.connection_status = '';
+	 // Socket.disconnect();
 
     /* Scope Functions */
 
-    $rootScope.$on('$locationChangeStart', function(event) {
-			// NOTE: setTimeout forces this to be syncronous, saving us from a
-			//  rootScope inProg error. http://docs.angularjs.org/error/$rootScope/inprog?p0=$apply
-			setTimeout(function() {
-				if ($scope.socket) {
-					$scope.socket.disconnect();
-					$scope.socket = null;
-				}
-			}, 100);
-		});
+		$scope.$on("$destroy", function() {
+        if (scene_ready_timer) {
+        	$timeout.cancel
+        }
+        // Socket.disconnect();
+        unsetSocketListeners();
+    });
+
+		var triggerSceneReady = function() {
+			setSocketListeners();
+			//Socket.reconnect();
+		}
 
     $scope.sceneReady = function(connection_status) {
-    	$rootScope.connection_status = 'connecting...';
+    	$scope.connection_status = 'connecting...';
     	$scope.$apply();
 
     	// NOTE: Artificial timeout for desired UX. Not functionally necessary.
-			setTimeout(function() {
-				$scope.socket = Socket.init();
-				setSocketListeners();
-			}, 1400);
+			scene_ready_timer = $timeout(triggerSceneReady, 1400);
     }
 
 
 	  /* Socket Listeners */
 
 	  function setSocketListeners() {
-	  	var socket = $scope.socket;
-
-		  socket.on('init', SocketFunctions.init);
-		  socket.on('connecting', SocketFunctions.connecting);
-		  socket.on('connect', SocketFunctions.connect);
-		  socket.on('connect_failed', SocketFunctions.connect_failed);
-		  socket.on('disconnect', SocketFunctions.disconnect);
-		  socket.on('error', SocketFunctions.error);
-		  socket.on('reconnecting', SocketFunctions.connecting);
-		  socket.on('reconnect', SocketFunctions.connect);
-		 	socket.on('reconnect_failed', SocketFunctions.connect_failed);
-		  socket.on('new_tweets', SocketFunctions.new_tweets);
+		  Socket.on('init', SocketFunctions.init);
+		  Socket.on('connecting', SocketFunctions.connecting);
+		  Socket.on('connect', SocketFunctions.connect);
+		  Socket.on('connect_failed', SocketFunctions.connect_failed);
+		  Socket.on('disconnect', SocketFunctions.disconnect);
+		  Socket.on('error', SocketFunctions.error);
+		  Socket.on('reconnecting', SocketFunctions.connecting);
+		  Socket.on('reconnect', SocketFunctions.connect);
+		 	Socket.on('reconnect_failed', SocketFunctions.connect_failed);
+		  Socket.on('new_tweets', SocketFunctions.new_tweets);
 		}
 
 		function unsetSocketListeners() {
-	  	var socket = $scope.socket;
-
-		  socket.removeListener('init', SocketFunctions.init);
-		  socket.removeListener('connecting', SocketFunctions.connecting);
-		  socket.removeListener('connect', SocketFunctions.connect);
-		  socket.removeListener('connect_failed', SocketFunctions.connect_failed);
-		  socket.removeListener('disconnect', SocketFunctions.disconnect);
-		  socket.removeListener('error', SocketFunctions.error);
-		  socket.removeListener('reconnecting', SocketFunctions.connecting);
-		  socket.removeListener('reconnect', SocketFunctions.connect);
-		 	socket.removeListener('reconnect_failed', SocketFunctions.connect_failed);
-		  socket.removeListener('new_tweets', SocketFunctions.new_tweets);
+		  Socket.off('init', SocketFunctions.init);
+		  Socket.off('connecting', SocketFunctions.connecting);
+		  Socket.off('connect', SocketFunctions.connect);
+		  Socket.off('connect_failed', SocketFunctions.connect_failed);
+		  Socket.off('disconnect', SocketFunctions.disconnect);
+		  Socket.off('error', SocketFunctions.error);
+		  Socket.off('reconnecting', SocketFunctions.connecting);
+		  Socket.off('reconnect', SocketFunctions.connect);
+		 	Socket.off('reconnect_failed', SocketFunctions.connect_failed);
+		  Socket.off('new_tweets', SocketFunctions.new_tweets);
 		}
 
 		var SocketFunctions = {
@@ -71,22 +65,22 @@ define([], function() {
 
 			},
 			connecting: function() {
-				$rootScope.connection_status = 'connecting...';
+				$scope.connection_status = 'connecting...';
 			},
 			connect: function() {
-				$rootScope.connection_status = 'connected';
+				$scope.connection_status = 'connected';
 			},
 			connect_failed: function() {
-				$rootScope.connection_status = 'failed to connect';
+				$scope.connection_status = 'failed to connect';
 			},
 			disconnect: function() {
-				$rootScope.connection_status = 'disconnected';
+				$scope.connection_status = 'disconnected';
 			},
 			error: function() {
-				$rootScope.connection_status = 'error connecting';
+				$scope.connection_status = 'error connecting';
 			},
 			reconnecting: function() {
-				$rootScope.connection_status = 'reconnecting...';
+				$scope.connection_status = 'reconnecting...';
 			},
 			new_tweets: function(tweets) {
 				$scope.tweet_data = tweets;

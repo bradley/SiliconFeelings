@@ -11,7 +11,7 @@ define(['angular'], function(angular) {
 				link: function(scope, element) {
 
 
-					(function(scope, element) {
+					/*(function(scope, element) {
 
 						var c = element[0],
 								ctx = c.getContext("2d");
@@ -109,61 +109,60 @@ define(['angular'], function(angular) {
 
 						setInterval(updateGradient,10);
 
-	        })(scope, element);
+	        })(scope, element); */
 				}
 			}
 		}])
-		.directive('emojiPlanet', ['$rootScope', '$http', '$window', 'EarthScene', function($rootScope, $http, $window, EarthScene) {
+		.directive('emojiPlanet', ['$rootScope', '$http', '$window', '$timeout', 'EarthScene', function($rootScope, $http, $window, $timeout, EarthScene) {
     	return {
 	      restrict: 'E',
 	      scope: {
 	      	'scopeReady': '=',
 	        'tweetData': '=',
-	        'socket': '=',
 	        'sceneReady': '&onLoad'
 	      },
 	      link: function(scope, element, attrs) {
 
 
 					(function(scope, element, attrs) {
+						var scene_ready_timeout;
 
-						// TODO: URGENT: REMOVE ALL LISTENERS AND TIMEOUTS WHEN SCOPE IS TO BE DESTROYED. THIS WILL LIKELY SOLVE OUR LAG ISSUE AFTER SEVERAL ROUTING ACTIONS.
-						// ALSO MAKE SURE THE PLAY FUNCTION AND STUFF OVER IN THE FACTORY ISNT MAKING THIS DRAW IN MULTIPLE CANVASES OR SOMETHING.
 						var emojiPlanet = {
 							init: function() {
 								this.setScopeWatcher();
-								this.timeout;
+								scope.$on('$destroy', function() {
+									if (scene_ready_timeout) {
+					            $timeout.cancel(scene_ready_timeout);
+					        }
+					      });
 							},
 							setScopeWatcher: function() {
 								var self = this;
-								scope.$watch('scopeReady', function(scope_is_ready, _) {
-									if (scope_is_ready) {
-										self.timeout = setTimeout(function() {
-											EarthScene.init(function(){
-												self.setAllWatchers();
-												self.setListeners();
-												scope.sceneReady();
-											});
-										}, 2000);
-									}
-								});
+								var setSceneReady = function() {
+									EarthScene.init(function(){
+										self.setAllWatchers();
+										self.setListeners();
+										scope.sceneReady();
+									});
+								}
+								//scope.$watch('scopeReady', function(scope_is_ready, _) {
+								//	if (scope_is_ready) {
+										scene_ready_timeout = $timeout(setSceneReady, 2000);
+								//	}
+								//});
 							},
 							setAllWatchers: function() {
 								// NOTE: All watchers are automatically destroyed along with the scope.
 								scope.$watch('tweetData', function(new_data, old_data) {
 						    	EarthScene.addPoints(new_data);
 							  });
-
-							  scope.$watch('socket', function(new_socket, _) {
-							  	if (new_socket) {
-							  		EarthScene.setSocket(new_socket);
-							  	}
-							  });
 							},
 							setListeners: function() {
 								var self = this;
 								scope.$on('$destroy', function() {
-									clearTimeout(self.timeout);
+									if (scene_ready_timeout) {
+					            $timeout.cancel(scene_ready_timeout);
+					        }
 
 									EarthScene.stop();
 
