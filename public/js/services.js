@@ -103,6 +103,7 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 				this.scene_ready = false;
 				this.interaction_initiated = false;
 				this.holding_earth = false;
+				this.allow_emoji = false;
 
 				this.init(callback);
 			};
@@ -158,6 +159,7 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 					this.scene_ready = false;
 					this.interaction_initiated = false;
 					this.holding_earth = false;
+					this.allow_emoji = false;
 
 		    	this.loadResources();
 		    },
@@ -326,7 +328,7 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 		    },
 		    addPoints: function(tweets) {
 		    	var self = this;
-		    	if (this.scene_ready && tweets) {
+		    	if (this.scene_ready && tweets && this.allow_emoji) {
 		    		var plane = new THREE.PlaneGeometry(67, 67),
             		mesh = new THREE.Mesh(plane),
            			geo = new THREE.Geometry(),
@@ -410,7 +412,7 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
    			},
    			showGlitchyEarthIfDisconnected: function() {
    				this.composer = null;
-			  	if (!Socket.connectionStatus() && this.scene_ready) {
+			  	if ((!Socket.connectionStatus() || !this.allow_emoji) && this.scene_ready) {
 			  		this.composer = new THREE.EffectComposer(this.renderer);
 						this.composer.addPass(this.renderPass);
 			  		this.composer.addPass(this.rgbEffect);
@@ -450,10 +452,12 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
    				}
    				this.holding_earth = false;
    			},
+   			allowEmoji: function() {
+   				this.allow_emoji = true;
+   				this.showGlitchyEarthIfDisconnected();
+   			},
    			play: function(callback) {
-   				// NOTE: LUNCH TESTSSSSSS. MAYBE TRY this.element.remove() too??
    				if (this.element) {
-   					console.log('called');
    					this.renderer.domElement.remove();
    					this.element = null
    				}
@@ -461,6 +465,7 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
    				this.element = $('#emoji-planet-container');
           this.element.append(this.renderer.domElement);
           this.render();
+          this.showGlitchyEarthIfDisconnected();
 
           if (typeof callback == 'function') {
           	callback();
@@ -471,6 +476,7 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 			       cancelAnimationFrame(this.requestId);
 			       this.requestId = undefined;
 			    }
+			    this.allow_emoji = false;
    			},
    			render: function() {
    				var self = this;
@@ -516,6 +522,9 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 		  	addPoints: function(tweets) {
 		  		earthScene.addPoints(tweets);
 		  	},
+		  	allowEmoji: function() {
+		  		earthScene.allowEmoji();
+		  	},
 		  	handleResize: function() {
 		  		earthScene.handleResize();
 		  	},
@@ -528,6 +537,7 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 		  	init: sharedScene.init,
 		  	stop: sharedScene.stop,
 		  	addPoints: sharedScene.addPoints,
+		  	allowEmoji: sharedScene.allowEmoji,
 		  	handleResize: sharedScene.handleResize,
 		  	isHoldingEarth: sharedScene.isHoldingEarth
 		  }

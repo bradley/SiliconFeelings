@@ -23,6 +23,7 @@ define([
     ]);
 
     myApp.run(function($rootScope, $http){
+      $rootScope.artificial_timeout_time = 1500;
 
       // Log a love note to our users.
       console.log('%c Hey there, lovely.', 'font-size: 14px; color: #264CCA');

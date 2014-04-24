@@ -117,8 +117,8 @@ define(['angular'], function(angular) {
     	return {
 	      restrict: 'E',
 	      scope: {
-	      	'scopeReady': '=',
 	        'tweetData': '=',
+	        'allowEmoji': '=',
 	        'sceneReady': '&onLoad'
 	      },
 	      link: function(scope, element, attrs) {
@@ -145,16 +145,18 @@ define(['angular'], function(angular) {
 										scope.sceneReady();
 									});
 								}
-								//scope.$watch('scopeReady', function(scope_is_ready, _) {
-								//	if (scope_is_ready) {
-										scene_ready_timeout = $timeout(setSceneReady, 2000);
-								//	}
-								//});
+
+								scene_ready_timeout = $timeout(setSceneReady, 2000);
 							},
 							setAllWatchers: function() {
 								// NOTE: All watchers are automatically destroyed along with the scope.
 								scope.$watch('tweetData', function(new_data, old_data) {
 						    	EarthScene.addPoints(new_data);
+							  });
+							  scope.$watch('allowEmoji', function(new_data, old_data) {
+							  	if (new_data) {
+							  		EarthScene.allowEmoji();
+							  	}
 							  });
 							},
 							setListeners: function() {

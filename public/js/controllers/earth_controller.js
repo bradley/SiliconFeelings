@@ -6,7 +6,7 @@ define([], function() {
 	  var scene_ready_timer;
 	  $scope.tweet_data;
 	  $scope.connection_status = '';
-	 // Socket.disconnect();
+	  $scope.allow_emoji = false;
 
     /* Scope Functions */
 
@@ -14,13 +14,12 @@ define([], function() {
         if (scene_ready_timer) {
         	$timeout.cancel
         }
-        // Socket.disconnect();
         unsetSocketListeners();
     });
 
 		var triggerSceneReady = function() {
 			setSocketListeners();
-			//Socket.reconnect();
+			$scope.allow_emoji = true;
 		}
 
     $scope.sceneReady = function(connection_status) {
@@ -28,13 +27,16 @@ define([], function() {
     	$scope.$apply();
 
     	// NOTE: Artificial timeout for desired UX. Not functionally necessary.
-			scene_ready_timer = $timeout(triggerSceneReady, 1400);
+			scene_ready_timer = $timeout(triggerSceneReady, $rootScope.artificial_timeout_time);
     }
 
 
 	  /* Socket Listeners */
 
 	  function setSocketListeners() {
+	  	if (Socket.connectionStatus()) {
+	  		SocketFunctions.connect();
+	  	}
 		  Socket.on('init', SocketFunctions.init);
 		  Socket.on('connecting', SocketFunctions.connecting);
 		  Socket.on('connect', SocketFunctions.connect);
@@ -87,7 +89,6 @@ define([], function() {
 			}
 		};
 
-		$scope.scope_ready = true;
 
 	  // Because this has happened asynchronously we've missed
 		// Angular's initial call to $apply after the controller has been loaded
