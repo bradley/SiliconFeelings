@@ -4,13 +4,12 @@ define([
   'directives',
   'controllers',
   '_',
-  '$',
   'circlemouse',
   'angularRoute',
   'angularResource',
   'angularAnimate'
   ],
-  function(angular, services, directives, controllers, _, $, circlemouse) {
+  function(angular, services, directives, controllers, _, circlemouse) {
     'use strict';
 
     var myApp = angular.module('myApp', [
@@ -23,7 +22,8 @@ define([
     ]);
 
     myApp.run(function($rootScope, $http){
-      $rootScope.artificial_timeout_time = 1500;
+      $rootScope.artificial_timeout_time = 2400;
+      $rootScope.page_view_count = 0;
 
       // Log a love note to our users.
       console.log('%c Hey there, lovely.', 'font-size: 14px; color: #264CCA');

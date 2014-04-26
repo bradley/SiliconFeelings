@@ -148,6 +148,12 @@ body {
     opacity: 0;
 }
 
+
+#view-frame > #animation-wrap.prevent-scoped-animation {
+    left: inherit!important;
+}
+
+
 #view-frame > #animation-wrap.home-view.ng-enter {
     left: -100%;
 }
@@ -160,12 +166,15 @@ body {
 #view-frame > #animation-wrap.home-view.ng-leave.ng-leave-active {
     left: -100%;
 }
+
 #view-frame > #animation-wrap.home-view.ng-enter:first-child {
     left: 100%;
 }
 #view-frame > #animation-wrap.home-view.ng-leave.ng-leave-active:first-child {
     left: 100%;
 }
+
+
 
 #view-frame > #animation-wrap.about-view.ng-enter {
     left: 100%;
@@ -608,7 +617,7 @@ footer#footer {
         left: 0;
         transition:all 0.1s ease-in;
         &::before {
-            width: 20px;
+            width: 10px;
             height: 38px;
             content: '';
             position: absolute;
@@ -630,7 +639,7 @@ footer#footer {
     }
     &.active {
         .pseudo::before {
-            left: -11px;
+            left: -4px;
             -webkit-transform: perspective(210px) rotateY(-70deg);
                -moz-transform: perspective(210px) rotateY(-70deg);
                 -ms-transform: perspective(210px) rotateY(-70deg);

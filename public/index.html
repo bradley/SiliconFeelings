@@ -21,11 +21,21 @@
           <p>With love, from <a href='http://twitter.com/bradleygriffith'>@bradleygriffith</a>.</p>
         </div>
         <div id='share' class='right'>
-          <share-button></share-button>
+          <div id='sharing-space'>
+            <div id='share-text-container'>
+              <span id='share-text'><a id='share-copy-link' title='click to copy text'>c</a><input type='text' readonly='readonly' value='http://bit.ly/changeme'/></span>
+            </div>
+            <span class='perspective-button-container'>
+              <span class='pseudo perspective'></span>
+              <button type='button' class='perspective'>Share</button>
+            </span>
+          </div>
         </div>
       </footer>
     </section>
   </div>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="js/non_angular.js"></script>
   <script data-main="js/main" src="/bower_components/requirejs/require.js"></script>
 </body>
 </html>

@@ -139,6 +139,9 @@ body {
 #view-frame > #animation-wrap.ng-leave.ng-leave-active {
   opacity: 0;
 }
+#view-frame > #animation-wrap.prevent-scoped-animation {
+  left: inherit!important;
+}
 #view-frame > #animation-wrap.home-view.ng-enter {
   left: -100%;
 }
@@ -577,7 +580,7 @@ footer#footer #sharing-space div#share-text-container.active {
   transition: all 0.1s ease-in;
 }
 .perspective-button-container .pseudo::before {
-  width: 20px;
+  width: 10px;
   height: 38px;
   content: '';
   position: absolute;
@@ -597,7 +600,7 @@ footer#footer #sharing-space div#share-text-container.active {
   z-index: -1;
 }
 .perspective-button-container.active .pseudo::before {
-  left: -11px;
+  left: -4px;
   -webkit-transform: perspective(210px) rotateY(-70deg);
   -moz-transform: perspective(210px) rotateY(-70deg);
   -ms-transform: perspective(210px) rotateY(-70deg);

@@ -146,7 +146,7 @@ define(['angular'], function(angular) {
 									});
 								}
 
-								scene_ready_timeout = $timeout(setSceneReady, 2000);
+								scene_ready_timeout = $timeout(setSceneReady, 300);
 							},
 							setAllWatchers: function() {
 								// NOTE: All watchers are automatically destroyed along with the scope.
@@ -219,38 +219,26 @@ define(['angular'], function(angular) {
 	      }
 	    }
     }])
-		.directive('shareButton', ['$window', function($window) {
-			return {
-				restrict: 'E',
-				templateUrl: 'partials/components/share-button.html',
-				link: function(scope, element) {
-					$('.perspective-button-container').click(function() {
-			        $(this).toggleClass('active');
-			        $('#share-text-container').toggleClass('active');
-			    });
-			    var $shareable_text = $('#share-text'),
-			    		$shareable_text_input = $shareable_text.find('input');
-
-			    $shareable_text_input.blur(function() {
-			    	$shareable_text.removeClass('focused');
-			    });
-
-			    $shareable_text.click(function(e) {
-			    	$shareable_text.addClass('focused');
-			    	$shareable_text_input.select();
-			    });
-				}
-			}
-		}])
-		.directive('animClass', ['$route', function($route){
+		.directive('animClass', ['$rootScope', '$route', function($rootScope, $route){
 		  return {
 		    link: function(scope, elm, attrs){
-		      var enterClass = $route.current.animate;
-		      elm.addClass(enterClass);
-		      scope.$on('$destroy',function(){
-		        elm.removeClass(enterClass);
+		    	var enter_class = $route.current.animate;
+
+					$rootScope.page_view_count += 1;
+					if ($rootScope.page_view_count <= 1) {
+						elm.addClass('prevent-scoped-animation');
+					}
+
+					scope.$on('$routeChangeStart', function(event) {
+						elm.removeClass('prevent-scoped-animation');
+					});
+
+					elm.addClass(enter_class);
+
+					scope.$on('$destroy', function() {
+		        elm.removeClass(enter_class);
 		        elm.addClass($route.current.animate);
-		      })
+		      });
 		    }
 		  }
 		}]);

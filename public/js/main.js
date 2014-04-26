@@ -1,5 +1,5 @@
 requirejs.config({
-	urlArgs: "bust=" + (new Date()).getTime(),
+	//urlArgs: "bust=" + (new Date()).getTime(),
   waitSeconds: 200,
 	paths: {
 		angular           : '//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min',
@@ -9,7 +9,6 @@ requirejs.config({
 		io                : '/socket.io/socket.io.js',
 		three             : '/vendor/js/three.min',
 		trackballControls : '/vendor/js/TrackballControls',
-		$                 : '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min',
 		_                 : '/vendor/js/underscore-min',
 		circlemouse				: '/vendor/js/jquery.circlemouse',
 		maskPass          : '/vendor/js/postprocessing/MaskPass',
@@ -28,7 +27,6 @@ requirejs.config({
 		'angularResource'   : ['angular'],
 		'three'             : {'exports': 'three'},
 		'trackballControls' : ['three'],
-		'circlemouse'				: ['$'],
 		'copyShader'        : ['three'],
 		'maskPass'          : ['three'],
 		'renderPass'        : ['three'],
