@@ -125,19 +125,16 @@ define(['angular'], function(angular) {
 
 
 					(function(scope, element, attrs) {
-						var scene_ready_timeout;
+						var scene_ready_timeout,
+								resize_timer;
 
 						var emojiPlanet = {
 							init: function() {
-								this.setScopeWatcher();
-								scope.$on('$destroy', function() {
-									if (scene_ready_timeout) {
-					            $timeout.cancel(scene_ready_timeout);
-					        }
-					      });
+								this.prepareScene();
 							},
-							setScopeWatcher: function() {
+							prepareScene: function() {
 								var self = this;
+								// NOTE: Setting this function to a var allows us to cancel our timeout if necessary.
 								var setSceneReady = function() {
 									EarthScene.init(function(){
 										self.setAllWatchers();
@@ -146,6 +143,7 @@ define(['angular'], function(angular) {
 									});
 								}
 
+								scope.$on('$destroy', function() { if (scene_ready_timeout) { $timeout.cancel(scene_ready_timeout); }});
 								scene_ready_timeout = $timeout(setSceneReady, 300);
 							},
 							setAllWatchers: function() {
@@ -162,10 +160,6 @@ define(['angular'], function(angular) {
 							setListeners: function() {
 								var self = this;
 								scope.$on('$destroy', function() {
-									if (scene_ready_timeout) {
-					            $timeout.cancel(scene_ready_timeout);
-					        }
-
 									EarthScene.stop();
 
 									$(element[0]).circlemouse({
@@ -183,6 +177,7 @@ define(['angular'], function(angular) {
 									$(document).unbind('mouseup', self.isNotHoldingEarth);
 
 									angular.element($window).unbind('resize', self.handleResize);
+									$timeout.cancel(resize_timer);
 								});
 
 								$(element[0]).circlemouse({
@@ -202,7 +197,10 @@ define(['angular'], function(angular) {
 						    angular.element($window).bind('resize', this.handleResize);
 							},
 							handleResize: function() {
-								EarthScene.handleResize();
+								$timeout.cancel(resize_timer);
+								resize_timer = $timeout(function() {
+									EarthScene.handleResize();
+								}, 50);
 							},
 							isNotHoldingEarth: function() {
 								EarthScene.isHoldingEarth(false);
@@ -222,16 +220,19 @@ define(['angular'], function(angular) {
 		.directive('animClass', ['$rootScope', '$route', function($rootScope, $route){
 		  return {
 		    link: function(scope, elm, attrs){
+		    	// This function applies a route specific class to the main view area so we can have different animations between views.
 		    	var enter_class = $route.current.animate;
 
+		    	// NOTE: This isn't ideally encapsulated, but this tracking page views per visit
+		    	// in rootScope allows us to prevent some of our transition animations on the first load
+		    	// by applying an animation preventing class.
 					$rootScope.page_view_count += 1;
 					if ($rootScope.page_view_count <= 1) {
 						elm.addClass('prevent-scoped-animation');
+						scope.$on('$routeChangeStart', function(event) {
+							elm.removeClass('prevent-scoped-animation');
+						});
 					}
-
-					scope.$on('$routeChangeStart', function(event) {
-						elm.removeClass('prevent-scoped-animation');
-					});
 
 					elm.addClass(enter_class);
 
