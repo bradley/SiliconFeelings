@@ -15,7 +15,7 @@ define(['angular', 'services'], function(angular) {
 
 		  var scene_ready_timer;
 		  $scope.tweet_data;
-		  $scope.connection_status = '';
+		  $scope.connection_status;
 		  $scope.allow_emoji = false;
 
 
@@ -100,5 +100,6 @@ define(['angular', 'services'], function(angular) {
 				}
 			};
 
+			SocketFunctions.connecting();
 		}]);
 });

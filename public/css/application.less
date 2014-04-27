@@ -107,7 +107,6 @@ body {
     padding: @header_footer_height 16px 0;
     -moz-box-sizing: border-box;
          box-sizing: border-box;
-    display: table;
     position: relative;
     overflow: hidden;
 }
@@ -123,11 +122,11 @@ body {
 }
 
 #view-frame > #animation-wrap.ng-enter, #view-frame > #animation-wrap.ng-leave {
-    -webkit-transition: all 0.75s 0.08s;
+    -webkit-transition: all 0.7s 0.08s;
     -webkit-transition-delay: 0.08s;
-    -moz-transition: all 0.75s 0.08s;
-    -o-transition: all 0.75s 0.08s;
-    transition: all 0.75s 0.08s;
+    -moz-transition: all 0.7s 0.08s;
+    -o-transition: all 0.7s 0.08s;
+    transition: all 0.7s 0.08s;
     -webkit-backface-visibility: hidden;
     -moz-backface-visibility: hidden;
     -ms-backface-visibility: hidden;
@@ -407,6 +406,14 @@ section#main {
         max-width: 100%;
         max-height: 100%;
         position: static;
+        opacity: 0;
+        -webkit-transition: opacity 0.35s ease-in;
+           -moz-transition: opacity 0.35s ease-in;
+             -o-transition: opacity 0.35s ease-in;
+                transition: opacity 0.35s ease-in;
+        &.active {
+            opacity: 1;
+        }
     }
     > img {
         backface-visibility: hidden;

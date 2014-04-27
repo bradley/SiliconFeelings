@@ -466,7 +466,10 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
           this.element.append(this.renderer.domElement);
           this.render();
           this.showGlitchyEarthIfDisconnected();
-
+          var self = this;
+          setTimeout(function() {
+          	$(self.renderer.domElement).addClass('active');
+          }, 100);
           if (typeof callback == 'function') {
           	callback();
           }
@@ -477,6 +480,7 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 			       this.requestId = undefined;
 			    }
 			    this.allow_emoji = false;
+			    $(this.renderer.domElement).removeClass('active');
    			},
    			render: function() {
    				var self = this;

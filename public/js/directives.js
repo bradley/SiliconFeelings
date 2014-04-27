@@ -144,7 +144,7 @@ define(['angular'], function(angular) {
 								}
 
 								scope.$on('$destroy', function() { if (scene_ready_timeout) { $timeout.cancel(scene_ready_timeout); }});
-								scene_ready_timeout = $timeout(setSceneReady, 300);
+								scene_ready_timeout = $timeout(setSceneReady, 800);
 							},
 							setAllWatchers: function() {
 								// NOTE: All watchers are automatically destroyed along with the scope.
