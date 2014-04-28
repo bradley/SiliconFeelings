@@ -11,24 +11,21 @@ define(['angular'], function(angular) {
 				link: function(scope, element) {
 
 
-					/*(function(scope, element) {
+					(function(scope, element) {
 
 						var c = element[0],
 								ctx = c.getContext("2d");
 
 						var font_size = 58,
-					      first_word = 'Emoji',
-					      first_font = "italic bold " + 116 + "px 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, 'Liberation Sans', 'Arimo', Arial, sans-serif",
-					      second_word = 'International',
-					      second_font = 40 + "px 'Minion Pro', 'Crimson Text', Minion Pro', Times, 'Times New Roman', serif",
-					      gradient,
-					      first_word_width,
-					      second_word_width;
+					      first_word = 'SILICON',
+					      second_word = 'FEELINGS',
+					      font = 116 + "px 'Rayon', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, 'Liberation Sans', 'Arimo', Arial, sans-serif",
+					      gradient;
 
 						var colors = new Array(
 						  [118, 200, 215],
 						  [93, 161, 153],
-						  [80, 140, 169],
+						  [55, 110, 83],
 						  [107, 184, 200],
 						  [114, 214, 206],
 						  [115, 207, 166]);
@@ -73,43 +70,60 @@ define(['angular'], function(angular) {
 						  }
 						}
 
-						function resizeCanvasForFonts() {
-							var text_width = 0;
-
-							ctx.font = first_font;
-						  first_word_width = ctx.measureText(first_word).width;
-						  ctx.font = second_font;
-						  second_word_width = ctx.measureText(second_word).width;
-
-						  text_width = Math.max(first_word_width,second_word_width);
-						  if (c.width != text_width) {
-						    c.width = text_width + 10;
-						    c.height = 150;
-						  }
-						}
-
 						function updateLogoText(color1, color2) {
 
 						  // Reset
 						  ctx.clearRect(0, 0, c.width, c.height);
 
-						  resizeCanvasForFonts();
+						 // resizeCanvasForFonts();
 
 						  // Draw Logo Text
-						  ctx.font = first_font;
+						  ctx.font = font;
 						  gradient = ctx.createLinearGradient(0,0,c.width,0);
 						  gradient.addColorStop("0",color1);
 						  gradient.addColorStop("1.0",color2);
 						  ctx.fillStyle = gradient;
-						  ctx.fillText(first_word, (c.width/2) - (first_word_width / 2), 85);
-						  ctx.font = second_font;
-						  ctx.fillStyle = "#121924";
-						  ctx.fillText(second_word, (c.width/2) - (second_word_width / 2), 145);
+
+
+						  var split_first_word = first_word.split(''),
+						  		step_distance_x = [65, 65, 65, 75, 95, 95, 95],
+						  		step_distance_y = [40, 40, 40, 50, 60, 60, 60],
+						  		x_pos = -10, y_pos = 0;
+
+						  for (var i = 0; i < split_first_word.length; i++) {
+						  	var character = split_first_word[i];
+						  	ctx.save();
+								ctx.translate(50, 90);
+								ctx.rotate(-Math.PI/0.5505);
+								ctx.textAlign = "center";
+								ctx.fillText(character, x_pos, y_pos);
+								x_pos += step_distance_x[i];
+								y_pos -= step_distance_y[i];
+								ctx.restore();
+						  }
+
+						  var split_first_word = second_word.split(''),
+						  		step_distance_x = [85, 85, 90, 65, 75, 95, 95, 95],
+						  		step_distance_y = [53, 53, 53, 40, 50, 60, 60, 60],
+						  		x_pos = 56, y_pos = 122 + 0;
+
+						  for (var i = 0; i < split_first_word.length; i++) {
+						  	var character = split_first_word[i];
+						  	ctx.save();
+								ctx.translate(50, 90);
+								ctx.rotate(-Math.PI/0.5505);
+								ctx.textAlign = "center";
+								ctx.fillText(character, x_pos, y_pos);
+								x_pos += step_distance_x[i];
+								y_pos -= step_distance_y[i];
+								ctx.restore();
+						  }
+
 						}
 
 						setInterval(updateGradient,10);
 
-	        })(scope, element); */
+	        })(scope, element);
 				}
 			}
 		}])
