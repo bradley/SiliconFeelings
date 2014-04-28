@@ -338,14 +338,14 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
            	//   happen since we've refined our mappings, but this will prevent errors if
            	//   we've missed anything.
            	tweets = _.reject(tweets, function(tweet, index) {
-           		return typeof self.emoji_sprite_mappings[tweet.unified] === 'undefined';
+           		return typeof self.emoji_sprite_mappings[tweet.u] === 'undefined';
            	});
 
             _.each(tweets, function(tweet, index) {
             	// Convert earth coordinate to point in 3d space relative to our earth sphere.
-	          	var lon = parseInt(tweet.coordinates[0]),
-	          			lat = parseInt(tweet.coordinates[1]),
-	          			unified = tweet['unified'],
+	          	var lon = parseInt(tweet.c[0]),
+	          			lat = parseInt(tweet.c[1]),
+	          			unified = tweet['u'],
 	          			sprite = self.emoji_sprite_mappings[unified].sprite.clone(),
 	          			position = self.lonLatToVector3(lon, lat);
 

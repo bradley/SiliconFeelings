@@ -57,7 +57,7 @@ define(['angular', 'services'], function(angular) {
 			  Socket.on('reconnecting', SocketFunctions.connecting);
 			  Socket.on('reconnect', SocketFunctions.connect);
 			 	Socket.on('reconnect_failed', SocketFunctions.connect_failed);
-			  Socket.on('new_tweets', SocketFunctions.new_tweets);
+			  Socket.on('tweets', SocketFunctions.tweets);
 			}
 
 			function unsetSocketListeners() {
@@ -70,7 +70,7 @@ define(['angular', 'services'], function(angular) {
 			  Socket.off('reconnecting', SocketFunctions.connecting);
 			  Socket.off('reconnect', SocketFunctions.connect);
 			 	Socket.off('reconnect_failed', SocketFunctions.connect_failed);
-			  Socket.off('new_tweets', SocketFunctions.new_tweets);
+			  Socket.off('tweets', SocketFunctions.tweets);
 			}
 
 			var SocketFunctions = {
@@ -95,7 +95,7 @@ define(['angular', 'services'], function(angular) {
 				reconnecting: function() {
 					$scope.connection_status = 'reconnecting...';
 				},
-				new_tweets: function(tweets) {
+				tweets: function(tweets) {
 					$scope.tweet_data = tweets;
 				}
 			};

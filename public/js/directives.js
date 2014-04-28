@@ -144,7 +144,7 @@ define(['angular'], function(angular) {
 								}
 
 								scope.$on('$destroy', function() { if (scene_ready_timeout) { $timeout.cancel(scene_ready_timeout); }});
-								scene_ready_timeout = $timeout(setSceneReady, 800);
+								scene_ready_timeout = $timeout(setSceneReady, ($rootScope.page_view_count > 1 ? 800 : 0)); // Allow time for route transitions unless this is the first load.
 							},
 							setAllWatchers: function() {
 								// NOTE: All watchers are automatically destroyed along with the scope.

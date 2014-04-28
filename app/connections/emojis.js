@@ -6,7 +6,7 @@ var EmojiStream = require('app/lib/emoji_stream/stream'),
 
 // Controllers ==================================================================
 function foundTweet(tweet) {
-  new_tweets.push({ emoji: tweet.emoji, unified: tweet.unified, coordinates: tweet.coordinates });
+  new_tweets.push({ u: tweet.unified, c: tweet.coordinates });
 }
 
 
@@ -15,7 +15,7 @@ function foundTweet(tweet) {
 //   tweets to clients to every tenth of a second rather than on every tweet.
 function emit() {
 	if (new_tweets.length) {
-	  io.sockets.emit('new_tweets', new_tweets);
+	  io.sockets.emit('tweets', new_tweets);
 	  new_tweets = [];
 	}
 	// Call self. This is effectively a loop.
