@@ -306,7 +306,8 @@ p {
 header#masthead {
     min-width: 100%;
     height: @header_footer_height;
-    padding: 16px;
+    margin-left: -32px;
+    padding: 16px 48px 16px 48px;
     -moz-box-sizing: border-box;
          box-sizing: border-box;
     img {
@@ -314,25 +315,7 @@ header#masthead {
         max-height: 100%;
     }
     .side-content {
-        /* Internet Explorer 10 */
-               display:-ms-flexbox;
-         -ms-flex-pack:center;
-        -ms-flex-align:center;
-
-        /* Firefox */
-               display:-moz-box;
-         -moz-box-pack:center;
-        -moz-box-align:center;
-
-        /* Safari, Opera, and Chrome */
-                  display:-webkit-box;
-         -webkit-box-pack:center;
-        -webkit-box-align:center;
-
-        /* W3C */
-          display:box;
-         box-pack:center;
-        box-align:center;
+        padding: 0px!important;
     }
     canvas {
         max-width: 100%;
