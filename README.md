@@ -16,7 +16,13 @@ Setup
 -----
 
 Install packages needed for server: `npm install`
+
 Install packages needed for client: `bower install`
+
+Symlink app directory with node modules: `cd node_modules && ln -nsf ../app && cd ..`
+
+Create a .env file in the root of the project and fill in your Twitter API credentials following the example content in .example.env
+
 Start app (local): foreman start
 
 
