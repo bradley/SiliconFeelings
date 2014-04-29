@@ -25,8 +25,10 @@ define(['angular'], function(angular) {
 						var colors = new Array(
 						  [254, 197, 228],
 						  [141, 250, 254],
+						  [250, 250, 250],
 						  [180, 228, 179],
-						  [196, 172, 253]);
+						  [196, 172, 253],
+						  [250, 250, 250]);
 
 						var step = 0,
 								colorIndices = [0,1,2,3],

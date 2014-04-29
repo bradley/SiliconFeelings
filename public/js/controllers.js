@@ -13,7 +13,7 @@ define(['angular', 'services'], function(angular) {
 
 		  /* Setup */
 
-		  var scene_ready_timer, load_progress_timer;
+		  var scene_ready_timer, load_progress_timer, load_delay_timer;
 		  $scope.tweet_data;
 		  $scope.connection_status;
 		  $scope.allow_emoji = false;
@@ -30,6 +30,9 @@ define(['angular', 'services'], function(angular) {
 	        if (load_progress_timer) {
 	        	$timeout.cancel(load_progress_timer);
 	      	}
+	      	if (load_delay_timer) {
+	      		$timeout.cancel(load_delay_timer);
+	      	}
 	        unsetSocketListeners();
 	    });
 
@@ -43,10 +46,10 @@ define(['angular', 'services'], function(angular) {
 				$scope.$apply();
 				if ($scope.load_progress >= 1) {
 
-					setTimeout(function() {
+					load_delay_timer = $timeout(function() {
 		  			$scope.load_visible = false;
 		  				$scope.$apply();
-		  		},500);
+		  		}, 500);
 
 				}
 			}
