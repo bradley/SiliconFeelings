@@ -125,12 +125,81 @@ define(['angular'], function(angular) {
 				}
 			}
 		}])
+		.directive('loadingIndicator', [function() {
+			return {
+				restrict: 'E',
+				scope: {
+					'visible': '=',
+					'progress': '='
+				},
+				templateUrl: 'partials/components/loading_indicator.html',
+				link: function(scope, element) {
+					(function(scope, element) {
+						var loadingIndicator = {
+							init: function(){
+		            this.$loader = $('#load-progress-bar');
+		            this.$overlay;
+		            this.loader_width = this.$loader.width();
+
+		            this.setComponents();
+		            this.setAllWatchers();
+			        },
+			        setComponents: function() {
+		            var $loading_outer = $("<div class='loading-outer'></div>"),
+		                $loading_inner = $("<div class='loading-inner'></div>");
+
+		            this.$overlay = $("<div class='loading-overlay'></div>");
+		            $loading_outer.width(this.loader_width);
+		            $loading_inner.width(this.loader_width);
+		            this.$overlay.width(this.loader_width);
+
+		            this.$loader.append($loading_outer);
+		            this.$loader.append($loading_inner);
+		            this.$loader.append(this.$overlay);
+		        	},
+		        	setAllWatchers: function() {
+		        		var self = this;
+		        		// NOTE: All watchers are automatically destroyed along with the scope.
+								scope.$watch('visible', function(new_data, old_data) {
+									self.makeVisible(new_data);
+							  });
+							  scope.$watch('progress', function(new_data, old_data) {
+							  	if (new_data) {
+							  		self.setProgress(new_data);
+							  	}
+							  });
+		        	},
+			        setProgress: function(progress) {
+		            if (typeof progress === 'number' && progress >= 0 && progress <= 1) {
+	                var remaining = this.loader_width - (this.loader_width * progress);
+	                this.$overlay.width(remaining);
+		            }
+		            else {
+	                console.log('Progress sent to the setProgress() method must be a number between 0 and 1');
+		            }
+			        },
+			        makeVisible: function(make_visible) {
+			        	if (make_visible) {
+			        		this.$loader.css('opacity', 1.0);
+			        	}
+			        	else {
+			        		this.$loader.css('opacity', 0.0);
+			        	}
+			        }
+						}
+
+						loadingIndicator.init();
+					})(scope, element);
+				}
+			}
+		}])
 		.directive('emojiPlanet', ['$rootScope', '$http', '$window', '$timeout', 'EarthScene', function($rootScope, $http, $window, $timeout, EarthScene) {
     	return {
 	      restrict: 'E',
 	      scope: {
 	        'tweetData': '=',
 	        'allowEmoji': '=',
+	        'loadProgress': '&loadProgress',
 	        'sceneReady': '&onLoad'
 	      },
 	      link: function(scope, element, attrs) {
@@ -148,7 +217,10 @@ define(['angular'], function(angular) {
 								var self = this;
 								// NOTE: Setting this function to a var allows us to cancel our timeout if necessary.
 								var setSceneReady = function() {
-									EarthScene.init(function(){
+									EarthScene.init(function(progress) {
+										scope.loadProgress({progress: progress});
+									},
+									function(){
 										self.setAllWatchers();
 										self.setListeners();
 										scope.sceneReady();

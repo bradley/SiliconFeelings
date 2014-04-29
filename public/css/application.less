@@ -380,7 +380,10 @@ section#main {
 
 /*  Earth
 	------------------------------------- */
-
+#main-panel {
+    width: 100%;
+    position: relative;
+}
 #emoji-planet-container {
     -webkit-border-radius: 50%;
             border-radius: 50%;
@@ -536,6 +539,7 @@ footer#footer {
 /*  Et Cetera
     ------------------------------------- */
 
+/* 3d button */
 .perspective-button-container {
     position: relative;
     z-index: 1;
@@ -631,3 +635,118 @@ footer#footer {
         }
     }
 }
+
+/* Loading indicator */
+.rainbow-loader {
+    position: absolute;
+    width: 100%;
+    height: 8px;
+    top: 50%;
+    left: 0;
+    overflow: hidden;
+    border-radius: 7px;
+    border: 1px solid #cecece;
+    opacity: 0;
+    -webkit-transition: opacity 0.2s ease-in;
+       -moz-transition: opacity 0.2s ease-in;
+         -o-transition: opacity 0.2s ease-in;
+            transition: opacity 0.2s ease-in;
+}
+.loading-overlay {
+    overflow: hidden;
+    background: white;
+    right: 0;
+}
+.loading-overlay, .loading-outer, .loading-inner {
+    position: absolute;
+    height: 100%;
+    top: 0;
+}
+.loading-outer {
+    animation-duration: 2s;
+    -webkit-animation-duration: 2s;
+    animation-iteration-count: infinite;
+    -webkit-animation-iteration-count: infinite;
+    animation-timing-function: ease-in;
+    -webkit-animation-timing-function: ease-in;
+}
+.loading-outer {
+    left: 100%;
+    animation-name: blend-inner;
+    -webkit-animation-name: blend-inner;
+}
+.loading-inner {
+    left: 0;
+}
+.loading-outer:before, .loading-outer:after {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    content:" ";
+}
+.loading-outer:before {
+    right: 100%;
+}
+.loading-outer:after {
+    left: 100%;
+}
+/* Gradients */
+.loading-outer {
+    background-image:   -moz-linear-gradient(left, rgba(255, 255, 0, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(0, 255, 255, 0.5) 100%);
+    background-image:        linear-gradient(left, rgba(255, 255, 0, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(0, 255, 255, 0.5) 100%);
+    background-image:-webkit-linear-gradient(left, rgba(255, 255, 0, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(0, 255, 255, 0.5) 100%);
+    background-image:     -o-linear-gradient(left, rgba(255, 255, 0, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(0, 255, 255, 0.5) 100%);
+    background-image:    -ms-linear-gradient(left, rgba(255, 255, 0, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(0, 255, 255, 0.5) 100%);
+    background-image:       -webkit-gradient(linear, left, right, color-stop(0%,rgba(255, 255, 0, 0.5)), color-stop(50%,rgba(255, 0, 255, 0.5)),color-stop(100%,rgba(0, 255, 255, 0.5)));
+}
+.loading-outer:before {
+    background-image:   -moz-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
+    background-image:        linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
+    background-image:-webkit-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
+    background-image:     -o-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
+    background-image:    -ms-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
+    background-image:       -webkit-gradient(linear, left, right, color-stop(0%,rgba(0, 255, 255, 0.5)), color-stop(50%,rgba(255, 0, 255, 0.5)),color-stop(100%,rgba(255, 255, 0, 0.5)));
+}
+.loading-outer:after {
+    background-image:   -moz-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
+    background-image:        linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
+    background-image:-webkit-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
+    background-image:     -o-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
+    background-image:    -ms-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
+    background-image:       -webkit-gradient(linear, left, right, color-stop(0%,rgba(0, 255, 255, 0.5)), color-stop(50%,rgba(255, 0, 255, 0.5)),color-stop(100%,rgba(255, 255, 0, 0.5)));
+}
+.loading-inner {
+    background-image:   -moz-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 255, 0, 0.5) 50%, rgba(255, 0, 255, 0.5) 100%);
+    background-image:        linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 255, 0, 0.5) 50%, rgba(255, 0, 255, 0.5) 100%);
+    background-image:-webkit-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 255, 0, 0.5) 50%, rgba(255, 0, 255, 0.5) 100%);
+    background-image:     -o-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 255, 0, 0.5) 50%, rgba(255, 0, 255, 0.5) 100%);
+    background-image:    -ms-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 255, 0, 0.5) 50%, rgba(255, 0, 255, 0.5) 100%);
+    background-image:       -webkit-gradient(linear, left, right, color-stop(0%,rgba(0, 255, 255, 0.5)), color-stop(50%,rgba(255, 255, 0, 0.5)),color-stop(100%,rgba(255, 0, 255, 0.5)));
+}
+/* Progress animations */
+/* TODO: IS THIS BAD??? WITH THE JS TIMEOUT? */
+.loading-overlay {
+    -webkit-transition: width ease-out 0.2s;
+    -moz-transition: width ease-out 0.2s;
+    -o-transition: width ease-out 0.2s;
+    transition: width ease-out 0.2s;
+}
+/* Animations */
+@keyframes blend-inner {
+    0% {
+        left: 100%;
+    }
+    100% {
+        left: -100%;
+    }
+}
+@-webkit-keyframes blend-inner {
+    0% {
+        left: 100%;
+    }
+    100% {
+        left: -100%;
+    }
+}
+

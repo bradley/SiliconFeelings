@@ -13,10 +13,12 @@ define(['angular', 'services'], function(angular) {
 
 		  /* Setup */
 
-		  var scene_ready_timer;
+		  var scene_ready_timer, load_progress_timer;
 		  $scope.tweet_data;
 		  $scope.connection_status;
 		  $scope.allow_emoji = false;
+		  $scope.load_progress = 0.0;
+		  $scope.load_visible = !($rootScope.earthResourcesLoaded);
 
 
 	    /* Scope Functions */
@@ -25,6 +27,9 @@ define(['angular', 'services'], function(angular) {
 	        if (scene_ready_timer) {
 	        	$timeout.cancel(scene_ready_timer);
 	        }
+	        if (load_progress_timer) {
+	        	$timeout.cancel(load_progress_timer);
+	      	}
 	        unsetSocketListeners();
 	    });
 
@@ -33,7 +38,27 @@ define(['angular', 'services'], function(angular) {
 				$scope.allow_emoji = true;
 			}
 
-	    $scope.sceneReady = function(connection_status) {
+			var updateLoadProgress = function(progress) {
+				$scope.load_progress = progress;
+				$scope.$apply();
+				if ($scope.load_progress >= 1) {
+
+					setTimeout(function() {
+		  			$scope.load_visible = false;
+		  				$scope.$apply();
+		  		},500);
+
+				}
+			}
+
+			$scope.loadProgress = function(progress) {
+				$timeout.cancel(load_progress_timer);
+				load_progress_timer = $timeout(function() {
+					updateLoadProgress(progress);
+				}, 100);
+			}
+
+	    $scope.sceneReady = function() {
 	    	$scope.connection_status = 'connecting...';
 	    	$scope.$apply();
 

@@ -53,7 +53,7 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 		.factory('EarthScene', ['$rootScope', '$http', '$window', 'Socket', function($rootScope, $http, $window, Socket) {
 			var EarthScene = EarthScene || {};
 
-			EarthScene.Scene = function(callback) {
+			EarthScene.Scene = function(progress_callback, completion_callback) {
 
 				// Setup
 	    	var self = this;
@@ -105,14 +105,15 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 				this.holding_earth = false;
 				this.allow_emoji = false;
 
-				this.init(callback);
+				this.init(progress_callback, completion_callback);
 			};
 		  EarthScene.Scene.prototype = {
-		    init: function(callback) {
+		    init: function(progress_callback, completion_callback) {
 
 		    	// Setup
 		    	var self = this;
-		    	this.callback = callback;
+		    	this.progress_callback = progress_callback;
+		    	this.completion_callback = completion_callback;
 		    	this.element;
 
 		    	// Constants
@@ -166,24 +167,75 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 		    loadResources: function() {
 		    	// Loads all resources.
 		    	var self = this;
-					// TODO: _Really_ need to rethink this chaining. It works but could get unwieldy quickly.
-        	$http.get('vendor/emoji_sprite_sheet_small.json').success(function(data) {
-			    	self.emoji_sprite_mappings = data.frames;
-			    	self.emoji_sprite_sheet_width = data.meta.size.w;
-			    	self.emoji_sprite_sheet_height = data.meta.size.h;
 
-			    	self.emoji_sprites_new.onload = function() {
-			        self.mapEmojiTextures(function() {
-			    			self.planet_texture = THREE.ImageUtils.loadTexture("vendor/images/earth.jpg", {}, function() {
-			        		self.planet_specular_texture = THREE.ImageUtils.loadTexture("vendor/images/specular.png", {}, function() {
-				        		self.setupScene();
-				        	});
-			        	});
-			    		});
-			      };
+        	var load_functions = [],
+        			emoji_data,
+        			loadSpriteSheetMappings,
+        			loadSpriteSheetImage,
+        			mapEmojiTextures,
+        			loadPlanetTexture,
+        			loadPlanetSpecularTexture;
 
-			      // Set src for image so that the onload event is triggered.
-			    	self.emoji_sprites_new.src = 'vendor/images/' + data.meta.image;
+
+			  	loadSpriteSheetMappings = function(promise) {
+			  		$http.get('vendor/emoji_sprite_sheet_small.json').success(function(data) {
+			  			emoji_data = data;
+			  			self.emoji_sprite_mappings = emoji_data.frames;
+			    		self.emoji_sprite_sheet_width = emoji_data.meta.size.w;
+			    		self.emoji_sprite_sheet_height = emoji_data.meta.size.h;
+
+			    		promise();
+			  		});
+			  	}
+			  	load_functions.push(loadSpriteSheetMappings);
+
+			  	loadSpriteSheetImage = function(promise) {
+			  		self.emoji_sprites_new.onload = function() {
+			  			promise();
+			  		};
+			  		// Set src for image so that the onload event is triggered.
+			    	self.emoji_sprites_new.src = 'vendor/images/' + emoji_data.meta.image;
+			  	}
+			  	load_functions.push(loadSpriteSheetImage);
+
+			  	mapEmojiTextures = function(promise) {
+			  		self.mapEmojiTextures(function() {
+			  			promise();
+			  		});
+			  	}
+			  	load_functions.push(mapEmojiTextures);
+
+			  	loadPlanetTexture = function(promise) {
+			  		self.planet_texture = THREE.ImageUtils.loadTexture("vendor/images/earth.jpg", {}, function() {
+			  			promise();
+			  		});
+			  	}
+			  	load_functions.push(loadPlanetTexture);
+
+			  	loadPlanetSpecularTexture = function(promise) {
+			  		self.planet_specular_texture = THREE.ImageUtils.loadTexture("vendor/images/specular.png", {}, function() {
+			  			promise();
+			  		});
+			  	}
+			  	load_functions.push(loadPlanetSpecularTexture);
+
+
+			  	function loadResourceFunctionAtIndex(index, promise) {
+			  		load_functions[index](function() {
+			  			self.progress_callback((index + 1) / (load_functions.length));
+			  			if ((index + 1) <= (load_functions.length - 1)) {
+			  				loadResourceFunctionAtIndex(index + 1, promise);
+			  				return;
+			  			}
+			  			promise();
+			  		});
+			  	}
+
+			  	loadResourceFunctionAtIndex(0, function() {
+			  		setTimeout(function() {
+			  			$rootScope.earthResourcesLoaded = true;
+			  			self.setupScene();
+			  		},500);
 			  	});
 		    },
 		    setupScene: function() {
@@ -211,8 +263,8 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
           this.setSocketListeners();
 
           this.scene_ready = true;
-          if (typeof this.callback == 'function') {
-          	this.callback();
+          if (typeof this.completion_callback == 'function') {
+          	this.completion_callback();
           }
 		    },
 		    mapEmojiTextures: function(callback) {
@@ -504,18 +556,20 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 		  var earthScene;
 
 		  var sharedScene = {
-		  	init: function(callback) {
+		  	init: function(progress_callback, completion_callback) {
 		  		if (earthScene) {
 		  			earthScene.play(function() {
 			  			setTimeout(function() {
-								callback();
+								completion_callback();
 							}, 100);
 			  		});
 		  		}
 		  		else {
-						earthScene = new EarthScene.Scene(function() {
+						earthScene = new EarthScene.Scene(function(progress) {
+							progress_callback(progress);
+						}, function() {
 		  				earthScene.play(function() {
-				  			callback();
+				  			completion_callback();
 				  		});
 		  			});
 		  		}
