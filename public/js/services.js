@@ -305,9 +305,9 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 		    },
 		    addLights: function() {
 		    	var main_light = this.light = new THREE.DirectionalLight(0xffffff, 0.4),
-        			spot_light = new THREE.SpotLight(0xffffff, 1.25),
-        			ambient_light = new THREE.AmbientLight(0x282F3E),
-        			backlight = new THREE.DirectionalLight(0x282343, 0.8);
+        			spot_light = new THREE.SpotLight(0xFBF4D1, 1.25),
+        			ambient_light = new THREE.AmbientLight(0x25343B),
+        			backlight = new THREE.DirectionalLight(0x25343B, 0.8);
 
         	this.scene.add(ambient_light);
 

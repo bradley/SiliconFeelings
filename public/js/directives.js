@@ -17,9 +17,9 @@ define(['angular'], function(angular) {
 								ctx = c.getContext("2d");
 
 						var font_size = 58,
-					      first_word = 'SILICON',
-					      second_word = 'FEELINGS',
-					      font = 116 + "px 'Rayon', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, 'Liberation Sans', 'Arimo', Arial, sans-serif",
+					      first_word = 'silicons',
+					      second_word = 'Silicon',
+					      font = 91 + "px 'Crimson Text', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, 'Liberation Sans', 'Arimo', Arial, sans-serif",
 					      gradient;
 
 						var colors = new Array(
@@ -83,8 +83,9 @@ define(['angular'], function(angular) {
 						  gradient.addColorStop("0",color1);
 						  gradient.addColorStop("1.0",color2);
 						  ctx.fillStyle = gradient;
+						  ctx.fillText(first_word, 0, 65);
 
-
+/*
 						  var split_first_word = first_word.split(''),
 						  		step_distance_x = [65, 65, 65, 75, 95, 95, 95],
 						  		step_distance_y = [40, 40, 40, 50, 60, 60, 60],
@@ -117,7 +118,7 @@ define(['angular'], function(angular) {
 								x_pos += step_distance_x[i];
 								y_pos -= step_distance_y[i];
 								ctx.restore();
-						  }
+						  }*/
 
 						}
 
