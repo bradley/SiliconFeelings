@@ -19,6 +19,7 @@ define(['angular', 'services'], function(angular) {
 		  $scope.allow_emoji = false;
 		  $scope.load_progress = 0.0;
 		  $scope.load_visible = !($rootScope.earthResourcesLoaded);
+		  $scope.connecting_visible = false;
 
 
 	    /* Scope Functions */
@@ -63,6 +64,7 @@ define(['angular', 'services'], function(angular) {
 
 	    $scope.sceneReady = function() {
 	    	$scope.connection_status = 'connecting...';
+	    	$scope.connecting_visible = true;
 	    	$scope.$apply();
 
 	    	// NOTE: Artificial timeout for desired UX. Not functionally necessary.
@@ -107,27 +109,33 @@ define(['angular', 'services'], function(angular) {
 				},
 				connecting: function() {
 					$scope.connection_status = 'connecting...';
+					$scope.connecting_visible = true;
 				},
 				connect: function() {
 					$scope.connection_status = 'connected';
+					$scope.connecting_visible = false;
 				},
 				connect_failed: function() {
 					$scope.connection_status = 'failed to connect';
+					$scope.connecting_visible = false;
 				},
 				disconnect: function() {
 					$scope.connection_status = 'disconnected';
+					$scope.connecting_visible = false;
 				},
 				error: function() {
 					$scope.connection_status = 'error connecting';
+					$scope.connecting_visible = false;
 				},
 				reconnecting: function() {
 					$scope.connection_status = 'reconnecting...';
+					$scope.connecting_visible = true;
 				},
 				tweets: function(tweets) {
 					$scope.tweet_data = tweets;
 				}
 			};
 
-			SocketFunctions.connecting();
+			//SocketFunctions.connecting();
 		}]);
 });

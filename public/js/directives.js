@@ -82,7 +82,7 @@ define(['angular'], function(angular) {
 						  gradient = ctx.createLinearGradient(0,0,c.width,0);
 						  gradient.addColorStop("0",color1);
 						  gradient.addColorStop("1.0",color2);
-						  ctx.fillStyle = gradient;
+						  ctx.fillStyle = 'black';
 						  ctx.fillText(first_word, 0, 65);
 
 /*
@@ -148,16 +148,9 @@ define(['angular'], function(angular) {
 		            this.setAllWatchers();
 			        },
 			        setComponents: function() {
-		            var $loading_outer = $("<div class='loading-outer'></div>"),
-		                $loading_inner = $("<div class='loading-inner'></div>");
-
 		            this.$overlay = $("<div class='loading-overlay'></div>");
-		            $loading_outer.width(this.loader_width);
-		            $loading_inner.width(this.loader_width);
 		            this.$overlay.width(this.loader_width);
 
-		            this.$loader.append($loading_outer);
-		            this.$loader.append($loading_inner);
 		            this.$loader.append(this.$overlay);
 		        	},
 		        	setAllWatchers: function() {

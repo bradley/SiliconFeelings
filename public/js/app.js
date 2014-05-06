@@ -22,7 +22,7 @@ define([
     ]);
 
     myApp.run(function($rootScope, $http){
-      $rootScope.artificial_timeout_time = 2400;
+      $rootScope.artificial_timeout_time = 2900;
       $rootScope.page_view_count = 0;
       $rootScope.earthResourcesLoaded = false;
 

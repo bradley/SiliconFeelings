@@ -103,7 +103,7 @@ body {
     min-width: 100%;
     height: inherit;
     margin-top: -@header_footer_height;
-    padding: @header_footer_height 16px 0;
+    padding: @header_footer_height 0 0;
     -moz-box-sizing: border-box;
          box-sizing: border-box;
     position: relative;
@@ -119,7 +119,6 @@ body {
     -webkit-backface-visibility: hidden;
     -webkit-transform-style: preserve-3d;
 }
-
 #view-frame > #animation-wrap.ng-enter, #view-frame > #animation-wrap.ng-leave {
     -webkit-transition: all 0.7s 0.08s;
     -webkit-transition-delay: 0.08s;
@@ -132,7 +131,6 @@ body {
     -o-backface-visibility: hidden;
     backface-visibility: hidden;
 }
-
 #view-frame > #animation-wrap.ng-enter {
     opacity: 0;
 }
@@ -145,43 +143,35 @@ body {
 #view-frame > #animation-wrap.ng-leave.ng-leave-active {
     opacity: 0;
 }
-
-
 #view-frame > #animation-wrap.prevent-scoped-animation {
     left: inherit!important;
 }
-
-
 #view-frame > #animation-wrap.home-view.ng-enter {
     left: -100%;
 }
 #view-frame > #animation-wrap.home-view.ng-enter.ng-enter-active {
-    left: 16px;
+    left: 0px;
 }
 #view-frame > #animation-wrap.home-view.ng-leave {
-    left: 16px;
+    left: 0px;
 }
 #view-frame > #animation-wrap.home-view.ng-leave.ng-leave-active {
     left: -100%;
 }
-
 #view-frame > #animation-wrap.home-view.ng-enter:first-child {
     left: 100%;
 }
 #view-frame > #animation-wrap.home-view.ng-leave.ng-leave-active:first-child {
     left: 100%;
 }
-
-
-
 #view-frame > #animation-wrap.about-view.ng-enter {
     left: 100%;
 }
 #view-frame > #animation-wrap.about-view.ng-enter.ng-enter-active {
-    left: 16px;
+    left: 0px;
 }
 #view-frame > #animation-wrap.about-view.ng-leave {
-    left: 16px;
+    left: 0px;
 }
 #view-frame > #animation-wrap.about-view.ng-leave.ng-leave-active {
     left: 100%;
@@ -228,14 +218,28 @@ a {
         padding-bottom: 4px;
         border-bottom: 0;
         background: url(../images/squiggle.gif) bottom repeat-x;
-        -webkit-animation:myfirst 0.3s linear 0s infinite;
+        -webkit-animation: anchorHover 0.3s linear 0s infinite;
+           -moz-animation: anchorHover 0.3s linear 0s infinite;
+             -o-animation: anchorHover 0.3s linear 0s infinite;
+                animation: anchorHover 0.3s linear 0s infinite;
         background-position:0px 5px;
     }
 }
-
-@-webkit-keyframes myfirst {
-    0%   {background-position:0px 5px;}
-    100%   {background-position: 6px 5px;}
+@-webkit-keyframes anchorHover {
+    0% { background-position:0px 5px; }
+    100% { background-position: 6px 5px; }
+}
+@-moz-keyframes anchorHover {
+    0% { background-position:0px 5px; }
+    100% { background-position: 6px 5px; }
+}
+@-o-keyframes anchorHover {
+    0% { background-position:0px 5px; }
+    100% { background-position: 6px 5px; }
+}
+@keyframes anchorHover {
+    0% { background-position:0px 5px; }
+    100% { background-position: 6px 5px; }
 }
 p {
     font-size: 15px;
@@ -295,6 +299,7 @@ p {
     .panel-center {
         display: table-cell;
         vertical-align: middle;
+        padding: 16px;
     }
 }
 .left {
@@ -313,8 +318,7 @@ p {
 header#masthead {
     min-width: 100%;
     height: @header_footer_height;
-    margin-left: -32px;
-    padding: 16px 48px 16px 48px;
+    padding: 16px;
     -moz-box-sizing: border-box;
          box-sizing: border-box;
     img {
@@ -322,7 +326,17 @@ header#masthead {
         max-height: 100%;
     }
     .side-content {
-        padding: 0px!important;
+        padding: 0px 16px!important;
+        -moz-box-sizing: border-box;
+                 box-sizing: border-box;
+    }
+    .main-content {
+        padding-top: 15px;
+        .column {
+            padding: 0 16px;
+            -moz-box-sizing: border-box;
+                 box-sizing: border-box;
+        }
     }
     canvas {
         max-width: 100%;
@@ -339,9 +353,10 @@ header#masthead {
     #connection-status {
         p {
             margin: 0;
-            padding: 12px 0;
+            padding: 0;
             line-height: inherit;
             font-size: inherit;
+            display: inline-block;
         }
     }
 }
@@ -387,6 +402,7 @@ section#main {
 
 /*  Earth
 	------------------------------------- */
+
 #main-panel {
     width: 100%;
     position: relative;
@@ -493,7 +509,6 @@ section#main {
         }
     }
 }
-
 
 
 /*  Footer
@@ -644,115 +659,122 @@ footer#footer {
 }
 
 /* Loading indicator */
-.rainbow-loader {
-    position: absolute;
+.loading-indicator {
     width: 100%;
     height: 8px;
+    position: absolute;
     top: 50%;
     left: 0;
     overflow: hidden;
     border: 1px solid #cecece;
-    opacity: 0;/*
-    -webkit-transition: opacity 0.2s ease-in;
-       -moz-transition: opacity 0.2s ease-in;
-         -o-transition: opacity 0.2s ease-in;
-            transition: opacity 0.2s ease-in;*/
+    opacity: 0;
+    background: black;
+    border-radius: 7px;
+    padding: 0 16px;
+    -moz-box-sizing: border-box;
+         box-sizing: border-box;
 }
 .loading-overlay {
+    height: 100%;
     overflow: hidden;
     background: white;
+    position: absolute;
+    top: 0;
     right: 0;
-}
-.loading-overlay, .loading-outer, .loading-inner {
-    position: absolute;
-    height: 100%;
-    top: 0;
-}
-.loading-outer {
-    animation-duration: 2s;
-    -webkit-animation-duration: 2s;
-    animation-iteration-count: infinite;
-    -webkit-animation-iteration-count: infinite;
-    animation-timing-function: ease-in;
-    -webkit-animation-timing-function: ease-in;
-}
-.loading-outer {
-    left: 100%;
-    animation-name: blend-inner;
-    -webkit-animation-name: blend-inner;
-}
-.loading-inner {
-    left: 0;
-}
-.loading-outer:before, .loading-outer:after {
-    position: absolute;
-    width: 100%;
-    top: 0;
-    bottom: 0;
-    content:" ";
-}
-.loading-outer:before {
-    right: 100%;
-}
-.loading-outer:after {
-    left: 100%;
-}
-/* Gradients */
-.loading-outer {
-    background-image:   -moz-linear-gradient(left, rgba(255, 255, 0, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(0, 255, 255, 0.5) 100%);
-    background-image:        linear-gradient(left, rgba(255, 255, 0, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(0, 255, 255, 0.5) 100%);
-    background-image:-webkit-linear-gradient(left, rgba(255, 255, 0, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(0, 255, 255, 0.5) 100%);
-    background-image:     -o-linear-gradient(left, rgba(255, 255, 0, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(0, 255, 255, 0.5) 100%);
-    background-image:    -ms-linear-gradient(left, rgba(255, 255, 0, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(0, 255, 255, 0.5) 100%);
-    background-image:       -webkit-gradient(linear, left, right, color-stop(0%,rgba(255, 255, 0, 0.5)), color-stop(50%,rgba(255, 0, 255, 0.5)),color-stop(100%,rgba(0, 255, 255, 0.5)));
-}
-.loading-outer:before {
-    background-image:   -moz-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
-    background-image:        linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
-    background-image:-webkit-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
-    background-image:     -o-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
-    background-image:    -ms-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
-    background-image:       -webkit-gradient(linear, left, right, color-stop(0%,rgba(0, 255, 255, 0.5)), color-stop(50%,rgba(255, 0, 255, 0.5)),color-stop(100%,rgba(255, 255, 0, 0.5)));
-}
-.loading-outer:after {
-    background-image:   -moz-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
-    background-image:        linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
-    background-image:-webkit-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
-    background-image:     -o-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
-    background-image:    -ms-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 0, 255, 0.5) 50%, rgba(255, 255, 0, 0.5) 100%);
-    background-image:       -webkit-gradient(linear, left, right, color-stop(0%,rgba(0, 255, 255, 0.5)), color-stop(50%,rgba(255, 0, 255, 0.5)),color-stop(100%,rgba(255, 255, 0, 0.5)));
-}
-.loading-inner {
-    background-image:   -moz-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 255, 0, 0.5) 50%, rgba(255, 0, 255, 0.5) 100%);
-    background-image:        linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 255, 0, 0.5) 50%, rgba(255, 0, 255, 0.5) 100%);
-    background-image:-webkit-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 255, 0, 0.5) 50%, rgba(255, 0, 255, 0.5) 100%);
-    background-image:     -o-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 255, 0, 0.5) 50%, rgba(255, 0, 255, 0.5) 100%);
-    background-image:    -ms-linear-gradient(left, rgba(0, 255, 255, 0.5) 0%, rgba(255, 255, 0, 0.5) 50%, rgba(255, 0, 255, 0.5) 100%);
-    background-image:       -webkit-gradient(linear, left, right, color-stop(0%,rgba(0, 255, 255, 0.5)), color-stop(50%,rgba(255, 255, 0, 0.5)),color-stop(100%,rgba(255, 0, 255, 0.5)));
-}
-/* Progress animations */
-/* TODO: IS THIS BAD??? WITH THE JS TIMEOUT? */
-.loading-overlay {
     -webkit-transition: width ease-out 0.2s;
-    -moz-transition: width ease-out 0.2s;
-    -o-transition: width ease-out 0.2s;
-    transition: width ease-out 0.2s;
+       -moz-transition: width ease-out 0.2s;
+         -o-transition: width ease-out 0.2s;
+            transition: width ease-out 0.2s;
 }
-/* Animations */
-@keyframes blend-inner {
+
+/* connecting indicator */
+.connecting-indicator {
+    opacity: 0;
+    background: transparent;
+    width: 30px;
+    height: 8px;
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
+    -webkit-transition: opacity linear 0.3s;
+       -moz-transition: opacity linear 0.3s;
+         -o-transition: opacity linear 0.3s;
+            transition: opacity linear 0.3s;
+    -webkit-transform: rotate(180deg);
+       -moz-transform: rotate(180deg);
+            transform: rotate(180deg);
+    &::before {
+        width: 8px;
+        height: 8px;
+        border-radius: 4px;
+        content: '';
+        position: absolute;
+        left: 0;
+        background: black;
+    }
+    &::after {
+        width: 8px;
+        height: 8px;
+        border-radius: 4px;
+        content: '';
+        position: absolute;
+        right: 0;
+        background: black;
+    }
+    &.active {
+        opacity: 1;
+        -webkit-animation: connectingRotate 0.65s linear 0.3s infinite;
+           -moz-animation: connectingRotate 0.65s linear 0.3s infinite;
+             -o-animation: connectingRotate 0.65s linear 0.3s infinite;
+                animation: connectingRotate 0.65s linear 0.3s infinite;
+    }
+}
+@-webkit-keyframes connectingRotate {
     0% {
-        left: 100%;
+         transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
     }
     100% {
-        left: -100%;
+        transform: rotate(180deg);
+        -moz-transform: rotate(180deg);
+        -webkit-transform: rotate(180deg);
     }
 }
-@-webkit-keyframes blend-inner {
+@-moz-keyframes connectingRotate {
     0% {
-        left: 100%;
+         transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
     }
     100% {
-        left: -100%;
+        transform: rotate(180deg);
+        -moz-transform: rotate(180deg);
+        -webkit-transform: rotate(180deg);
+    }
+}
+@-o-keyframes connectingRotate {
+    0% {
+         transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(180deg);
+        -moz-transform: rotate(180deg);
+        -webkit-transform: rotate(180deg);
+    }
+}
+@keyframes connectingRotate {
+    0% {
+         transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(180deg);
+        -moz-transform: rotate(180deg);
+        -webkit-transform: rotate(180deg);
     }
 }
 
