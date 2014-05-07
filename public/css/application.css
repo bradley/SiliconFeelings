@@ -76,7 +76,7 @@ h6 {
 }
 h3 {
   font-size: 19px;
-  font-weight: bold;
+  font-weight: normal;
   line-height: 27px;
 }
 a {
@@ -99,6 +99,10 @@ a:hover {
   -o-animation: anchorHover 0.3s linear 0s infinite;
   animation: anchorHover 0.3s linear 0s infinite;
   background-position: 0px 6px;
+}
+a.clean {
+  background: none!important;
+  border-bottom: 0!important;
 }
 @-webkit-keyframes anchorHover {
   0% {
@@ -317,7 +321,24 @@ header#masthead .side-content {
   -moz-box-sizing: border-box;
   wbox-sizing: border-box;
 }
+header#masthead .side-content #home-link {
+  margin-top: 13px;
+}
+header#masthead .side-content #home-link a {
+  font-size: 17px;
+  line-height: 25px;
+  position: relative;
+}
+header#masthead .side-content #home-link a span {
+  position: absolute;
+  left: 28px;
+  width: 150px;
+}
+header#masthead .side-content #home-link a img {
+  height: 23px;
+}
 header#masthead .main-content {
+  position: relative;
   padding-top: 15px;
 }
 header#masthead .main-content .column {
@@ -330,19 +351,37 @@ header#masthead .main-content .column p#connection-status-text {
   position: absolute;
   left: 0;
   top: 0;
-  opacity: 0;
+  opacity: 0.2;
   -webkit-transition: left 0.3s ease-in 0.5s, opacity 1s linear 3s;
   -moz-transition: left 0.3s ease-in 0.5s, opacity 1s linear 3s;
   -o-transition: left 0.3s ease-in 0.5s, opacity 1s linear 3s;
   transition: left 0.3s ease-in 0.5s, opacity 1s linear 3s;
 }
 header#masthead .main-content .column p#connection-status-text.active {
-  left: 62px;
+  left: 54px;
   opacity: 1;
   -webkit-transition: left 0.0s linear, opacity 0.35s linear 0.0s;
   -moz-transition: left 0.0s linear, opacity 0.35s linear 0.0s;
   -o-transition: left 0.0s linear, opacity 0.35s linear 0.0s;
   transition: left 0.0s linear, opacity 0.35s linear 0.0s;
+}
+header#masthead .main-content #more-information-link {
+  position: absolute;
+  right: 16px;
+  top: 13px;
+}
+header#masthead .main-content #more-information-link a {
+  font-size: 17px;
+  line-height: 25px;
+  position: relative;
+}
+header#masthead .main-content #more-information-link a span {
+  position: absolute;
+  right: 14px;
+  width: 150px;
+}
+header#masthead .main-content #more-information-link a img {
+  height: 23px;
 }
 header#masthead canvas {
   max-width: 100%;
@@ -355,6 +394,9 @@ header#masthead canvas img {
 header#masthead img {
   max-width: 100%;
   max-height: 100%;
+}
+header#masthead #connection-status {
+  margin-top: -2px;
 }
 header#masthead #connection-status p {
   margin: 0;
@@ -445,8 +487,6 @@ section#main .grid .side-content .panel .panel-center canvas img {
   overflow: scroll;
   display: block;
   padding: 32px 16px;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
 }
 #main .about-column {
   width: 470px;
@@ -479,7 +519,6 @@ section#main .grid .side-content .panel .panel-center canvas img {
   margin-bottom: 2px;
 }
 #main .about-column .about-group .qa-group p span.qa-tag {
-  font-weight: bold;
   margin-right: 1px;
   color: #0d0f17;
 }
@@ -518,9 +557,7 @@ footer#footer {
 }
 footer#footer #regards p {
   margin: 0;
-  padding: 15px 0px 15px 16px;
-  font-size: 13px;
-  line-height: 19px;
+  padding: 15px 0 15px 16px;
 }
 footer#footer #sharing-space {
   position: relative;
@@ -572,8 +609,7 @@ footer#footer #sharing-space div#share-text-container .facebook {
   color: #362738;
   vertical-align: middle;
   font-family: "Rayon", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 17px;
   text-rendering: optimizeLegibility;
   white-space: nowrap;
   background: #F5F5F3;
@@ -671,42 +707,28 @@ footer#footer #sharing-space div#share-text-container .facebook {
 .connecting-indicator {
   opacity: 0;
   background: transparent;
-  width: 30px;
-  height: 8px;
+  width: 23px;
+  height: 23px;
   position: relative;
   display: inline-block;
   -webkit-transition: opacity ease-in 0.35s;
   -moz-transition: opacity ease-in 0.35s;
   -o-transition: opacity ease-in 0.35s;
   transition: opacity ease-in 0.35s;
-  -webkit-transform: rotate(180deg);
-  -moz-transform: rotate(180deg);
-  transform: rotate(180deg);
+  -webkit-transform: rotate(360deg);
+  -moz-transform: rotate(360deg);
+  transform: rotate(360deg);
 }
-.connecting-indicator::before {
-  width: 8px;
-  height: 8px;
-  border-radius: 4px;
-  content: '';
-  position: absolute;
-  left: 0;
-  background: black;
-}
-.connecting-indicator::after {
-  width: 8px;
-  height: 8px;
-  border-radius: 4px;
-  content: '';
-  position: absolute;
-  right: 0;
-  background: black;
+.connecting-indicator img {
+  width: 100%;
+  height: 100%;
 }
 .connecting-indicator.active {
   opacity: 1;
-  -webkit-animation: connectingRotate 0.65s ease-in-out 0.3s infinite;
-  -moz-animation: connectingRotate 0.65s ease-in-out 0.3s infinite;
-  -o-animation: connectingRotate 0.65s ease-in-out 0.3s infinite;
-  animation: connectingRotate 0.65s ease-in-out 0.3s infinite;
+  -webkit-animation: connectingRotate 0.65s linear 0.3s infinite;
+  -moz-animation: connectingRotate 0.65s linear 0.3s infinite;
+  -o-animation: connectingRotate 0.65s linear 0.3s infinite;
+  animation: connectingRotate 0.65s linear 0.3s infinite;
 }
 @-webkit-keyframes connectingRotate {
   0% {
@@ -715,9 +737,9 @@ footer#footer #sharing-space div#share-text-container .facebook {
     -webkit-transform: rotate(0deg);
   }
   100% {
-    transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
-    -webkit-transform: rotate(180deg);
+    transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
   }
 }
 @-moz-keyframes connectingRotate {
@@ -727,9 +749,9 @@ footer#footer #sharing-space div#share-text-container .facebook {
     -webkit-transform: rotate(0deg);
   }
   100% {
-    transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
-    -webkit-transform: rotate(180deg);
+    transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
   }
 }
 @-o-keyframes connectingRotate {
@@ -739,9 +761,9 @@ footer#footer #sharing-space div#share-text-container .facebook {
     -webkit-transform: rotate(0deg);
   }
   100% {
-    transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
-    -webkit-transform: rotate(180deg);
+    transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
   }
 }
 @keyframes connectingRotate {
@@ -751,8 +773,8 @@ footer#footer #sharing-space div#share-text-container .facebook {
     -webkit-transform: rotate(0deg);
   }
   100% {
-    transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
-    -webkit-transform: rotate(180deg);
+    transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
   }
 }
