@@ -63,7 +63,7 @@ define(['angular', 'services'], function(angular) {
 			}
 
 	    $scope.sceneReady = function() {
-	    	$scope.connection_status = 'connecting...';
+	    	$scope.connection_status = 'connecting';
 	    	$scope.connecting_visible = true;
 	    	$scope.$apply();
 
@@ -108,7 +108,7 @@ define(['angular', 'services'], function(angular) {
 
 				},
 				connecting: function() {
-					$scope.connection_status = 'connecting...';
+					$scope.connection_status = 'connecting';
 					$scope.connecting_visible = true;
 				},
 				connect: function() {
@@ -128,7 +128,7 @@ define(['angular', 'services'], function(angular) {
 					$scope.connecting_visible = false;
 				},
 				reconnecting: function() {
-					$scope.connection_status = 'reconnecting...';
+					$scope.connection_status = 'reconnecting';
 					$scope.connecting_visible = true;
 				},
 				tweets: function(tweets) {

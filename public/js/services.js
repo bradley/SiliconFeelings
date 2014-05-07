@@ -357,9 +357,9 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 					this.composer.addPass(this.rgbEffect);
 
 					this.tvEffect = new THREE.ShaderPass(THREE.BadTVShader);
-					this.tvEffect.uniforms['distortion'].value = 1.5;
+					this.tvEffect.uniforms['distortion'].value = 2.0;
 					this.tvEffect.uniforms['distortion2'].value = 2.1;
-					this.tvEffect.uniforms['speed'].value = 0.07;
+					this.tvEffect.uniforms['speed'].value = 0.09;
 					this.tvEffect.uniforms['rollSpeed'].value = 0.0;
 					this.composer.addPass(this.tvEffect);
 
