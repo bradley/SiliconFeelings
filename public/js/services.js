@@ -305,9 +305,9 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 		    },
 		    addLights: function() {
 		    	var main_light = this.light = new THREE.DirectionalLight(0xffffff, 0.4),
-        			spot_light = new THREE.SpotLight(0xffffff, 1.25),
-        			ambient_light = new THREE.AmbientLight(0x282F3E),
-        			backlight = new THREE.DirectionalLight(0x282343, 0.8);
+        			spot_light = new THREE.SpotLight(0xD4E1C0, 1.25),
+        			ambient_light = new THREE.AmbientLight(0x29305E),
+        			backlight = new THREE.DirectionalLight(0x29195C, 0.8);
 
         	this.scene.add(ambient_light);
 
@@ -357,9 +357,9 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 					this.composer.addPass(this.rgbEffect);
 
 					this.tvEffect = new THREE.ShaderPass(THREE.BadTVShader);
-					this.tvEffect.uniforms['distortion'].value = 1.5;
+					this.tvEffect.uniforms['distortion'].value = 2.0;
 					this.tvEffect.uniforms['distortion2'].value = 2.1;
-					this.tvEffect.uniforms['speed'].value = 0.07;
+					this.tvEffect.uniforms['speed'].value = 0.09;
 					this.tvEffect.uniforms['rollSpeed'].value = 0.0;
 					this.composer.addPass(this.tvEffect);
 
