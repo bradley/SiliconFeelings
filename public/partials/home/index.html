@@ -7,13 +7,13 @@
       <div class='column'>
         <div id='connection-status' class='left ng-cloak'>
           <div class='left'>
-            <div class='connecting-indicator' ng-class="(connecting_visible) ? 'active' : ''"></div>
+            <div class='connecting-indicator' ng-class="(connecting_visible) ? 'active' : ''"><img src='vendor/images/spinner.svg'/></div>
             <p id='connection-status-text' ng-class="(connecting_visible) ? 'active' : ''">{{connection_status}}</p>
           </div>
         </div>
-        <div id='rotation-toggler' class='right ng-cloak'>
-
-        </div>
+      </div>
+      <div id='more-information-link'>
+        <a href='#/about' class='clean'><span>More Information</span><img src='vendor/images/right_arrow.svg'/></a>
       </div>
     </div>
   </div>
@@ -23,8 +23,6 @@
     <div class='side-content'>
       <div class='panel'>
         <div class='panel-center'>
-          <p>This is a real time display of Emoji being tweeted by people across Earth.</p>
-          <a href='#/about'>more information</a>
         </div>
       </div>
     </div>
