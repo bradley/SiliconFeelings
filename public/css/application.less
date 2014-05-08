@@ -67,21 +67,31 @@ body {
     -webkit-text-size-adjust: 100%;
     margin: 0;
     position: relative;
-    background: @white_gold;
+    /* background: #f5f5f5; */ /* Uncomment if we need more contrast on background. */
     background-image:
-      -webkit-linear-gradient(top, rgba(254, 254, 252, 0.05) 0%, rgba(246, 242, 239, 0.8) 100%),
-      -webkit-linear-gradient(145deg, rgba(154, 143, 147, 0.2), rgba(255, 255, 255, 1.0));
+      -webkit-linear-gradient(top, rgba(255, 246, 235, 0.5) 0%, rgba(231, 246, 242, 0.5) 100%),
+      -webkit-linear-gradient(145deg, rgba(255, 246, 235, 1), rgba(247, 247, 247, 0.2));
     background-image:
-      -moz-linear-gradient(top, rgba(254, 254, 252, 0.05) 0%, rgba(246, 242, 239, 0.8) 100%),
-      -moz-linear-gradient(145deg, rgba(154, 143, 147, 0.2), rgba(255, 255, 255, 1.0));
+      -moz-linear-gradient(top, rgba(255, 246, 235, 0.5) 0%, rgba(231, 246, 242, 0.5) 100%),
+      -moz-linear-gradient(145deg, rgba(255, 246, 235, 1), rgba(247, 247, 247, 0.2));
     background-image:
-      -o-linear-gradient(top, rgba(254, 254, 252, 0.05) 0%, rgba(246, 242, 239, 0.8) 100%),
-      -o-linear-gradient(145deg, rgba(154, 143, 147, 0.2), rgba(255, 255, 255, 1.0));
+      -o-linear-gradient(top, rgba(255, 246, 235, 0.5) 0%, rgba(231, 246, 242, 0.5) 100%),
+      -o-linear-gradient(145deg, rgba(255, 246, 235, 1), rgba(247, 247, 247, 0.2));
     background-image:
-      linear-gradient(to top, rgba(254, 254, 252, 0.5) 0%, rgba(251, 255, 255, 0.8) 100%),
-      linear-gradient(315deg, rgba(154, 143, 147, 0.2), rgba(255, 255, 255, 1.0));
+      linear-gradient(to top, rgba(255, 246, 235, 0.5) 0%, rgba(231, 246, 242, 0.5) 100%),
+      linear-gradient(315deg, rgba(255, 246, 235, 1), rgba(247, 247, 247, 0.2));
     background-repeat: no-repeat;
     background-attachment: fixed;
+    position: relative;
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: @header_footer_height;
+        width: 100%;
+        background: white;
+    }
 }
 h1, h2, h3, h4, h5, h6 {
     color: @darker-text-color;
@@ -169,8 +179,8 @@ p {
     > #animation-wrap {
         width: 100%;
         height: 100%;
-        margin-top: -80px;
-        padding-top: 80px;
+        margin-top: -@header_footer_height;
+        padding-top: @header_footer_height;
         box-sizing: border-box;
         position: absolute;
         -webkit-backface-visibility: hidden;
