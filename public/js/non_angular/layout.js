@@ -23,7 +23,7 @@ Application.layout = {
 	setGridMainMinHeight: function() {
 		var calculated_height;
 
-		this.$grid_main = this.$angular_view_wrap.find('.grid .main-content');
+		this.$grid_main = this.$angular_view_wrap.find('.grid'); //.find('.grid .main-content');
 
 		calculated_height = Math.floor(this.$grid_main.width() * 0.40);
 		calculated_height = (calculated_height < 470 ? 470 : calculated_height);

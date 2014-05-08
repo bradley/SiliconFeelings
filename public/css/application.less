@@ -525,7 +525,10 @@ section#main {
 
 #about-container {
     height: 100%;
-    min-height: 544px;
+    /* Note: I hate this but this has to be adjusted for padding.
+         This seems to be the right height to match the main
+         container at min height. Adjust and check resize accordingly. */
+    min-height: 406px;
     overflow: scroll;
     display: block;
     padding: 32px 16px;
@@ -713,7 +716,7 @@ footer#footer {
     }
     &.active {
         .pseudo::before {
-            left: -4px;
+            left: -2px;
             -webkit-transform: perspective(270px) rotateY(-55deg);
                -moz-transform: perspective(270px) rotateY(-55deg);
                 -ms-transform: perspective(270px) rotateY(-55deg);
