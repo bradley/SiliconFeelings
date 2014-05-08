@@ -1,9 +1,9 @@
-@storm: #121924;
-@mist: #EFEFEF;
-@white_gold: #F5F5F3;
-
-@text-color: #362738;
-@darker-text-color: #0D0F17;
+@storm: #0D0F17;
+@mist: #ABA9B1;
+@text-color: #343748;
+@link-color: #5C32F4;
+@link-underline: #814FFF;
+@highlight: #FFD5D0;
 
 @header_footer_height: 80px;
 @main_offset: @header_footer_height * 2;
@@ -94,7 +94,7 @@ body {
     }
 }
 h1, h2, h3, h4, h5, h6 {
-    color: @darker-text-color;
+    color: @storm;
     margin: 0;
     padding: 0;
     text-rendering: optimizeLegibility;
@@ -105,15 +105,15 @@ h3 {
     line-height: 27px;
 }
 a {
-    color: @darker-text-color;
+    color: @link-color;
     text-decoration: none;
     padding-bottom: 2px;
-    border-bottom: 1px solid @darker-text-color;
+    border-bottom: 1px solid @link-underline;
     &:visited {
-      /* color: @darker-text-color!important; */
+      color: @link-color!important;
     }
     &:hover {
-        color: @darker-text-color;
+        color: @link-color;
         padding-bottom: 6px;
         border-bottom: 0;
         background: url(../images/squiggle.gif) bottom repeat-x;
@@ -124,6 +124,7 @@ a {
         background-position:0px 6px;
     }
     &.clean {
+        color: @storm!important;
         background: none!important;
         border-bottom: 0!important;
     }
@@ -153,10 +154,10 @@ p {
     }
 }
 ::selection {
-    background: #FFD5D0; /* Consider this color: #94F9D3; */
+    background: @highlight;
 }
 ::-moz-selection {
-    background: #FFD5D0; /* Consider this color: #94F9D3; */
+    background: @highlight;
 }
 #root-container-wrap {
     height: 100vh;
@@ -341,7 +342,13 @@ header#masthead {
                 font-size: 17px;
                 line-height: 25px;
                 position: relative;
-                span {
+                &:hover {
+                    > span span {
+                        border-bottom: 1px solid;
+                        padding-bottom: 2px;
+                    }
+                }
+                > span {
                     position: absolute;
                     left: 28px;
                     width: 150px;
@@ -364,18 +371,18 @@ header#masthead {
                 position: absolute;
                 left: 0;
                 top: 0;
-                opacity: 0.2;
-                -webkit-transition: left 0.3s ease-in 0.5s, opacity 1s linear 3s;
-                   -moz-transition: left 0.3s ease-in 0.5s, opacity 1s linear 3s;
-                     -o-transition: left 0.3s ease-in 0.5s, opacity 1s linear 3s;
-                        transition: left 0.3s ease-in 0.5s, opacity 1s linear 3s;
+                color: @mist;
+                -webkit-transition: left 0.3s ease-in 0.5s, color 1s linear 3s;
+                   -moz-transition: left 0.3s ease-in 0.5s, color 1s linear 3s;
+                     -o-transition: left 0.3s ease-in 0.5s, color 1s linear 3s;
+                        transition: left 0.3s ease-in 0.5s, color 1s linear 3s;
                 &.active {
                     left: 54px;
-                    opacity: 1;
-                    -webkit-transition: left 0.0s linear, opacity 0.35s linear 0.0s;
-                       -moz-transition: left 0.0s linear, opacity 0.35s linear 0.0s;
-                         -o-transition: left 0.0s linear, opacity 0.35s linear 0.0s;
-                            transition: left 0.0s linear, opacity 0.35s linear 0.0s;
+                    color: @storm;
+                    -webkit-transition: left 0.0s linear, color 0.35s linear 0.0s;
+                       -moz-transition: left 0.0s linear, color 0.35s linear 0.0s;
+                         -o-transition: left 0.0s linear, color 0.35s linear 0.0s;
+                            transition: left 0.0s linear, color 0.35s linear 0.0s;
                 }
             }
         }
@@ -387,7 +394,13 @@ header#masthead {
                 font-size: 17px;
                 line-height: 25px;
                 position: relative;
-                span {
+                &:hover {
+                    > span span {
+                        border-bottom: 1px solid;
+                        padding-bottom: 2px;
+                    }
+                }
+                > span {
                     position: absolute;
                     right: 14px;
                     width: 150px;
@@ -545,7 +558,7 @@ section#main {
                 }
                 span.qa-tag {
                     margin-right: 1px;
-                    color: @darker-text-color;
+                    color: @storm;
                 }
             }
         }
@@ -602,12 +615,14 @@ footer#footer {
             right: 35px;
             width: 1px;
             overflow: hidden;
+            opacity: 0;
             -webkit-transition: all 0.1s ease-in;
                -moz-transition: all 0.1s ease-in;
                  -o-transition: all 0.1s ease-in;
                     transition: all 0.1s ease-in;
             &.active {
                 width: 295px;
+                opacity: 1;
             }
             .twitter {
                 position: absolute;
@@ -636,8 +651,8 @@ footer#footer {
     &:hover {
         cursor: pointer;
         button {
-            background: white;
-            box-shadow: 0px 4px 10px 0 rgba(0,0,0,0.1),0px 2px 10px 0px rgba(0,0,0,0.1);
+            background: #F8F8F8;
+            box-shadow: 0px 4px 10px 0 rgba(19, 19, 29, 0.1),0px 2px 10px 0px rgba(19, 19, 29, 0.1);
         }
         .pseudo {
             &::before {
@@ -655,13 +670,13 @@ footer#footer {
         font-size: 17px;
         text-rendering: optimizeLegibility;
         white-space: nowrap;
-        background: #F5F5F3;
-        box-shadow: rgba(0,0,0,0.2) 0px 1px 1px 0px,rgba(0,0,0,0.1) 0px 1px 2px 0px;
+        background: #EDEDED;
+        border: none;
+        outline: none;
+        box-shadow: rgba(19, 19, 29, 0.2) 0px 1px 1px 0px,rgba(19, 19, 29, 0.1) 0px 1px 2px 0px;
         -webkit-border-radius: 2px;
            -moz-border-radius: 2px;
                 border-radius: 2px;
-        border: none;
-        outline: none;
         transition:all 0.1s ease-in;
         z-index: 1;
         &:hover {
@@ -677,16 +692,16 @@ footer#footer {
         transition:all 0.1s ease-in;
         &::before {
             width: 10px;
-            height: 38px;
+            height: 39px;
             content: '';
             position: absolute;
             top: 1px;
             left: -8px;
-            background: #33427C;
+            background: @storm;
             -webkit-border-radius: 2px;
                -moz-border-radius: 2px;
                     border-radius: 2px;
-            box-shadow: rgba(0,0,0,0.2) 0px 1px 1px 0px,rgba(0,0,0,0.1) 0px 1px 2px 0px;
+            box-shadow: rgba(19, 19, 29, 0.2) 0px 1px 1px 0px,rgba(19, 19, 29, 0.1) 0px 1px 2px 0px;
             -webkit-transform: perspective(350px) rotateY(-90deg);
                -moz-transform: perspective(350px) rotateY(-90deg);
                 -ms-transform: perspective(350px) rotateY(-90deg);
@@ -699,11 +714,11 @@ footer#footer {
     &.active {
         .pseudo::before {
             left: -4px;
-            -webkit-transform: perspective(210px) rotateY(-70deg);
-               -moz-transform: perspective(210px) rotateY(-70deg);
-                -ms-transform: perspective(210px) rotateY(-70deg);
-                 -o-transform: perspective(210px) rotateY(-70deg);
-                    transform: perspective(210px) rotateY(-70deg);
+            -webkit-transform: perspective(270px) rotateY(-55deg);
+               -moz-transform: perspective(270px) rotateY(-55deg);
+                -ms-transform: perspective(270px) rotateY(-55deg);
+                 -o-transform: perspective(270px) rotateY(-55deg);
+                    transform: perspective(270px) rotateY(-55deg);
             -webkit-border-top-left-radius: 3px;
                -moz-border-top-left-radius: 3px;
                     border-top-left-radius: 3px;
@@ -731,9 +746,9 @@ footer#footer {
     top: 50%;
     left: 0;
     overflow: hidden;
-    border: 1px solid #cecece;
+    border: 1px solid @mist;
     opacity: 0;
-    background: black;
+    background: @storm;
     border-radius: 7px;
     padding: 0 16px;
     -moz-box-sizing: border-box;
