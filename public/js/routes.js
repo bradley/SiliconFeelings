@@ -16,7 +16,9 @@ define(['angular', 'app'], function(angular, app) {
       animate: 'about-view'
     });
     $routeProvider.otherwise({
-      templateUrl: '/404.html'
+      templateUrl: '/partials/unfound.html',
+      controller: 'unfoundController',
+      animate: 'about-view'
     });
 	}]);
 });

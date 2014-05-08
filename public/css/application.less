@@ -520,6 +520,29 @@ section#main {
 }
 
 
+
+/*  Unfound Page
+    ------------------------------------- */
+#unfound-page-container {
+    height: 100%;
+    /* Note: I hate this but this has to be adjusted for padding.
+         This seems to be the right height to match the main
+         container at min height. Adjust and check resize accordingly. */
+    min-height: 406px;
+    overflow: scroll;
+    display: block;
+    padding: 32px 16px;
+    #unfound-page-message {
+        width: 600px;
+        text-align: center;
+        margin: 160px auto;
+        p {
+            font-size: 24px;
+        }
+    }
+}
+
+
 /*  About Page
     ------------------------------------- */
 

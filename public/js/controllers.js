@@ -137,5 +137,8 @@ define(['angular', 'services'], function(angular) {
 			};
 
 			//SocketFunctions.connecting();
+		}])
+		.controller('unfoundController', ['$scope', function($scope) {
+			//
 		}]);
 });
