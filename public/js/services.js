@@ -50,6 +50,157 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 		  }
 
 		}])
+		.factory('Logo', ['$rootScope', '$http', '$window', 'Socket', function($rootScope, $http, $window, Socket) {
+			var Logo = Logo || {};
+
+			Logo.LogoCanvas = function() {
+				var self = this;
+
+				this.element = null;
+	    	this.requestId = null;
+
+				this.c = null;
+				this.ctx = null;
+
+	    	this.colors = null;
+
+				this.font_size = null;
+				this.logo_text = null;
+				this.font = null,
+
+	    	this.step = null;
+				this.colorIndices = null;
+				this.gradientSpeed = null;
+
+				this.init();
+			}
+			Logo.LogoCanvas.prototype = {
+		    init: function() {
+
+		    	this.element = null;
+		    	this.requestId = null;
+
+					this.c = document.createElement('canvas');
+					this.c.width = 500;
+					this.c.height = 60;
+					this.ctx = this.c.getContext('2d');
+
+		    	this.colors = new Array(
+					  [112, 228, 102],
+					  [77, 0, 228],
+					  [245, 163, 54],
+					  [160, 231, 251],
+					  [233, 115, 245],
+					  [150, 107, 249],
+					  [242, 209, 126]
+					);
+
+					this.font_size = 48;//54;
+					this.logo_text = 'Silicon Feelings';
+					this.font = "bold " + this.font_size + "px 'Rayon-Bold', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, 'Liberation Sans', 'Arimo', Arial, sans-serif",
+
+		    	this.step = 0;
+					this.colorIndices = [0,1,2,3];
+					this.gradientSpeed = 0.009;
+
+					this.timeout;
+		    },
+		    updateGradient: function() {
+
+					var c0_0 = this.colors[this.colorIndices[0]],
+							c0_1 = this.colors[this.colorIndices[1]],
+							c1_0 = this.colors[this.colorIndices[2]],
+							c1_1 = this.colors[this.colorIndices[3]];
+
+					var istep = 1 - this.step,
+							r1 = Math.round(istep * c0_0[0] + this.step * c0_1[0]),
+							g1 = Math.round(istep * c0_0[1] + this.step * c0_1[1]),
+							b1 = Math.round(istep * c0_0[2] + this.step * c0_1[2]),
+							color1 = "#"+((r1 << 16) | (g1 << 8) | b1).toString(16);
+
+					var r2 = Math.round(istep * c1_0[0] + this.step * c1_1[0]),
+							g2 = Math.round(istep * c1_0[1] + this.step * c1_1[1]),
+							b2 = Math.round(istep * c1_0[2] + this.step * c1_1[2]),
+							color2 = "#"+((r2 << 16) | (g2 << 8) | b2).toString(16);
+
+					this.updateLogoText(color1, color2);
+
+				  this.step += this.gradientSpeed;
+				  if ( this.step >= 1 )
+				  {
+				    this.step %= 1;
+				    this.colorIndices[0] = this.colorIndices[1];
+				    this.colorIndices[2] = this.colorIndices[3];
+
+				    //pick two new target color indices
+				    //do not pick the same as the current one
+				    this.colorIndices[1] = (this.colorIndices[1] + Math.floor(1 + Math.random() * (this.colors.length - 1))) % this.colors.length;
+				    this.colorIndices[3] = (this.colorIndices[3] + Math.floor(1 + Math.random() * (this.colors.length - 1))) % this.colors.length;
+
+				  }
+				},
+				updateLogoText: function(color1, color2) {
+					var gradient;
+
+				  // Reset
+				  this.ctx.clearRect(0, 0, this.c.width, this.c.height);
+
+				  // Draw Logo Text
+				  this.ctx.font = this.font;
+				  gradient = this.ctx.createLinearGradient(0,0,this.c.width,0);
+				  gradient.addColorStop("0",color1);
+				  gradient.addColorStop("1.0",color2);
+				  this.ctx.fillStyle = gradient;
+				  this.ctx.fillText(this.logo_text, 0, 47);
+
+				  this.render();
+				},
+		  	play: function() {
+   				this.element = $('#logo-container');
+          this.element.append(this.c);
+          this.render();
+   			},
+   			stop: function() {
+   				if (this.timeout) {
+						clearTimeout(this.timeout);
+					}
+   			},
+   			render: function() {
+   				var self = this;
+					if (this.timeout) {
+						clearTimeout(this.timeout);
+					}
+					this.timeout = setTimeout(function() {
+						self.updateGradient();
+					}, 100);
+   			}
+		  }
+
+		  var logoCanvas;
+
+		  var sharedCanvas = {
+		  	init: function() {
+		  		if (logoCanvas) {
+		  			logoCanvas.play();
+		  		}
+		  		else {
+						logoCanvas = new Logo.LogoCanvas();
+						logoCanvas.play();
+		  		}
+		  	},
+		  	stop: function() {
+		  		logoCanvas.stop();
+		  	}
+		  }
+
+		  var canvas = {
+		  	init: sharedCanvas.init,
+		  	stop: sharedCanvas.stop
+		  }
+
+		  return canvas;
+
+		}])
 		.factory('EarthScene', ['$rootScope', '$http', '$window', 'Socket', function($rootScope, $http, $window, Socket) {
 			var EarthScene = EarthScene || {};
 

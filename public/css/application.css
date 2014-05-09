@@ -398,13 +398,16 @@ header#masthead .main-content #more-information-link a > span {
 header#masthead .main-content #more-information-link a img {
   height: 23px;
 }
-header#masthead canvas {
-  max-width: 100%;
-  max-height: 100%;
+header#masthead h1 {
+  margin-top: 15px;
+  /* font-family: 'Rayon-Bold'; */
+
+  font-size: 24px;
+  font-weight: normal;
 }
-header#masthead canvas img {
-  max-width: 100%;
-  max-height: 100%;
+header#masthead canvas {
+  height: 30px;
+  margin-top: 10px;
 }
 header#masthead img {
   max-width: 100%;
