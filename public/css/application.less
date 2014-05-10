@@ -1,5 +1,5 @@
 @storm: #0D0F17;
-@mist: #ABA9B1;
+@mist: #BAB5CA;
 @text-color: #343748;
 @link-color: #5C32F4;
 @link-underline: #814FFF;
@@ -24,34 +24,15 @@
 
 /*  Typography
     ------------------------------------- */
-/*
-@import url(http://fonts.googleapis.com/css?family=Arimo:400,400italic,700,700italic);
-@import url(http://fonts.googleapis.com/css?family=Varela+Round);*/
-@font-face {
-    font-family: DejaVuSans;
-    src: url(../vendor/fonts/DejaVuSans.ttf);
-}
-@font-face {
-    font-family: DejaVuSans-ExtraLight;
-    src: url(../vendor/fonts/DejaVuSans-ExtraLight.ttf);
-}
-@font-face {
-    font-family: DejaVuMono;
-    src: url(../vendor/fonts/DejaVuSansMono.ttf);
-}
+
 @font-face {
     font-family: Rayon;
     src: url(../vendor/fonts/GrayonText-hinted.ttf);
 }
 @font-face {
-    font-family: Rayon-Bold;
-    src: url(../vendor/fonts/GrayonText-bold-hinted.ttf);
+    font-family: Grotesque-Med;
+    src: url(../vendor/fonts/Brandon_med.otf);
 }
-@font-face {
-    font-family: Rayon-Italic;
-    src: url(../vendor/fonts/GrayonText-italic-hinted.ttf);
-}
-
 
 /*  3. Base
     ------------------------------------- */
@@ -255,13 +236,6 @@ p {
         }
     }
 }
-.grid {
-
-}
-.grid > * {
-    margin: 0 0;
-    height: 100%;
-}
 @media all and (min-width:630px) {
     .grid {
         height: 100%;
@@ -412,10 +386,19 @@ header#masthead {
         }
     }
     h1 {
-        margin-top: 15px;
-        /* font-family: 'Rayon-Bold'; */
+        margin-top: 14px;
+        font-family: 'Grotesque-Med';
         font-size: 24px;
         font-weight: normal;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        color: @mist;
+        &::selection {
+            background: transparent;
+        }
+        &::-moz-selection {
+            background: transparent;
+        }
     }
     canvas {
         height: 30px;
@@ -436,6 +419,26 @@ header#masthead {
         }
     }
 }
+@media all and (max-width:630px) {
+    header#masthead {
+        .side-content {
+            width: 230px;
+            float: left;
+        }
+        .main-content {
+            width: 60px;
+            float: right;
+            #more-information-link {
+                a {
+                    > span {
+                        width: 23px!important;
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 
 /*  Main
@@ -474,6 +477,12 @@ section#main {
         }
     }
 }
+@media all and (max-width:630px) {
+    section#main {
+        float: left;
+    }
+}
+
 
 
 /*  Earth
@@ -482,6 +491,12 @@ section#main {
 #main-panel {
     width: 100%;
     position: relative;
+    &::selection {
+        background: transparent;
+    }
+    &::-moz-selection {
+        background: transparent;
+    }
 }
 #emoji-planet-container {
     -webkit-border-radius: 50%;
@@ -494,6 +509,12 @@ section#main {
             cursor: -webkit-grabbing!important;
             cursor: -moz-grabbing!important;
         }
+    }
+    &::selection {
+        background: transparent;
+    }
+    &::-moz-selection {
+        background: transparent;
     }
     > canvas {
         backface-visibility: hidden;
@@ -522,29 +543,6 @@ section#main {
 }
 
 
-
-/*  Unfound Page
-    ------------------------------------- */
-#unfound-page-container {
-    height: 100%;
-    /* Note: I hate this but this has to be adjusted for padding.
-         This seems to be the right height to match the main
-         container at min height. Adjust and check resize accordingly. */
-    min-height: 406px;
-    overflow: scroll;
-    display: block;
-    padding: 32px 16px;
-    #unfound-page-message {
-        width: 600px;
-        text-align: center;
-        margin: 160px auto;
-        p {
-            font-size: 24px;
-        }
-    }
-}
-
-
 /*  About Page
     ------------------------------------- */
 
@@ -560,14 +558,14 @@ section#main {
 }
 #main .about-column {
     width: 470px;
+    max-width: 100%;
     padding: 0 16px;
     -moz-box-sizing: border-box;
          box-sizing: border-box;
     float: left;
-    margin-left: 32px;
     &:first-child {
-        margin-left: 0px;
-        margin-right: 32px;
+        margin-bottom: 32px;
+        margin-right: 64px;
     }
     .about-group {
         margin-bottom: 64px;
@@ -599,18 +597,54 @@ section#main {
             }
         }
         #source-code {
-            float: right;
-            a, img {
-                float: right;
-            }
+            margin-top: 32px;
             a {
-                margin-top: 17px;
-                margin-right: 8px;
+                border: 0;
+                color: @storm!important;
+                &:hover {
+                    color: inherit;
+                    padding: 16px 16px 12px;
+                    border-bottom: inherit;
+                    background-position: inherit;
+                }
             }
-            img {
-                height: 46px;
-                margin-top: 4px;
-            }
+        }
+    }
+}
+@media all and (max-width:630px) {
+    #about-container {
+
+    }
+    #main .about-column {
+        &:first-child {
+            margin-right: 0px;
+        }
+    }
+}
+
+
+
+/*  Unfound Page
+    ------------------------------------- */
+
+#unfound-page-container {
+    height: 100%;
+    /* Note: I hate this but this has to be adjusted for padding.
+         This seems to be the right height to match the main
+         container at min height. Adjust and check resize accordingly. */
+    min-height: 406px;
+    overflow: scroll;
+    display: block;
+    padding: 32px 16px;
+    #unfound-page-message {
+        width: 600px;
+        text-align: center;
+        margin: 160px auto;
+        p {
+            font-size: 24px;
+        }
+        img {
+            height: 54px;
         }
     }
 }
@@ -640,6 +674,32 @@ footer#footer {
 
 /*  Et Cetera
     ------------------------------------- */
+
+/* Buttons */
+.button {
+    display: inline-block;
+    padding: 16px 16px 12px;
+    position: relative;
+    color: @text-color;
+    vertical-align: middle;
+    font-size: 14px;
+    text-rendering: optimizeLegibility;
+    white-space: nowrap;
+    background: #E7F6F2; /* This is the same color as our top left corner of the background gradient. */
+    box-shadow: rgba(0,0,0,0.2) 0px 1px 1px 0px, rgba(0,0,0,0.1) 0px 1px 2px 0px;
+    -webkit-border-radius: 2px;
+       -moz-border-radius: 2px;
+            border-radius: 2px;
+    border: none;
+    outline: none;
+    transition:all 0.1s ease-in;
+    z-index: 1;
+    &:hover {
+        cursor: pointer;
+        background: white;
+        box-shadow: 0px 4px 10px 0 rgba(0,0,0,0.1),0px 2px 10px 0px rgba(0,0,0,0.1);
+    }
+}
 
 /* Loading indicator */
 .loading-indicator {
@@ -743,5 +803,17 @@ footer#footer {
         transform: rotate(360deg);
         -moz-transform: rotate(360deg);
         -webkit-transform: rotate(360deg);
+    }
+}
+
+
+@media all and (min-width:630px) {
+    .small-screen {
+        display: none;
+    }
+}
+@media all and (max-width:630px) {
+    .large-screen {
+        display: none;
     }
 }

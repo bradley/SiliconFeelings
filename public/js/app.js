@@ -27,7 +27,7 @@ define([
       $rootScope.earthResourcesLoaded = false;
 
       // Log a love note to our users.
-      console.log('%c Hey there, lovely.', 'font-size: 14px; color: #264CCA');
+      console.log("%c Hey there, lovely. If you'd like to view the full source code, you can do so here: https://github.com/bradley/SiliconFeelings", 'font-size: 14px; color: #264CCA');
     });
     return myApp;
   }

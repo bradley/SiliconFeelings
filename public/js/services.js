@@ -86,22 +86,27 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 					this.ctx = this.c.getContext('2d');
 
 		    	this.colors = new Array(
-					  [112, 228, 102],
-					  [77, 0, 228],
-					  [245, 163, 54],
-					  [160, 231, 251],
-					  [233, 115, 245],
-					  [150, 107, 249],
-					  [242, 209, 126]
+					  [92, 50, 244],
+					  [92, 50, 244],
+					  [92, 50, 244],
+					  [92, 50, 244],
+					  [92, 50, 244],
+					  [84, 138, 224],
+					  [92, 50, 244],
+					  [91, 157, 209],
+					  [92, 50, 244],
+					  [109, 200, 184],
+					  [92, 50, 244],
+					  [128, 235, 206]
 					);
 
 					this.font_size = 48;//54;
-					this.logo_text = 'Silicon Feelings';
-					this.font = "bold " + this.font_size + "px 'Rayon-Bold', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, 'Liberation Sans', 'Arimo', Arial, sans-serif",
+					this.logo_text = 'SILICON FEELINGS';
+					this.font = "bold " + this.font_size + "px 'Grotesque-Med', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, sans-serif",
 
 		    	this.step = 0;
 					this.colorIndices = [0,1,2,3];
-					this.gradientSpeed = 0.009;
+					this.gradientSpeed = 0.09;
 
 					this.timeout;
 		    },

@@ -12,32 +12,13 @@
 }
 /*  Typography
     ------------------------------------- */
-/*
-@import url(http://fonts.googleapis.com/css?family=Arimo:400,400italic,700,700italic);
-@import url(http://fonts.googleapis.com/css?family=Varela+Round);*/
-@font-face {
-  font-family: DejaVuSans;
-  src: url(../vendor/fonts/DejaVuSans.ttf);
-}
-@font-face {
-  font-family: DejaVuSans-ExtraLight;
-  src: url(../vendor/fonts/DejaVuSans-ExtraLight.ttf);
-}
-@font-face {
-  font-family: DejaVuMono;
-  src: url(../vendor/fonts/DejaVuSansMono.ttf);
-}
 @font-face {
   font-family: Rayon;
   src: url(../vendor/fonts/GrayonText-hinted.ttf);
 }
 @font-face {
-  font-family: Rayon-Bold;
-  src: url(../vendor/fonts/GrayonText-bold-hinted.ttf);
-}
-@font-face {
-  font-family: Rayon-Italic;
-  src: url(../vendor/fonts/GrayonText-italic-hinted.ttf);
+  font-family: Grotesque-Med;
+  src: url(../vendor/fonts/Brandon_med.otf);
 }
 /*  3. Base
     ------------------------------------- */
@@ -254,10 +235,6 @@ p.small {
 #view-frame > #animation-wrap.about-view.ng-leave.ng-leave-active::first-child {
   left: 100%;
 }
-.grid > * {
-  margin: 0 0;
-  height: 100%;
-}
 @media all and (min-width: 630px) {
   .grid {
     height: 100%;
@@ -362,7 +339,7 @@ header#masthead .main-content .column p#connection-status-text {
   position: absolute;
   left: 0;
   top: 0;
-  color: #aba9b1;
+  color: #bab5ca;
   -webkit-transition: left 0.3s ease-in 0.5s, color 1s linear 3s;
   -moz-transition: left 0.3s ease-in 0.5s, color 1s linear 3s;
   -o-transition: left 0.3s ease-in 0.5s, color 1s linear 3s;
@@ -399,11 +376,19 @@ header#masthead .main-content #more-information-link a img {
   height: 23px;
 }
 header#masthead h1 {
-  margin-top: 15px;
-  /* font-family: 'Rayon-Bold'; */
-
+  margin-top: 14px;
+  font-family: 'Grotesque-Med';
   font-size: 24px;
   font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: #bab5ca;
+}
+header#masthead h1::selection {
+  background: transparent;
+}
+header#masthead h1::-moz-selection {
+  background: transparent;
 }
 header#masthead canvas {
   height: 30px;
@@ -422,6 +407,19 @@ header#masthead #connection-status p {
   line-height: inherit;
   font-size: inherit;
   display: inline-block;
+}
+@media all and (max-width: 630px) {
+  header#masthead .side-content {
+    width: 230px;
+    float: left;
+  }
+  header#masthead .main-content {
+    width: 60px;
+    float: right;
+  }
+  header#masthead .main-content #more-information-link a > span {
+    width: 23px!important;
+  }
 }
 /*  Main
     ------------------------------------- */
@@ -454,11 +452,22 @@ section#main .grid .side-content .panel .panel-center canvas img {
   max-width: 100%;
   max-height: 100%;
 }
+@media all and (max-width: 630px) {
+  section#main {
+    float: left;
+  }
+}
 /*  Earth
     ------------------------------------- */
 #main-panel {
   width: 100%;
   position: relative;
+}
+#main-panel::selection {
+  background: transparent;
+}
+#main-panel::-moz-selection {
+  background: transparent;
 }
 #emoji-planet-container {
   -webkit-border-radius: 50%;
@@ -472,6 +481,12 @@ section#main .grid .side-content .panel .panel-center canvas img {
 #emoji-planet-container.ec-circle-hover:active {
   cursor: -webkit-grabbing !important;
   cursor: -moz-grabbing !important;
+}
+#emoji-planet-container::selection {
+  background: transparent;
+}
+#emoji-planet-container::-moz-selection {
+  background: transparent;
 }
 #emoji-planet-container > canvas {
   backface-visibility: hidden;
@@ -497,27 +512,6 @@ section#main .grid .side-content .panel .panel-center canvas img {
   max-height: 100%;
   position: static;
 }
-/*  Unfound Page
-    ------------------------------------- */
-#unfound-page-container {
-  height: 100%;
-  /* Note: I hate this but this has to be adjusted for padding.
-         This seems to be the right height to match the main
-         container at min height. Adjust and check resize accordingly. */
-
-  min-height: 406px;
-  overflow: scroll;
-  display: block;
-  padding: 32px 16px;
-}
-#unfound-page-container #unfound-page-message {
-  width: 600px;
-  text-align: center;
-  margin: 160px auto;
-}
-#unfound-page-container #unfound-page-message p {
-  font-size: 24px;
-}
 /*  About Page
     ------------------------------------- */
 #about-container {
@@ -533,15 +527,15 @@ section#main .grid .side-content .panel .panel-center canvas img {
 }
 #main .about-column {
   width: 470px;
+  max-width: 100%;
   padding: 0 16px;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   float: left;
-  margin-left: 32px;
 }
 #main .about-column:first-child {
-  margin-left: 0px;
-  margin-right: 32px;
+  margin-bottom: 32px;
+  margin-right: 64px;
 }
 #main .about-column .about-group {
   margin-bottom: 64px;
@@ -574,19 +568,46 @@ section#main .grid .side-content .panel .panel-center canvas img {
   line-height: 24px;
 }
 #main .about-column .about-group #source-code {
-  float: right;
-}
-#main .about-column .about-group #source-code a,
-#main .about-column .about-group #source-code img {
-  float: right;
+  margin-top: 32px;
 }
 #main .about-column .about-group #source-code a {
-  margin-top: 17px;
-  margin-right: 8px;
+  border: 0;
+  color: #0d0f17 !important;
 }
-#main .about-column .about-group #source-code img {
-  height: 46px;
-  margin-top: 4px;
+#main .about-column .about-group #source-code a:hover {
+  color: inherit;
+  padding: 16px 16px 12px;
+  border-bottom: inherit;
+  background-position: inherit;
+}
+@media all and (max-width: 630px) {
+  #main .about-column:first-child {
+    margin-right: 0px;
+  }
+}
+/*  Unfound Page
+    ------------------------------------- */
+#unfound-page-container {
+  height: 100%;
+  /* Note: I hate this but this has to be adjusted for padding.
+         This seems to be the right height to match the main
+         container at min height. Adjust and check resize accordingly. */
+
+  min-height: 406px;
+  overflow: scroll;
+  display: block;
+  padding: 32px 16px;
+}
+#unfound-page-container #unfound-page-message {
+  width: 600px;
+  text-align: center;
+  margin: 160px auto;
+}
+#unfound-page-container #unfound-page-message p {
+  font-size: 24px;
+}
+#unfound-page-container #unfound-page-message img {
+  height: 54px;
 }
 /*  Footer
     ------------------------------------- */
@@ -604,6 +625,33 @@ footer#footer #regards p {
 }
 /*  Et Cetera
     ------------------------------------- */
+/* Buttons */
+.button {
+  display: inline-block;
+  padding: 16px 16px 12px;
+  position: relative;
+  color: #343748;
+  vertical-align: middle;
+  font-size: 14px;
+  text-rendering: optimizeLegibility;
+  white-space: nowrap;
+  background: #E7F6F2;
+  /* This is the same color as our top left corner of the background gradient. */
+
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 1px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  border: none;
+  outline: none;
+  transition: all 0.1s ease-in;
+  z-index: 1;
+}
+.button:hover {
+  cursor: pointer;
+  background: white;
+  box-shadow: 0px 4px 10px 0 rgba(0, 0, 0, 0.1), 0px 2px 10px 0px rgba(0, 0, 0, 0.1);
+}
 /* Loading indicator */
 .loading-indicator {
   width: 100%;
@@ -612,7 +660,7 @@ footer#footer #regards p {
   top: 50%;
   left: 0;
   overflow: hidden;
-  border: 1px solid #aba9b1;
+  border: 1px solid #bab5ca;
   opacity: 0;
   background: #0d0f17;
   border-radius: 7px;
@@ -705,5 +753,15 @@ footer#footer #regards p {
     transform: rotate(360deg);
     -moz-transform: rotate(360deg);
     -webkit-transform: rotate(360deg);
+  }
+}
+@media all and (min-width: 630px) {
+  .small-screen {
+    display: none;
+  }
+}
+@media all and (max-width: 630px) {
+  .large-screen {
+    display: none;
   }
 }

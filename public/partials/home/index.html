@@ -6,7 +6,7 @@
     </div>
     <div class='main-content'>
       <div class='column'>
-        <div id='connection-status' class='left ng-cloak'>
+        <div id='connection-status' class='left ng-cloak large-screen'>
           <div class='left'>
             <div class='connecting-indicator' ng-class="(connecting_visible) ? 'active' : ''"><img src='vendor/images/spinner.svg'/></div>
             <p id='connection-status-text' ng-class="(connecting_visible) ? 'active' : ''">{{connection_status}}</p>
@@ -14,7 +14,7 @@
         </div>
       </div>
       <div id='more-information-link'>
-        <a href='#/about' class='clean'><span><span>More Information</span></span><img src='vendor/images/right_arrow.svg'/></a>
+        <a href='#/about' class='clean'><span><span class='small-screen'>?</span><span class='large-screen'>More Information</span></span><img src='vendor/images/right_arrow.svg'/></a>
       </div>
     </div>
   </div>
