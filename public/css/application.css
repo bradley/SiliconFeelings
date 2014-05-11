@@ -581,6 +581,12 @@ section#main .grid .side-content .panel .panel-center canvas img {
   background-position: inherit;
 }
 @media all and (max-width: 630px) {
+  #about-container {
+    max-width: 100vw;
+  }
+  #main .about-column {
+    padding-right: 48px;
+  }
   #main .about-column:first-child {
     margin-right: 0px;
   }
@@ -599,7 +605,6 @@ section#main .grid .side-content .panel .panel-center canvas img {
   padding: 32px 16px;
 }
 #unfound-page-container #unfound-page-message {
-  width: 600px;
   text-align: center;
   margin: 160px auto;
 }
