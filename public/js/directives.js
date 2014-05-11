@@ -173,7 +173,7 @@ define(['angular'], function(angular) {
 										el.removeClass('ec-circle-hover');
 									},
 									onMouseDown: function(event, el) {
-								    self.isHoldingEarth();
+								    self.isHoldingEarth(event);
 									}
 								});
 
@@ -190,8 +190,8 @@ define(['angular'], function(angular) {
 							isNotHoldingEarth: function() {
 								EarthScene.isHoldingEarth(false);
 							},
-							isHoldingEarth: function() {
-								EarthScene.isHoldingEarth(true);
+							isHoldingEarth: function(event) {
+								EarthScene.isHoldingEarth(true, event);
 							}
 
 						}

@@ -648,7 +648,7 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
    					this.controls.handleResize();
    				}
    			},
-   			isHoldingEarth: function(is_holding) {
+   			isHoldingEarth: function(is_holding, event) {
    				if (is_holding) {
    					if (this.scene_ready) {
    						this.controls = this.controls || new THREE.TrackballControls(this.camera, this.renderer.domElement);
@@ -742,8 +742,8 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 		  	handleResize: function() {
 		  		earthScene.handleResize();
 		  	},
-		  	isHoldingEarth: function(is_holding) {
-		  		earthScene.isHoldingEarth(is_holding);
+		  	isHoldingEarth: function(is_holding, event) {
+		  		earthScene.isHoldingEarth(is_holding, event);
 		  	}
 		  }
 

@@ -166,6 +166,7 @@ p.small {
   height: 100%;
   margin-top: -80px;
   padding-top: 80px;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
   position: absolute;
   -webkit-backface-visibility: hidden;
@@ -271,6 +272,7 @@ p.small {
 .panel {
   height: 100%;
   display: table;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 .panel .panel-center {
@@ -303,7 +305,7 @@ header#masthead img {
 header#masthead .side-content {
   padding: 0px 16px!important;
   -moz-box-sizing: border-box;
-  wbox-sizing: border-box;
+  box-sizing: border-box;
 }
 header#masthead .side-content #home-link {
   margin-top: 13px;
@@ -320,6 +322,7 @@ header#masthead .side-content #home-link a:hover > span span {
 header#masthead .side-content #home-link a > span {
   position: absolute;
   left: 28px;
+  top: -9px;
   width: 150px;
 }
 header#masthead .side-content #home-link a img {
@@ -370,6 +373,7 @@ header#masthead .main-content #more-information-link a:hover > span span {
 header#masthead .main-content #more-information-link a > span {
   position: absolute;
   right: 14px;
+  top: -9px;
   width: 150px;
 }
 header#masthead .main-content #more-information-link a img {
@@ -410,7 +414,7 @@ header#masthead #connection-status p {
 }
 @media all and (max-width: 630px) {
   header#masthead .side-content {
-    width: 230px;
+    width: 275px;
     float: left;
   }
   header#masthead .main-content {
@@ -610,9 +614,15 @@ section#main .grid .side-content .panel .panel-center canvas img {
 }
 #unfound-page-container #unfound-page-message p {
   font-size: 24px;
+  padding: 0 16px;
 }
 #unfound-page-container #unfound-page-message img {
   height: 54px;
+}
+@media all and (max-width: 630px) {
+  #unfound-page-container #unfound-page-message p {
+    font-size: 19px;
+  }
 }
 /*  Footer
     ------------------------------------- */
