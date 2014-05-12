@@ -20,7 +20,12 @@ define(['angular', 'services'], function(angular) {
 		  $scope.load_progress = 0.0;
 		  $scope.load_visible = !($rootScope.earthResourcesLoaded);
 		  $scope.connecting_visible = false;
+		  $scope.webgl_disabled_notice_visible = false;
 
+			if (!webgl_support()) {
+				$scope.load_visible = false;
+				$scope.webgl_disabled_notice_visible = true;
+			}
 
 	    /* Scope Functions */
 

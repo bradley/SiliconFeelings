@@ -468,6 +468,11 @@ section#main .grid .side-content .panel .panel-center canvas img {
     ------------------------------------- */
 #main-panel {
   width: 100%;
+  /* Note: I hate this but this has to be adjusted for padding.
+         This seems to be the right height to match the main
+         container at min height. Adjust and check resize accordingly. */
+
+  min-height: 470px;
   position: relative;
 }
 #main-panel::selection {
@@ -643,6 +648,32 @@ footer#footer #regards p {
 }
 /*  Et Cetera
     ------------------------------------- */
+#webgl-disabled-notice-container {
+  width: 100%;
+  height: 400px;
+  padding: 16px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  text-align: center;
+  position: absolute;
+  top: 80px;
+  left: 0;
+  overflow: hidden;
+  font-size: 19px;
+}
+#webgl-disabled-notice {
+  opacity: 0;
+}
+#webgl-disabled-notice a {
+  border: 0;
+  color: #0d0f17 !important;
+}
+#webgl-disabled-notice a:hover {
+  color: inherit;
+  padding: 16px 16px 12px;
+  border-bottom: inherit;
+  background-position: inherit;
+}
 /* Buttons */
 .button {
   display: inline-block;

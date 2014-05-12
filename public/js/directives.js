@@ -94,6 +94,42 @@ define(['angular'], function(angular) {
 				}
 			}
 		}])
+		.directive('webglDisabledNotice', [function() {
+			return {
+				restrict: 'E',
+				scope: {
+					'visible': '='
+				},
+				templateUrl: 'partials/components/webgl_disabled_notice.html',
+				link: function(scope, element) {
+					(function(scope, element) {
+						var webglDisabledNotice = {
+							init: function(){
+								this.$notice = $('#webgl-disabled-notice');
+		            this.setAllWatchers();
+			        },
+		        	setAllWatchers: function() {
+		        		var self = this;
+		        		// NOTE: All watchers are automatically destroyed along with the scope.
+								scope.$watch('visible', function(new_data, old_data) {
+									self.makeVisible(new_data);
+							  });
+		        	},
+			        makeVisible: function(make_visible) {
+			        	if (make_visible) {
+			        		this.$notice.css('opacity', 1.0);
+			        	}
+			        	else {
+			        		this.$notice.css('opacity', 0.0);
+			        	}
+			        }
+						}
+
+						webglDisabledNotice.init();
+					})(scope, element);
+				}
+			}
+		}])
 		.directive('emojiPlanet', ['$rootScope', '$http', '$window', '$timeout', 'EarthScene', function($rootScope, $http, $window, $timeout, EarthScene) {
     	return {
 	      restrict: 'E',
@@ -196,7 +232,10 @@ define(['angular'], function(angular) {
 
 						}
 
-						emojiPlanet.init();
+						if (webgl_support()) {
+						 	emojiPlanet.init();
+						}
+
 
 	        })(scope, element, attrs);
 	      }

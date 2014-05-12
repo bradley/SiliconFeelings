@@ -27,6 +27,18 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <script src="js/non_angular/application.js"></script>
   <script src="js/non_angular/layout.js"></script>
+  <script type="text/javascript">
+    function webgl_support() {
+      try{
+        var canvas = document.createElement( 'canvas' );
+        return !! window.WebGLRenderingContext && (
+             canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) );
+      }
+      catch( e ) {
+        return false;
+      }
+    };
+  </script>
   <script data-main="js/main" src="/bower_components/requirejs/require.js"></script>
 </body>
 </html>
