@@ -1,6 +1,8 @@
 Silicon Feelings
 ===========
+Silicon Feelings is a real time display of Emoji being tweeted by people across Earth using Node.js, Express, AngularJS, and three.js with WebGL.
 
+You can view the production site at [silicons.co](http://silicons.co).
 
 Setup
 -----
@@ -26,3 +28,5 @@ As for my understanding of working with emoji in the browser, and with streaming
 I'd also like to thank [Sergey Yakunin](http://yakunins.com/my-work/) for allowing me to use his font, [Rayon](http://yakunins.com/rayon/specimen/rayon.html) for this project.
 
 Finally, I used the [hi resolution emoji images](https://github.com/greaterweb/emoji-highres) provided by [greaterweb](https://github.com/greaterweb) – shrunken slightly and mapped to a sprite sheet using [TexturePacker](http://www.codeandweb.com/texturepacker) – for the emoji displayed on the client side.
+
+Arrow icons by [Molly Bramlet](http://thenounproject.com/mollybramlet/) from The Noun Project.
