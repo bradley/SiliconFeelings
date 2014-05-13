@@ -105,7 +105,7 @@ define(['angular'], function(angular) {
 					(function(scope, element) {
 						var webglDisabledNotice = {
 							init: function(){
-								this.$notice = $('#webgl-disabled-notice');
+								this.$notice = $('#webgl-disabled-notice-container');
 		            this.setAllWatchers();
 			        },
 		        	setAllWatchers: function() {
@@ -117,10 +117,10 @@ define(['angular'], function(angular) {
 		        	},
 			        makeVisible: function(make_visible) {
 			        	if (make_visible) {
-			        		this.$notice.css('opacity', 1.0);
+			        		this.$notice.addClass('active');
 			        	}
 			        	else {
-			        		this.$notice.css('opacity', 0.0);
+			        		this.$notice.removeClass('active');
 			        	}
 			        }
 						}

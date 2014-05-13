@@ -660,9 +660,10 @@ footer#footer #regards p {
   left: 0;
   overflow: hidden;
   font-size: 19px;
+  display: none;
 }
-#webgl-disabled-notice {
-  opacity: 0;
+#webgl-disabled-notice-container.active {
+  display: block;
 }
 #webgl-disabled-notice a {
   border: 0;

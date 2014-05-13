@@ -707,9 +707,12 @@ footer#footer {
     left: 0;
     overflow: hidden;
     font-size: 19px;
+    display: none;
+    &.active {
+        display: block;
+    }
 }
 #webgl-disabled-notice {
-    opacity: 0;
     a {
         border: 0;
         color: @storm!important;

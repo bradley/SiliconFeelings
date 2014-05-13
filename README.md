@@ -12,6 +12,7 @@ Install packages needed for server: `npm install`
 Install packages needed for client: `bower install`
 
 Symlink app directory with node modules: `cd node_modules && ln -nsf ../app && cd ..`
+The node_modules directory is gitignored by default, but if you intend to copy this project's structure and store it in git, you should also commit the symlink: `git add -f node_modules/app`
 
 Create a .env file in the root of the project and fill in your Twitter API credentials following the example content in .example.env
 
