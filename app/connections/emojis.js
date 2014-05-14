@@ -27,7 +27,7 @@ function emit() {
 function setup(io_connection) {
   var emojiStream = new EmojiStream();
   io = io_connection;
-
+  io.set('heartbeat interval', 4);
 
   // Tweet Stream Event Handlers
   emojiStream.streamTweets(foundTweet)
