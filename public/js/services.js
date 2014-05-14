@@ -6,7 +6,10 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 
 	angular.module('myApp.services', [])
 		.factory('Socket', ['$rootScope', function($rootScope) {
-			var options = { 'force new connection': true },
+			var options = {
+						'force new connection': true,
+						'heartbeat timeout': 10
+					},
 					connection = io.connect('/', options);
 
 		  return {

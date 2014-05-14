@@ -3,7 +3,7 @@ module.exports = function(io) {
   [
     'emojis'
   ].forEach(function(connectionName) {
-      require('app/connections/' + connectionName)(io);
+    require('app/connections/' + connectionName)(io);
   });
   io.sockets.on('connection', function(socket) {
   	socket.emit('init', {

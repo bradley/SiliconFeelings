@@ -28,6 +28,7 @@ function setup(io_connection) {
   var emojiStream = new EmojiStream();
   io = io_connection;
 
+
   // Tweet Stream Event Handlers
   emojiStream.streamTweets(foundTweet)
 
