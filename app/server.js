@@ -5,11 +5,13 @@ var express  = require('express'),
 		mongoose = require('mongoose'),
 		config   = require('config'),
 		app      = express(),
+		path     = require('path'),
 		server   = require('http').createServer(app),
 		io 			 = require('socket.io').listen(server);
 
 // Configure Aapplication  ======================================================
 app.configure(function() {
+	app.use(express.favicon(path.resolve(__dirname, '../public/images/favicon.ico')));
 	app.use(express.logger());
 	app.use(express.bodyParser());
   app.use(express.methodOverride());
