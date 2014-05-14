@@ -426,6 +426,9 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
           	this.completion_callback();
           }
 		    },
+		    isSceneReady: function() {
+		    	return this.scene_ready;
+		    },
 		    mapEmojiTextures: function(callback) {
 		    	// Creates a reusable material for each emoji using our spritesheet, and updates emoji sprite sheet json mapper.
 		    	for(var key in this.emoji_sprite_mappings) {
@@ -716,7 +719,7 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 
 		  var sharedScene = {
 		  	init: function(progress_callback, completion_callback) {
-		  		if (earthScene) {
+		  		if (earthScene && earthScene.isSceneReady()) {
 		  			earthScene.play(function() {
 			  			setTimeout(function() {
 								completion_callback();

@@ -30,7 +30,7 @@ define(['angular', 'services'], function(angular) {
 	    /* Scope Functions */
 
 			$scope.$on("$destroy", function() {
-					$scope.load_visible = false;
+					//$scope.load_visible = false;
 	        if (scene_ready_timer) {
 	        	$timeout.cancel(scene_ready_timer);
 	        }
