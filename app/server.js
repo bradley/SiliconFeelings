@@ -51,8 +51,8 @@ mongoose.connect(config.database.uri, function(err, res) {
 // Begin Listening ==============================================================
 server.listen(config.express.port, function(error) {
 	if (error) {
-    console.log("Unable to listen for connections: " + error);
-    process.exit(10);
-  }
+                console.log("Unable to listen for connections: " + error);
+                process.exit(10);
+        }
  	console.log("Express is listening on port: " + config.express.port);
 });
