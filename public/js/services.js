@@ -506,7 +506,7 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 					var start = 1780,
         			end = 1940;
 
-        	this.scene.fog = new THREE.Fog(0xEAE4DD, start, end);
+        	this.scene.fog = new THREE.Fog(0xFFFFFF, start, end);
 		    },
 		    addPostprocessing: function() {
 		    	this.composer = new THREE.EffectComposer(this.renderer);

@@ -1,3 +1,4 @@
+console.log(process.env.TWITTER_CONSUMER_KEY);
 module.exports = {
  	express: {
  		port: process.env.PORT || 5000
