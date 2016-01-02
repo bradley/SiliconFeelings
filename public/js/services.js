@@ -1,4 +1,4 @@
-define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'renderPass', 'shaderPass', 'rgbShiftShader', 'badTVShader', 'tripShader'], function(angular) {
+define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'renderPass', 'shaderPass', 'rgbShiftShader', 'badTVShader', 'tripShader'], function(angular, io) {
 	'use strict';
 
 
@@ -10,8 +10,7 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 						'force new connection': true,
 						'heartbeat timeout': 10
 					},
-					connection = io.connect('/', options);
-
+					connection = io('/', options);
 		  return {
 		    disconnect: function() {
 		    	if (this.connectionStatus()) {
@@ -21,10 +20,10 @@ define(['angular', 'io', 'three', 'trackballControls', 'effectComposer', 'render
 		    },
 		    reconnect: function() {
 		    	this.disconnect();
-		    	connection.socket.connect('/', options);
+		    	connection.connect('/', options);
 		    },
 		    connectionStatus: function() {
-		  		return connection.socket.connected;
+		  		return connection.connected;
 		  	},
 		    on: function(eventName, callback) {
 		      connection.on(eventName, function() {
