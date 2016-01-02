@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 
 // Setup ========================================================================
-var //env      = require('dotenv').load(),
+var env      = require('dotenv').load(),
 		express  = require('express'),
-		mongoose = require('mongoose'),
 		config   = require('config'),
 		app      = express(),
 		path     = require('path'),
@@ -37,17 +36,6 @@ require('../config/routes')(app);
 
 // Connections ==================================================================
 require('../config/connections')(io);
-
-
-// Connect to Database ==========================================================
-mongoose.connect(config.database.uri, function(err, res) {
-	if (err) {
-		console.log ('ERROR connecting to: ' + config.database.uri + '. ' + err);
-	} else {
-		console.log ('Succeeded connected to: ' + config.database.uri);
-	}
-});
-
 
 // Begin Listening ==============================================================
 server.listen(config.express.port, function(error) {
