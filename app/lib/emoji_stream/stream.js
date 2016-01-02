@@ -29,7 +29,7 @@ EmojiStream.prototype = {
 
     var wholeWorld = [ '-180', '-90', '180', '90' ]
     // Start streaming.
-    this.stream = stream = twitter_stream.stream('statuses/filter', { track: emojis, locations: wholeWorld });
+    this.stream = stream = twitter_stream.stream('statuses/filter', { track: emojis });
 
     stream.on('tweet', function(tweet) {
       var emojiTweet = new EmojiTweet(tweet, emojiData);
