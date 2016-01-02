@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // Setup ========================================================================
-var env      = require('dotenv').load(),
+var //env      = require('dotenv').load(),
 		express  = require('express'),
 		mongoose = require('mongoose'),
 		config   = require('config'),
