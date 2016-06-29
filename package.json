@@ -1,20 +1,20 @@
 {
-	"name": "SiliconFeelings",
-	"description": "",
-	"version": "0.0.1",
-	"author": "Bradley",
-	"private": true,
-	"dependencies": {
-		"config": "*",
-		"dotenv": "*",
-		"express": "3.3.5",
-		"node.extend": "*",
-		"punycode": "*",
-		"socket.io": "1.0.4",
-		"twit": "*",
-		"underscore": "*"
-	},
-	"devDependencies": {
-		"mocha": "~1.13.0"
-	}
+  "name": "SiliconFeelings",
+  "description": "",
+  "version": "0.0.1",
+  "author": "Bradley",
+  "private": true,
+  "dependencies": {
+    "config": "^1.21.0",
+    "dotenv": "^2.0.0",
+    "express": "^3.21.2",
+    "node.extend": "^1.1.5",
+    "punycode": "^2.0.0",
+    "socket.io": "^1.4.8",
+    "twit": "^2.2.4",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "mocha": "~1.13.0"
+  }
 }
