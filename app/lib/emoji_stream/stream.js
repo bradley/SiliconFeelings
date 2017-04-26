@@ -1,7 +1,7 @@
-var Twit           = require('twit'),
-    config         = require('config'),
-    EmojiTweet     = require('app/lib/emoji_tweet/tweet'),
-    EmojiData      = require('app/lib/emoji_data/emoji_data'),
+var Twit           = require("twit"),
+    config         = require("config"),
+    EmojiTweet     = require("app/lib/emoji_tweet/tweet"),
+    EmojiData      = require("app/lib/emoji_data/emoji_data"),
     twitter_stream;
 
 twitter_stream = new Twit({
@@ -22,16 +22,20 @@ EmojiStream.prototype = {
         emojiData,
         emojis;
 
-    // Only use the 'top' 400 emoji (determined Feb 26, 2014 using http://www.emojitracker.com/)
+    // Only use the "top" 400 emoji (determined Feb 26, 2014 using http://www.emojitracker.com/)
     // if we still only have basic stream access... i.e.; if Twitter never got back to us. 😔
     emojiData = new EmojiData({ top_emojis: config.twitter.has_basic_access });
     emojis = emojiData.emojis;
 
-    var wholeWorld = [ '-180', '-90', '180', '90' ]
+    var wholeWorld = [ "-180", "-90", "180", "90" ]
     // Start streaming.
-    this.stream = stream = twitter_stream.stream('statuses/filter', { track: emojis });
+    this.stream = stream = twitter_stream.stream("statuses/filter", { track: emojis });
 
-    stream.on('tweet', function(tweet) {
+    stream.on("error", function (err) {
+      console.log("error!", err);
+    });
+
+    stream.on("tweet", function(tweet) {
       var emojiTweet = new EmojiTweet(tweet, emojiData);
 
       if (emojiTweet.isRetweet()) {
