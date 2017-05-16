@@ -6,7 +6,7 @@ var EmojiTweet = function(raw_tweet, emojiData) {
   this.config.emojiData = emojiData;
   this.tweet = raw_tweet;
   this.coordinates = this.tweet.coordinates ? this.tweet.coordinates.coordinates : null;
-  if (!this.coordinates && this.tweet.place) {
+  if (!this.coordinates && this.tweet.place && this.tweet.place.bounding_box) {
     this.coordinates = this.tweet.place.bounding_box.coordinates[0][0];
   }
   this.emojis = this.emojis || this.findEmojis();
